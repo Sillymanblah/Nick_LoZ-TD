@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af7ea85760c3d1a4fa8f706a9c26095f, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  name: Test Unit
+  unitID: 0
+  icon: {fileID: 21300000, guid: 9ad20c916c95d15488a6a7fbc1630c4d, type: 3}
+  prefab: {fileID: 7051703183058129083, guid: bff7b148fcc1cb34c8a6b446318c196f, type: 3}
+  cost1: 50
+  attack1: 2
+  cooldown1: 3
+  range1: 10
+  cost2: 75
+  attack2: 3
+  cooldown2: 2.5
+  range2: 15
+  cost3: 100
+  attack3: 6
+  cooldown3: 2
+  range3: 20
+  cost4: 125
+  attack4: 4
+  cooldown4: 1.5
+  range4: 25
+  cost5: 150
+  attack5: 4
+  cooldown5: 1
+  range5: 18
