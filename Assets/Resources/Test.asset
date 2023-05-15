@@ -17,22 +17,27 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 9ad20c916c95d15488a6a7fbc1630c4d, type: 3}
   prefab: {fileID: 7051703183058129083, guid: bff7b148fcc1cb34c8a6b446318c196f, type: 3}
   cost1: 50
-  attack1: 2
+  attack1: 3
   cooldown1: 3
   range1: 10
+  DPS1: 1
   cost2: 75
-  attack2: 3
+  attack2: 4
   cooldown2: 2.5
   range2: 15
+  DPS2: 1.6
   cost3: 100
   attack3: 6
   cooldown3: 2
   range3: 20
+  DPS3: 3
   cost4: 125
-  attack4: 4
+  attack4: 6
   cooldown4: 1.5
   range4: 25
+  DPS4: 4
   cost5: 150
   attack5: 4
   cooldown5: 1
   range5: 18
+  DPS5: 4

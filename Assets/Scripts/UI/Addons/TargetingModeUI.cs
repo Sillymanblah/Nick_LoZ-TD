@@ -33,7 +33,7 @@ public class TargetingModeUI : MonoBehaviour
         if (targetModeByInt == -1)
             targetModeByInt = 3;
 
-        UIUnitStats.SingleTon.SetUnitTargettingModeButton(targetModeByInt);
+        UIUnitStats.instance.SetUnitTargettingModeButton(targetModeByInt);
     }
 
     public void RightButton()
@@ -43,6 +43,6 @@ public class TargetingModeUI : MonoBehaviour
         if (targetModeByInt == 4)
             targetModeByInt = 0;
 
-        UIUnitStats.SingleTon.SetUnitTargettingModeButton(targetModeByInt);
+        UIUnitStats.instance.SetUnitTargettingModeButton(targetModeByInt);
     }
 }

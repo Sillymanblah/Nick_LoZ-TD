@@ -10,13 +10,17 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public PlayerUnitManager player;
     [SerializeField] TextMeshProUGUI moneyText;
     [SerializeField] Transform unitLoadout;
-    [SerializeField] UIUnitStats uIUnitStats;
     [SerializeField] TextMeshProUGUI exceptionText;
     public static UIManager instance;
     public bool MouseOnUI;
 
+    [Space]
     [SerializeField] TextMeshProUGUI readyCount;
     [SerializeField] GameObject readyButton;
+
+    [Space]
+    [SerializeField] TextMeshProUGUI skipWaveCount;
+    [SerializeField] GameObject skipWaveButton;
 
     private void Awake()
     {
@@ -25,40 +29,30 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     // Start is called before the first frame update
     void Start()
     {
-        if (player.isServer) return;
-
         foreach (Transform slot in unitLoadout)
         {
             if (slot.name == "SlotNums") { break; }
             slot.transform.GetChild(1).GetComponent<Text>().text = string.Empty;
         }
 
+        skipWaveButton.SetActive(false);
         exceptionText.text = string.Empty;
     }
 
     // Update is called once per frame
     void Update()
     {
-
         // So if the instance is null, we wont get errors until server starts/client joins
         if (GameManager.instance == null) return;
-
-        // We are updating the text next to the ready button
-        if (GameManager.instance.gameStarted == false)
-        {
-            var gameManager = GameManager.instance;
-
-            readyCount.text = gameManager.playerReadyCount + "/" + gameManager.playerCount;
-        }
 
         if (player == null) return;
 
         if (!player.isLocalPlayer) return;
 
-
-
         MoneyText();
     }
+
+
 
     void MoneyText()
     {
@@ -91,20 +85,6 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         Text count = unitLoadout.GetChild(index).Find("Count").GetComponent<Text>();
         count.text = player.loadoutCount[index].ToString();
-        Debug.Log($"bruh");
-    }
-
-    public void UpdateUnitStats(Unit unit, bool active)
-    {
-        if (active)
-        {
-            uIUnitStats.gameObject.SetActive(true);
-            uIUnitStats.SetStats(unit);
-        }
-        else 
-        {
-            uIUnitStats.gameObject.SetActive(false);
-        }
     }
 
     public void UIExceptionMessage(string message)
@@ -132,15 +112,35 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }
     }
 
+    public void UpdateReadyButton(int playerReadyCount, int maxPlayerCount)
+    {
+        readyCount.text = playerReadyCount + "/" + maxPlayerCount;
+    }
+
     // THIS IS FOR THE READY UP BUTTON AT BEGINNING OF GAME
     public void ReadyUpButton()
     {
         player.ReadyUp();
     }
 
+    public void UpdateSkipWaveButton(int playerReadyCount, int maxPlayerCount)
+    {
+        skipWaveCount.text = playerReadyCount + "/" + maxPlayerCount;
+    }
+
+    public void SkipWaveButton()
+    {
+        player.SkipWaveReady();
+    }
+
     public void DisableReadyButtonLocally()
     {
         readyButton.SetActive(false);
+    }
+
+    public void ToggleSkipButtonLocally(bool on)
+    {
+        skipWaveButton.SetActive(on);
     }
 
     public void BuyUnitButton(int index)

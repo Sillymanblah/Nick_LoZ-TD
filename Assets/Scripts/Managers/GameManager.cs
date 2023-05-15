@@ -8,11 +8,10 @@ public class GameManager : NetworkBehaviour
     List<GridCell> totalGridCells = new List<GridCell>();
     public static GameManager instance;
 
-    [SyncVar]
+
     public int playerCount;
 
-    [SyncVar]
-    public int playerReadyCount;
+    int playerReadyCount;
 
     [SyncVar]
     public bool gameStarted;
@@ -78,6 +77,14 @@ public class GameManager : NetworkBehaviour
     {
         if (add) playerCount++;
         else playerCount--;
+
+        RpcUpdatePlayerCount(playerReadyCount, playerCount);
+    }
+
+    [ClientRpc]
+    void RpcUpdatePlayerCount(int playerReady, int maxPlayerCount)
+    {
+        UIManager.instance.UpdateReadyButton(playerReady, maxPlayerCount);
     }
 
     [Server]
@@ -86,10 +93,17 @@ public class GameManager : NetworkBehaviour
         if (ready == true) playerReadyCount++;
         else playerReadyCount--;
 
+        RpcUpdatePlayerCount(playerReadyCount, playerCount);
+
+        UIManager.instance.UpdateReadyButton(playerReadyCount, playerCount);
+
         if (playerReadyCount == playerCount)
         {
             gameStarted = true;
             WaveManager.instance.spawnEnemies = true;
+            WaveManager.instance.SetHealthWithPlayerCount(playerCount);
+            BaseManager.instance.SetBaseHP(playerCount);
+            playerReadyCount = 0;
 
             foreach (NetworkIdentity player in CSNetworkManager.instance.players)
             {
@@ -103,5 +117,4 @@ public class GameManager : NetworkBehaviour
     {
         UIManager.instance.DisableReadyButtonLocally();
     }
-
 }

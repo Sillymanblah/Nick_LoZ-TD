@@ -23,23 +23,27 @@ public class HealthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        healthSlider.maxValue = enemy.GetMaxHealth();
-        healthSlider.value = enemy.GetHealthPoints();
-        UpdateBarValue();
         gameObject.SetActive(false);
     }
+    
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
-    public void UpdateBarValue()
+    public void UpdateBarValue(int healthValue)
     {
-        healthSlider.value = enemy.GetHealthPoints();
+        healthSlider.value = healthValue;
         hpText.text = FormatNumber((int)healthSlider.value) + "/" +  FormatNumber((int)healthSlider.maxValue);
     }
+
+    public void BarValueOnStart(float maxValue)
+    {
+        healthSlider.maxValue = maxValue;
+        UpdateBarValue((int)maxValue);
+    }
+
     private void LateUpdate() 
     {
         if (isWorldSpace)

@@ -15,17 +15,46 @@ public class UIUnitStats : MonoBehaviour
     [SerializeField] TextMeshProUGUI upgradeText;
     [SerializeField] TextMeshProUGUI sellText;
     [SerializeField] TextMeshProUGUI targetModeText;
+    [SerializeField] Transform buttonsParent;
 
 
     public PlayerUnitManager localPlayer;
 
-    public static UIUnitStats SingleTon;
+    public static UIUnitStats instance;
 
     private void Start()
     {
         this.gameObject.SetActive(false);
-        SingleTon = this;
+        instance = this;
     }
+
+    public void UpdateUnitStats(Unit unit, bool active)
+    {
+        if (active)
+        {
+            gameObject.SetActive(true);
+            SetStats(unit);
+        }
+        else 
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void UpdateUnitStatsAoE(Unit unit, bool active)
+    {
+        if (active)
+        {
+            gameObject.SetActive(true);
+            SetStats(unit);
+            AOEStats();
+        }
+        else 
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     public void SetStats(Unit unit)
     {
         currentUnit = unit;
@@ -48,6 +77,7 @@ public class UIUnitStats : MonoBehaviour
         sellText.text = "+" + (currentUnit.GetSellCost()).ToString();
 
         targetModeText.text = currentUnit.GetTargetMode().ToString();
+        buttonsParent.gameObject.SetActive(true);
     }
 
     // When the unit is already declared (ex. for changing UI text on selected unit)
@@ -100,5 +130,11 @@ public class UIUnitStats : MonoBehaviour
         TargettingMode thisTargetMode = (TargettingMode)targetMode;
 
         targetModeText.text = thisTargetMode.ToString().ToUpper();
+    }
+
+    public void AOEStats()
+    {
+        buttonsParent.gameObject.SetActive(false);
+        targetModeText.text = "AoE";
     }
 }

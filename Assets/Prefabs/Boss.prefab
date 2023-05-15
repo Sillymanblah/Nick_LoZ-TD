@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 540426367160929275}
   - component: {fileID: 3861044601155133074}
   - component: {fileID: 3515089226976260565}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Boss
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -136,9 +136,9 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  maxHealthPoints: 1000
-  healthPoints: 1
-  moneyMultiplier: 0.2
+  maxHealthPoints: 1500
+  healthPoints: 0
+  moneyMultiplier: 1
   speed: 0.5
   distanceCovered: 0
   isDead: 0

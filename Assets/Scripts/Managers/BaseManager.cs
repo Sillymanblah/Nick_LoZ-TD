@@ -7,7 +7,7 @@ using TMPro;
 
 public class BaseManager : NetworkBehaviour
 {
-    
+    [SyncVar]
     [SerializeField] int maxBaseHealth;
     [SyncVar]
     [SerializeField] int baseHealth;
@@ -31,7 +31,14 @@ public class BaseManager : NetworkBehaviour
     {
         base.OnStartServer();
 
+    }
+
+    [Server]
+    public void SetBaseHP(int multiplier)
+    {
+        maxBaseHealth *= multiplier;
         baseHealth = maxBaseHealth;
+        UpdateBaseHPUI();
     }
 
     [Server]

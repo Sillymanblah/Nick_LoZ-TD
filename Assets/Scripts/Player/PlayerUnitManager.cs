@@ -13,15 +13,14 @@ public class PlayerUnitManager : NetworkBehaviour
     [SerializeField] public List<UnitSO> unitsLoadout = new List<UnitSO>(3);
     [SerializeField] public List<int> loadoutCount = new List<int>(3);
     [SerializeField] Unit selectedUnit;
-    public Unit GetSelectedUnit() { return selectedUnit; }
+    //public Unit GetSelectedUnit() { return selectedUnit; }
 
     [SerializeField] Transform currentGridTransform;
     [SerializeField] GridCell currentGrid;
 
-    [SerializeField] LayerMask ignoreLayers;
     bool placedUnit = true;
 
-    [SyncVar] bool playerReady = false;
+    public bool playerReady = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +28,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
         var gameManager = GameManager.instance;
 
-        UIUnitStats.SingleTon.localPlayer = this;
+        UIUnitStats.instance.localPlayer = this;
         
 
         if (GameManager.instance.gameStarted == true)
@@ -80,7 +79,7 @@ public class PlayerUnitManager : NetworkBehaviour
     {
         selectedUnit.SellUnit(this.netIdentity);
         selectedUnit = null;
-        UIManager.instance.UpdateUnitStats(null, false);
+        UIUnitStats.instance.UpdateUnitStats(null, false);
     }
 
     public void UpgradeUnit()
@@ -104,7 +103,7 @@ public class PlayerUnitManager : NetworkBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 30))
+        if (Physics.Raycast(ray, out hit, 60))
         {
             if (hit.collider.gameObject.layer == 3)
             {
@@ -125,7 +124,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
                     else if (!selectedUnit.isOwned) selectedUnit = null;
                 }
-                else if (hit.collider.gameObject.layer == 3)
+                else if (hit.collider.gameObject.layer != 6)
                 {
                     if (UIManager.instance.MouseOnUI) return;
 
@@ -267,7 +266,6 @@ public class PlayerUnitManager : NetworkBehaviour
         if (!isServer)
         {
             loadoutCount[loadoutIndex]++;
-            Debug.Log($"bro wtf");
         }
 
         UIManager.instance.SlotUnitCount(loadoutIndex);
@@ -302,5 +300,11 @@ public class PlayerUnitManager : NetworkBehaviour
     {
         playerReady = !playerReady;
         GameManager.instance.PlayersAreReady(playerReady);
+    }
+
+    [Command]
+    public void SkipWaveReady()
+    {
+        WaveManager.instance.PlayersAreReady(playerReady, this.netIdentity);
     }
 }

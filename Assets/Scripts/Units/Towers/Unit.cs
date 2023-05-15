@@ -21,8 +21,8 @@ public class Unit : NetworkBehaviour
 
     public List<EnemyUnit> enemiesInRange = new List<EnemyUnit>();
     PlayerUnitManager attachedPlayer;
-    [SerializeField] SphereCollider rangeCollider;
-    [SerializeField] Transform rangeVisualSprite;
+    [SerializeField] protected SphereCollider rangeCollider;
+    [SerializeField] protected Transform rangeVisualSprite;
     [SerializeField] UIUnitHoverStats hoverStats;
 
     [SyncVar]
@@ -37,13 +37,13 @@ public class Unit : NetworkBehaviour
     [SerializeField] int sellCost;
 
     [SyncVar]
-    [SerializeField] float cooldown;
+    [SerializeField] protected float cooldown;
 
     [SyncVar]
-    [SerializeField] float attack;
+    [SerializeField] protected float attack;
 
     [SyncVar]
-    [SerializeField] float range;
+    [SerializeField] protected float range;
 
     [SyncVar]
     [SerializeField] int level = 1;
@@ -66,14 +66,14 @@ public class Unit : NetworkBehaviour
 
 
     public bool isPlaced = false;
-    bool isSelected = false;
+    protected bool isSelected = false;
     int gridCellIndex;
     int loadoutIndex;
 
     //void UpdateAttackStat(float oldValue, float newValue)
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         if (!isClient)
         {
@@ -111,7 +111,7 @@ public class Unit : NetworkBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (!isPlaced) return;
 
@@ -150,13 +150,15 @@ public class Unit : NetworkBehaviour
         rangeCollider.radius = range / 5;
         rangeVisualSprite.gameObject.SetActive(false);
 
-        LocalUnitColor();
+        ClientPlacedUnit();
     }
 
     [TargetRpc]
-    void LocalUnitColor()
+    void ClientPlacedUnit()
     {
         transform.GetChild(0).GetComponent<MeshRenderer>().material.color = Color.red;
+
+        isPlaced = true;
     }
 
     public int CostToUpgrade(int level)
@@ -180,6 +182,8 @@ public class Unit : NetworkBehaviour
 
     void CurrentTargettingMode()
     {
+        if (enemiesInRange.Count <= 1) return;
+
         switch(targetMode)
         {
             case TargettingMode.First:
@@ -290,14 +294,14 @@ public class Unit : NetworkBehaviour
     }
 
     [TargetRpc]
-    void UpdateLocalClient(Vector3 newScale, bool activeUI)
+    protected virtual void UpdateLocalClient(Vector3 newScale, bool activeUI)
     {
         Debug.Log($"is this being called");
         rangeVisualSprite.localScale = newScale;
-        UIManager.instance.UpdateUnitStats(this, activeUI);
+        UIUnitStats.instance.UpdateUnitStats(this, activeUI);
     }
 
-    float currentCooldown;
+    protected float currentCooldown;
 
     [Server]
     protected virtual void AttackEnemy()
@@ -315,24 +319,32 @@ public class Unit : NetworkBehaviour
 
         CurrentTargettingMode();
 
-        enemiesInRange[0].DealDamage(attack);
+        if (enemiesInRange[0] == null)
+        {
+            enemiesInRange.RemoveAt(0);
+            return;
+        }
+        else
+        { 
+            enemiesInRange[0].DealDamage(attack);
+        }
         currentCooldown = Time.time + cooldown;
     }
     
-    public void SelectUnit()
+    public virtual void SelectUnit()
     {
         isSelected = true;
         rangeVisualSprite.gameObject.SetActive(true);
         rangeCollider.radius = range / 5;
         rangeVisualSprite.localScale = new Vector3(1,1) * (rangeCollider.radius * 0.2f);
-        UIManager.instance.UpdateUnitStats(this, true);
+        UIUnitStats.instance.UpdateUnitStats(this, true);
     }
 
     public void DeSelectUnit()
     {
         rangeVisualSprite.gameObject.SetActive(false);
         isSelected = false;
-        UIManager.instance.UpdateUnitStats(this, false);
+        UIUnitStats.instance.UpdateUnitStats(this, false);
     }
 
     /// <summary>
@@ -340,6 +352,8 @@ public class Unit : NetworkBehaviour
     /// </summary>
     private void OnMouseOver()
     {
+        if (!isClient) return;
+
         hoverStats.gameObject.SetActive(true);
         hoverStats.UpdateHoverStats();
     }

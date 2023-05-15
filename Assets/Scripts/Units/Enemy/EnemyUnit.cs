@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 public class EnemyUnit : NetworkBehaviour
 {
     [SerializeField] int maxHealthPoints;
-
     public int GetMaxHealth() { return maxHealthPoints; }
 
     [Space]
@@ -35,16 +34,12 @@ public class EnemyUnit : NetworkBehaviour
     private void Awake()
     {
         if (!isServer) return;
-
-        SetMaxHealthMultiplier(1);
     }
     void Start()
     {
-        
-
         if (!isServer) return;
 
-        dropMoney = (int)moneyMultiplier * healthPoints;
+        dropMoney = Mathf.FloorToInt(moneyMultiplier * healthPoints);
         target = WayPointsManager.points[1];
 
         previousPosition = transform.position;
@@ -106,14 +101,27 @@ public class EnemyUnit : NetworkBehaviour
     void UpdateEnemyHealth(int oldValue, int newValue)
     {
         healthPoints = newValue;
-        thisHealthBar.UpdateBarValue();
+        thisHealthBar.UpdateBarValue(newValue);
     }
 
     [Server]
-    public void SetMaxHealthMultiplier(int points)
+    public void SetMaxHealthMultiplier(float points)
     {
-        maxHealthPoints *= points;
+        float maxHealthMultiplied = (float)maxHealthPoints * points;
+
+        maxHealthPoints = Mathf.FloorToInt(maxHealthMultiplied);
         healthPoints = maxHealthPoints;
+
+        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+        {
+            HPBarUIStartUp(player.connectionToClient, maxHealthPoints);
+        }
+    }
+
+    [TargetRpc]
+    void HPBarUIStartUp(NetworkConnectionToClient conn, int maxHealthPoints)
+    {
+        thisHealthBar.BarValueOnStart(maxHealthPoints);
     }
 
     /// <summary>

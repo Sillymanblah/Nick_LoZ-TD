@@ -34,6 +34,10 @@ public class CSNetworkManager : NetworkManager
         base.OnServerAddPlayer(conn);
         players.Add(conn.identity);
         GameManager.instance.UpdatePlayerCount(true);
+
+        PlayerManager player = conn.identity.GetComponent<PlayerManager>();
+        //player.SetDisplayName("Player " + numPlayers);
+        player.SetCameraPOV();
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)

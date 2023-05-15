@@ -16,7 +16,7 @@ public class WaveManager : NetworkBehaviour
     [Header("Wave Management")]
 
     [Tooltip("How many waves should there be in a single game")]
-    [SerializeField] int waveAmount = 1;
+    [SerializeField] public int waveAmount = 1;
 
     [Tooltip("How many groups we want in a single wave")]  
     [SerializeField] public int waveSize;
@@ -39,11 +39,15 @@ public class WaveManager : NetworkBehaviour
     [Space]
 
     [Header("Enemy code things")]
-    int healthMultiplier = 1;
+    float healthMultiplier = 1;
+    float playerMultiplier = 1;
     [SerializeField] int enemiesKilled;
 
     [SyncVar]
     [SerializeField] public int totalEnemiesSpawned;
+
+    [SerializeField] int playerReadyCount;
+    [SerializeField] List<NetworkIdentity> playersReadyToSkip = new List<NetworkIdentity>();
 
     // Start is called before the first frame update
     void Start()
@@ -56,15 +60,17 @@ public class WaveManager : NetworkBehaviour
     {
         if (!isServer) return;
 
+        if (spawnEnemies == false) return;
+
         if (currentGroup == waveSize)
         {
-            if (enemiesKilled == totalEnemiesSpawned)
+            if (enemiesKilled >= totalEnemiesSpawned)
                 WaveComplete();
         }
 
         if (intermission) return;
 
-        if (spawnEnemies == false) return;
+        
 
         // This prevents enemies from spawning before the wave ends and if all enemies on scene havent been killed yet
         if (currentGroup == waveSize) return;
@@ -82,6 +88,7 @@ public class WaveManager : NetworkBehaviour
         while (unitSpawnCount < groupSize)
         {
             EnemyUnit newEnemy = Instantiate(enemy1, WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
+            
             NetworkServer.Spawn(newEnemy.gameObject);
             newEnemy.SetMaxHealthMultiplier(healthMultiplier);
             totalEnemiesSpawned++;
@@ -92,8 +99,10 @@ public class WaveManager : NetworkBehaviour
             
         }
 
-        if (currentWave == waveAmount - 1 && currentGroup == waveSize - 1)
+        if (currentWave == waveAmount && currentGroup == waveSize - 1)
             SpawnBoss();
+        else if (currentGroup == waveSize - 1)
+            StartCoroutine(ActivateSkipWave());
 
         yield return new WaitForSeconds(5.0f);
 
@@ -104,10 +113,11 @@ public class WaveManager : NetworkBehaviour
     [Server]
     void SpawnBoss()
     {
-        GameObject newBoss = Instantiate(boss, WayPointsManager.points[0].position, Quaternion.identity);
+        EnemyUnit newBoss = Instantiate(boss, WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
         totalEnemiesSpawned++;
-
-        NetworkServer.Spawn(newBoss);
+        
+        NetworkServer.Spawn(newBoss.gameObject);
+        newBoss.SetMaxHealthMultiplier(playerMultiplier);
     }
 
     IEnumerator Intermission()
@@ -120,11 +130,86 @@ public class WaveManager : NetworkBehaviour
         intermission = false;
     }
 
+    IEnumerator ActivateSkipWave()
+    {
+        float currentTime = 0;
+
+        while (currentTime < 5)
+        {
+            currentTime += Time.deltaTime;
+
+            yield return null;
+        }
+
+        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+        {
+            RpcToggleSkipWaveButton(player.connectionToClient, true);
+        }
+
+        RpcUpdateSkipWaveCount(playerReadyCount, GameManager.instance.playerCount);
+    }
+
+    [TargetRpc]
+    void RpcToggleSkipWaveButton(NetworkConnectionToClient conn, bool result)
+    {
+        UIManager.instance.ToggleSkipButtonLocally(result);
+        
+    }
+
+    [ClientRpc]
+    void RpcUpdateSkipWaveCount(int readyCount, int maxPlayers)
+    {
+        UIManager.instance.UpdateSkipWaveButton(readyCount, maxPlayers);
+    }
+
+    [Server]
+    public void PlayersAreReady(bool result, NetworkIdentity player)
+    {
+        if (playersReadyToSkip.Count > 0)
+        {
+            if (playersReadyToSkip.Contains(player) == true)
+            {
+                playerReadyCount--;
+                playersReadyToSkip.Remove(player);
+            }
+            else
+            {
+                playerReadyCount++;
+                playersReadyToSkip.Add(player);
+            }
+        }
+        else
+        {
+            playerReadyCount++;
+            playersReadyToSkip.Add(player);
+        }
+
+        RpcUpdateSkipWaveCount(playerReadyCount, GameManager.instance.playerCount);
+
+        if (playerReadyCount == GameManager.instance.playerCount)
+        {
+            playerReadyCount = 0;
+            playersReadyToSkip.Clear();
+            enemiesKilled = enemiesKilled - totalEnemiesSpawned;
+            
+            SkipWaveComplete();
+
+            foreach (NetworkIdentity newplayer in CSNetworkManager.instance.players)
+            {
+                RemoveSkipWaveButton(newplayer.connectionToClient);
+            }
+        }
+    }
+
+    [TargetRpc]
+    void RemoveSkipWaveButton(NetworkConnectionToClient conn)
+    {
+        UIManager.instance.ToggleSkipButtonLocally(false);
+    }
+
     [Server]
     void WaveComplete()
     {
-        currentWave++;
-
         if (currentWave == waveAmount)
         {
             GameComplete();
@@ -134,13 +219,34 @@ public class WaveManager : NetworkBehaviour
         else
         {
             Debug.Log($"Wave complete!");
-            healthMultiplier++;
+            currentWave++;
+            healthMultiplier = playerMultiplier * (currentWave);
             enemiesKilled = 0;
             totalEnemiesSpawned = 0;
+            playersReadyToSkip.Clear();
+            playerReadyCount = 0;
 
+            foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+            {
+                RpcToggleSkipWaveButton(player.connectionToClient, false);
+            }
+
+            StopCoroutine(nameof(ActivateSkipWave));
             StartCoroutine(Intermission());
             currentGroup = 0;
         }
+    }
+
+    void SkipWaveComplete()
+    {
+        Debug.Log($"Wave complete!");
+        currentWave++;
+        healthMultiplier = playerMultiplier * (currentWave);
+        totalEnemiesSpawned = 0;
+
+        StopCoroutine(nameof(ActivateSkipWave));
+        StartCoroutine(Intermission());
+        currentGroup = 0;
     }
 
     [Server]
@@ -155,4 +261,20 @@ public class WaveManager : NetworkBehaviour
     {
         enemiesKilled++;
     }
+
+    [Server]
+    public void SetHealthWithPlayerCount(int playerCount)
+    {
+        
+        playerMultiplier *= (playerCount * 0.75f);
+
+        if (playerCount == 1)
+        {
+            playerMultiplier = 1;
+        }
+
+        healthMultiplier = playerMultiplier;
+    } 
+
+    
 }

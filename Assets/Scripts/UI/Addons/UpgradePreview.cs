@@ -16,11 +16,11 @@ public class UpgradePreview : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UIUnitStats.SingleTon.PreviewStats();
+        UIUnitStats.instance.PreviewStats();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        UIUnitStats.SingleTon.SetStats();
+        UIUnitStats.instance.SetStats();
     }
 }
