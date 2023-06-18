@@ -15,7 +15,7 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] GameObject playerNameTag;
     public PlayerMovement playerMovement;
     CameraControls cameraControls;
-
+    public bool ingame = false;
     
 
     [TargetRpc]
@@ -36,6 +36,8 @@ public class PlayerManager : NetworkBehaviour
 
     private void Start()
     {
+        if (!ingame) return;
+
         if (!isLocalPlayer) return;
 
         controller = GetComponent<CharacterController>();
@@ -50,6 +52,8 @@ public class PlayerManager : NetworkBehaviour
 
     private void Update()
     {
+        if (!ingame) return;
+
         if (!isLocalPlayer) return;
 
         /*if (Input.GetKeyDown(KeyCode.Escape))
@@ -98,6 +102,30 @@ public class PlayerManager : NetworkBehaviour
     public void AdjustHeadHeight()
     {
         head.localPosition = new Vector3(0, controller.height - 1, 0);
+    }
+
+    #endregion
+
+    #region Menu Lobby shit
+
+    [ClientRpc]
+    public void OnStartLobby()
+    {
+        foreach (Transform child in this.gameObject.transform)
+        {
+            ingame = false;
+            child.gameObject.SetActive(false);
+        }
+    }
+
+    [ClientRpc]
+    public void OnStartGame()
+    {
+        foreach (Transform child in this.gameObject.transform)
+        {
+            ingame = true;
+            child.gameObject.SetActive(false);
+        }
     }
 
     #endregion

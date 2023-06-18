@@ -22,11 +22,14 @@ public class PlayerStateManager : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerManager = GetComponent<PlayerManager>();
+
+        if (!playerManager.ingame) return;
+
         if (!isLocalPlayer) return;
 
         playerAnimations = GetComponent<PlayerAnimationManager>();
         playerMovement = GetComponent<PlayerMovement>();
-        playerManager = GetComponent<PlayerManager>();
         inputManager = GetComponent<InputManager>();
 
         currentState = FallingState;
@@ -37,6 +40,8 @@ public class PlayerStateManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!playerManager.ingame) return;
+
         if (!isLocalPlayer) return;
 
         currentState.UpdateState(this);

@@ -108,6 +108,7 @@ public class WaveManager : NetworkBehaviour
 
         unitSpawnCount = 0;
         currentGroup++;
+        healthMultiplier += 0.08f;
     }
 
     [Server]
@@ -265,7 +266,6 @@ public class WaveManager : NetworkBehaviour
     [Server]
     public void SetHealthWithPlayerCount(int playerCount)
     {
-        
         playerMultiplier *= (playerCount * 0.75f);
 
         if (playerCount == 1)
@@ -274,7 +274,5 @@ public class WaveManager : NetworkBehaviour
         }
 
         healthMultiplier = playerMultiplier;
-    } 
-
-    
+    }
 }

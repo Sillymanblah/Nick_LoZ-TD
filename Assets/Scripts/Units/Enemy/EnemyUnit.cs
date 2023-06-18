@@ -42,6 +42,10 @@ public class EnemyUnit : NetworkBehaviour
         dropMoney = Mathf.FloorToInt(moneyMultiplier * healthPoints);
         target = WayPointsManager.points[1];
 
+        var lookAtWaypoint = new Vector3(target.position.x, transform.position.y, target.position.z);
+
+        transform.LookAt(lookAtWaypoint, Vector3.up);
+
         previousPosition = transform.position;
         InvokeRepeating(nameof(TrackDistance), 0, 0.1f);
     }
@@ -71,6 +75,10 @@ public class EnemyUnit : NetworkBehaviour
 
         wavepointIndex++;
         target = WayPointsManager.points[wavepointIndex];
+
+        var lookAtWaypoint = new Vector3(target.position.x, transform.position.y, target.position.z);
+
+        transform.LookAt(lookAtWaypoint, Vector3.up);
     }
 
     void TrackDistance()

@@ -17,6 +17,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
     [SerializeField] Transform currentGridTransform;
     [SerializeField] GridCell currentGrid;
+    [SerializeField] PlayerManager playerManager;
 
     bool placedUnit = true;
 
@@ -24,6 +25,8 @@ public class PlayerUnitManager : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!playerManager.ingame) return;
+
         if (!isLocalPlayer) return;
 
         var gameManager = GameManager.instance;
@@ -39,6 +42,9 @@ public class PlayerUnitManager : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
+
+        if (!playerManager.ingame) return;
+
         if (!isLocalPlayer) return;
         
         UIManager.instance.player = this;
@@ -48,6 +54,8 @@ public class PlayerUnitManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!playerManager.ingame) return;
+
         if (!isLocalPlayer) return;
 
         GridPickerRaycast();
@@ -213,6 +221,13 @@ public class PlayerUnitManager : NetworkBehaviour
 
         while (setUnitDown == false)
         {
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                Destroy(thisUnit);
+                placedUnit = true;
+                yield break;
+            }
+
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 currentGrid = currentGridTransform.GetComponent<GridCell>();
