@@ -127,7 +127,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  money: 250
+  money: 300
   unitsLoadout:
   - {fileID: 11400000, guid: b6fb9e408031c3e4e9d3a73905d2f098, type: 2}
   - {fileID: 11400000, guid: 7b7ea45b2e6970041b0ef4606aa4f201, type: 2}

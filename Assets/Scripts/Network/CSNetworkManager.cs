@@ -9,6 +9,7 @@ public class CSNetworkManager : NetworkManager
 {
     public static CSNetworkManager instance;
     public List<NetworkIdentity> players = new List<NetworkIdentity>();
+    List<string> playerNames = new List<string>();
     KcpTransport thisTransport;
     
 
@@ -31,48 +32,70 @@ public class CSNetworkManager : NetworkManager
         
     }
 
-    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
+    public override void OnServerConnect(NetworkConnectionToClient conn)
     {
-        base.OnServerAddPlayer(conn);
-        
-        // For lobby
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        base.OnServerConnect(conn);
+        if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            players.Add(conn.identity);
-            conn.identity.GetComponent<PlayerManager>().OnStartLobby();
-
-            conn.identity.GetComponent<PlayerNetworkInfo>().OnClientJoinLobby();
+            if (GameManager.instance.gameStarted)
+                conn.Disconnect();
 
             return;
         }
+    }
 
-        conn.identity.GetComponent<PlayerManager>().OnStartGame();
+    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
+    {
+        base.OnServerAddPlayer(conn);
+
+        Debug.Log(numPlayers);
+        players.Add(conn.identity);
+
+        // For lobby
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            conn.identity.GetComponent<PlayerManager>().OnStartLobby();
+            conn.identity.GetComponent<PlayerNetworkInfo>().OnClientJoinLobby();
+            return;
+        }
 
         // For ingame and after lobby
 
-        GameManager.instance.UpdatePlayerCount(true);
+        GameManager.instance.UpdatePlayerCount();
 
-        PlayerManager player = conn.identity.GetComponent<PlayerManager>();
-        player.SetCameraPOV();
+        conn.identity.GetComponent<PlayerManager>().OnStartGame(conn);
+
+        //PlayerManager player = conn.identity.GetComponent<PlayerManager>();
+        
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
-        Scene activeScene = SceneManager.GetActiveScene();
-
+        playerNames.Remove(conn.identity.GetComponent<PlayerNetworkInfo>().name);
         players.Remove(conn.identity);
-        base.OnServerDisconnect(conn);
-
+        
         // for lobby
-        if (activeScene.buildIndex == 0)
+        if (SceneManager.GetActiveScene().buildIndex == 0)
         {
+            conn.identity.GetComponent<PlayerNetworkInfo>().OnClientLeaveLobby(conn);
             SetLobbyPlayerNames();
+
+            base.OnServerDisconnect(conn);
             return;
         }
-
         // for ingame
 
-        GameManager.instance.UpdatePlayerCount(false);
+        GameManager.instance.UpdatePlayerCount();
+        base.OnServerDisconnect(conn);
+
+        if (numPlayers == 0)
+        {
+            ServerChangeScene("MainMenu");
+            players.Clear();
+            playerNames.Clear();
+        }
+
+        
     }
 
     public override void OnStartServer()
@@ -81,10 +104,6 @@ public class CSNetworkManager : NetworkManager
         thisTransport = GetComponent<KcpTransport>();
         Debug.Log("Server IP: " + networkAddress);
         Debug.Log($"Server Port: " + thisTransport.Port);
-
-        Scene activeScene = SceneManager.GetActiveScene();
-
-        if (activeScene.buildIndex != 0) return;
 
         LobbyScene();
     }
@@ -99,25 +118,34 @@ public class CSNetworkManager : NetworkManager
     {
         for (int i = 0; i < 4; i++)
         {
-            PlayerNetworkInfo playerNI = null;
-
-            if (players[0] != null)
-                playerNI = players[0].GetComponent<PlayerNetworkInfo>();
-
-            else if (players.Count == 0)
+            if (players.Count == 0)
             {
-                LobbyManager.instance.SetPlayerListUI(string.Empty, 0);
+                LobbyManager.instance.SetPlayerListUI(string.Empty, i);
                 continue;
             }
 
             // if the iteration count is greater than our player count, then we make the null player slots empty
             if (i + 1 > players.Count)
             {
-                playerNI.SetLobbyUI(string.Empty, i);
+                LobbyManager.instance.SetPlayerListUI(string.Empty, i);
                 continue;
             }
 
-            playerNI.SetLobbyUI(playerNI.name, i);
+            LobbyManager.instance.SetPlayerListUI(playerNames[i], i);
         }
+    }
+
+    [Server]
+    public void AddPlayerName(string name)
+    {
+        playerNames.Add(name);
+        SetLobbyPlayerNames();
+    }
+
+    [Server]
+    public void SwitchScenes(string sceneName)
+    {
+        ServerChangeScene(sceneName);
+        players.Clear();
     }
 }

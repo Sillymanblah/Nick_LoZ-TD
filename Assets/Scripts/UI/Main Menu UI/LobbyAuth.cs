@@ -21,7 +21,6 @@ public class LobbyAuth : MonoBehaviour
     public void SyncData(PlayerNetworkInfo player)
     {
         player.SetDisplayName(name);
-        Debug.Log(name);
     }
 
     public void SetName(string newName)

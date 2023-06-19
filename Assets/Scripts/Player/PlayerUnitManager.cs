@@ -37,16 +37,6 @@ public class PlayerUnitManager : NetworkBehaviour
         if (GameManager.instance.gameStarted == true)
             UIManager.instance.DisableReadyButtonLocally();
 
-    }
-
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-
-        if (!playerManager.ingame) return;
-
-        if (!isLocalPlayer) return;
-        
         UIManager.instance.player = this;
         UIManager.instance.SlotLoadout();
     }

@@ -17,8 +17,6 @@ public class PlayerManager : NetworkBehaviour
     CameraControls cameraControls;
     public bool ingame = false;
     
-
-    [TargetRpc]
     public void SetCameraPOV()
     {
         var camBrain = FindObjectOfType<CinemachineFreeLook>();
@@ -108,7 +106,7 @@ public class PlayerManager : NetworkBehaviour
 
     #region Menu Lobby shit
 
-    [ClientRpc]
+    [TargetRpc]
     public void OnStartLobby()
     {
         foreach (Transform child in this.gameObject.transform)
@@ -118,14 +116,16 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
-    public void OnStartGame()
+    [TargetRpc]
+    public void OnStartGame(NetworkConnectionToClient conn)
     {
         foreach (Transform child in this.gameObject.transform)
         {
             ingame = true;
-            child.gameObject.SetActive(false);
+            child.gameObject.SetActive(true);
         }
+
+        SetCameraPOV();
     }
 
     #endregion

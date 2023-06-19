@@ -22,17 +22,18 @@ public class MainMenuUIManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        instance = this;
+        
         backButton.SetActive(false);
         gamemodesMenu.SetActive(false);
         connectingMenu.SetActive(false);
         multiplayerLobby.SetActive(false);
         currentMenu = startMenu;
     }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        instance = this;
     }
 
     // Update is called once per frame

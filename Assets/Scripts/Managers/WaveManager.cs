@@ -147,7 +147,7 @@ public class WaveManager : NetworkBehaviour
             RpcToggleSkipWaveButton(player.connectionToClient, true);
         }
 
-        RpcUpdateSkipWaveCount(playerReadyCount, GameManager.instance.playerCount);
+        RpcUpdateSkipWaveCount(playerReadyCount, CSNetworkManager.instance.numPlayers);
     }
 
     [TargetRpc]
@@ -185,9 +185,9 @@ public class WaveManager : NetworkBehaviour
             playersReadyToSkip.Add(player);
         }
 
-        RpcUpdateSkipWaveCount(playerReadyCount, GameManager.instance.playerCount);
+        RpcUpdateSkipWaveCount(playerReadyCount, CSNetworkManager.instance.numPlayers);
 
-        if (playerReadyCount == GameManager.instance.playerCount)
+        if (playerReadyCount == CSNetworkManager.instance.numPlayers)
         {
             playerReadyCount = 0;
             playersReadyToSkip.Clear();

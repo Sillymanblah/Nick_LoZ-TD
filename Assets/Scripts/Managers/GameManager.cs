@@ -8,9 +8,6 @@ public class GameManager : NetworkBehaviour
     List<GridCell> totalGridCells = new List<GridCell>();
     public static GameManager instance;
 
-
-    public int playerCount;
-
     int playerReadyCount;
 
     [SyncVar]
@@ -73,12 +70,9 @@ public class GameManager : NetworkBehaviour
     }
 
     [Server]
-    public void UpdatePlayerCount(bool add)
+    public void UpdatePlayerCount()
     {
-        if (add) playerCount++;
-        else playerCount--;
-
-        RpcUpdatePlayerCount(playerReadyCount, playerCount);
+        RpcUpdatePlayerCount(playerReadyCount, CSNetworkManager.instance.numPlayers);
     }
 
     [ClientRpc]
@@ -93,16 +87,16 @@ public class GameManager : NetworkBehaviour
         if (ready == true) playerReadyCount++;
         else playerReadyCount--;
 
-        RpcUpdatePlayerCount(playerReadyCount, playerCount);
+        RpcUpdatePlayerCount(playerReadyCount, CSNetworkManager.instance.numPlayers);
 
-        UIManager.instance.UpdateReadyButton(playerReadyCount, playerCount);
+        UIManager.instance.UpdateReadyButton(playerReadyCount, CSNetworkManager.instance.numPlayers);
 
-        if (playerReadyCount == playerCount)
+        if (playerReadyCount == CSNetworkManager.instance.numPlayers)
         {
             gameStarted = true;
             WaveManager.instance.spawnEnemies = true;
-            WaveManager.instance.SetHealthWithPlayerCount(playerCount);
-            BaseManager.instance.SetBaseHP(playerCount);
+            WaveManager.instance.SetHealthWithPlayerCount(CSNetworkManager.instance.numPlayers);
+            BaseManager.instance.SetBaseHP(CSNetworkManager.instance.numPlayers);
             playerReadyCount = 0;
 
             foreach (NetworkIdentity player in CSNetworkManager.instance.players)
