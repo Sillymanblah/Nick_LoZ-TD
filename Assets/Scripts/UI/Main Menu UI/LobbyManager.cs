@@ -8,7 +8,6 @@ using TMPro;
 public class LobbyManager : NetworkBehaviour
 {
     public static LobbyManager instance;
-    [SerializeField] NetworkSceneManager networkSceneManager;
     [SerializeField] Transform lobbyParent;
     [SerializeField] TextMeshProUGUI readyButtonText;
     public PlayerNetworkInfo player;

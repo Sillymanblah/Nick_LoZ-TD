@@ -1961,7 +1961,7 @@ MonoBehaviour:
   autoConnectClientBuild: 0
   sendRate: 30
   offlineScene: Assets/Scenes/MainMenu.unity
-  onlineScene: Assets/Scenes/MainMenu.unity
+  onlineScene: 
   transport: {fileID: 1235458318}
   networkAddress: localhost
   maxConnections: 4
@@ -2005,7 +2005,7 @@ MonoBehaviour:
   DualMode: 1
   NoDelay: 1
   Interval: 10
-  Timeout: 10000
+  Timeout: 5000
   RecvBufferSize: 7361536
   SendBufferSize: 7361536
   FastResend: 2
@@ -3993,7 +3993,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  networkSceneManager: {fileID: 0}
   lobbyParent: {fileID: 1678338121}
   readyButtonText: {fileID: 508245986}
   player: {fileID: 0}

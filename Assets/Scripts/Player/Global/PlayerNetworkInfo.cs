@@ -30,8 +30,9 @@ public class PlayerNetworkInfo : NetworkBehaviour
         base.OnStartClient();
 
         if (!isLocalPlayer) return;
-        
+
         LobbyManager.instance.player = this;
+        MainMenuUIManager.instance?.LobbyMenu();
     }
 
     [TargetRpc]

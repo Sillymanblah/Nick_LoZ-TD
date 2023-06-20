@@ -255,6 +255,7 @@ public class WaveManager : NetworkBehaviour
     {
         Debug.Log($"Game is complete!!!!! :DDD");
         intermission = true;
+        StartCoroutine(DelayEndingGame());
     }
 
     [Server]
@@ -274,5 +275,11 @@ public class WaveManager : NetworkBehaviour
         }
 
         healthMultiplier = playerMultiplier;
+    }
+
+    IEnumerator DelayEndingGame()
+    {
+        yield return new WaitForSeconds(2.0f);
+        NetworkServer.DisconnectAll();
     }
 }

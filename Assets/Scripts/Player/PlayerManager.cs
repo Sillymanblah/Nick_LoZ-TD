@@ -54,13 +54,13 @@ public class PlayerManager : NetworkBehaviour
 
         if (!isLocalPlayer) return;
 
-        /*if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             NetworkClient.Disconnect();
 
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-        }*/
+        }
 
         
         cameraControls.SwitchCameraMovementControl();

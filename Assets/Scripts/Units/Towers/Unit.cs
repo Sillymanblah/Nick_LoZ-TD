@@ -110,6 +110,11 @@ public class Unit : NetworkBehaviour
         rangeVisualSprite.localScale = new Vector3(1,1) * (rangeCollider.radius * 0.2f);
     }
 
+    public override void OnStopServer()
+    {
+        GameManager.instance.SyncGridCellOccupence(false, gridCellIndex);
+    }
+
     // Update is called once per frame
     protected virtual void Update()
     {

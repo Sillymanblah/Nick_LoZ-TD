@@ -75,10 +75,25 @@ public class MainMenuUIManager : MonoBehaviour
     public void GoMultiplayer()
     {
         currentMenu = multiplayerLobby;
-        multiplayerLobby.SetActive(true);
+        
         gamemodesMenu.SetActive(false);
         backButton.SetActive(false);
+        connectingMenu.SetActive(true);
+        Debug.Log($"starting client");
         NetworkManager.singleton.StartClient();
+    }
+
+    public void FailedToJoinLobby()
+    {
+        GoToGamemodes();
+        connectingMenu.SetActive(false);
+        Debug.Log($"Failed to connect");
+    }
+
+    public void LobbyMenu()
+    {
+        multiplayerLobby.SetActive(true);
+        connectingMenu.SetActive(false);
     }
 
     public void LeaveLobby()

@@ -38,7 +38,11 @@ public class CSNetworkManager : NetworkManager
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
             if (GameManager.instance.gameStarted)
+            {
                 conn.Disconnect();
+                Debug.Log($"ONSERVERCONNECT");
+
+            }
 
             return;
         }
@@ -48,7 +52,7 @@ public class CSNetworkManager : NetworkManager
     {
         base.OnServerAddPlayer(conn);
 
-        Debug.Log(numPlayers);
+        Debug.Log(conn.identity.GetComponent<PlayerNetworkInfo>().name + " has joined the game!");
         players.Add(conn.identity);
 
         // For lobby
@@ -71,15 +75,18 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
+        Debug.Log(conn.identity.GetComponent<PlayerNetworkInfo>().name + " has left the game");
         playerNames.Remove(conn.identity.GetComponent<PlayerNetworkInfo>().name);
         players.Remove(conn.identity);
         
+        
+
         // for lobby
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             conn.identity.GetComponent<PlayerNetworkInfo>().OnClientLeaveLobby(conn);
             SetLobbyPlayerNames();
-
+            Debug.Log($"disc alooo");
             base.OnServerDisconnect(conn);
             return;
         }
@@ -90,12 +97,13 @@ public class CSNetworkManager : NetworkManager
 
         if (numPlayers == 0)
         {
+            Debug.LogWarning($"Changing Scenes");
             ServerChangeScene("MainMenu");
+            
+
             players.Clear();
             playerNames.Clear();
         }
-
-        
     }
 
     public override void OnStartServer()
@@ -106,6 +114,12 @@ public class CSNetworkManager : NetworkManager
         Debug.Log($"Server Port: " + thisTransport.Port);
 
         LobbyScene();
+    }
+
+    public override void OnClientError(TransportError error, string reason)
+    {
+        base.OnClientError(error, reason);
+        MainMenuUIManager.instance.FailedToJoinLobby();
     }
 
     void LobbyScene()
