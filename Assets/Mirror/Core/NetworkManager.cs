@@ -1266,7 +1266,7 @@ namespace Mirror
             // This needs to run for host client too. NetworkServer.active is checked there
             if (NetworkClient.isConnected)
             {
-                if (msg.sceneName == "MainMenu" && SceneManager.GetActiveScene().buildIndex == 0) return;
+                if (msg.sceneName == SceneManager.GetActiveScene().name) return;
 
                 ClientChangeScene(msg.sceneName, msg.sceneOperation, msg.customHandling);
             }

@@ -31,6 +31,8 @@ public class PlayerNetworkInfo : NetworkBehaviour
 
         if (!isLocalPlayer) return;
 
+        if (CSNetworkManager.instance.sceneTesting) return;
+
         LobbyManager.instance.player = this;
         MainMenuUIManager.instance?.LobbyMenu();
     }

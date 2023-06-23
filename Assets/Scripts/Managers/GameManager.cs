@@ -37,6 +37,8 @@ public class GameManager : NetworkBehaviour
 
     public override void OnStartClient()
     {
+        if (CSNetworkManager.instance.sceneTesting) return;
+
         Transform gridCellParent = GameObject.Find("GridCells").transform;
 
         for (int i = 0; i < gridCellParent.childCount; i++)

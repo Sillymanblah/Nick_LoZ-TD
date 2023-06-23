@@ -14,6 +14,7 @@ public class CSNetworkManager : NetworkManager
     
 
     [SerializeField] bool DeployingAsServer;
+    [SerializeField] public bool sceneTesting;
 
     // Start is called before the first frame update
     public override void Start()
@@ -112,6 +113,8 @@ public class CSNetworkManager : NetworkManager
         thisTransport = GetComponent<KcpTransport>();
         Debug.Log("Server IP: " + networkAddress);
         Debug.Log($"Server Port: " + thisTransport.Port);
+
+        if (sceneTesting) return;
 
         LobbyScene();
     }

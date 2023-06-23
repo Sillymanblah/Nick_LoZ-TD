@@ -1,0 +1,126 @@
+# Blender MTL File: 'SkullKid.blend'
+# Material Count: 10
+
+newmtl Beak
+Ns 218.431006
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.300000 Textures\\Beak_Normal.png
+map_Kd Textures\\Beak_ALB.png
+
+newmtl Eye
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Textures\\Eye_ALB.png
+map_d Textures\\Eye_ALB.png
+
+newmtl Head
+Ns 3.941393
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.500000 Textures\\DeadWood_Normal.png
+map_Kd Textures\\DeadWood_ALB.png
+
+newmtl Ivory
+Ns 316.963763
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd Textures\\Fibers_ALB.png
+
+newmtl Rock2
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump C:\\Users\\cyan2\\Desktop\\Art\\Projects\\LOZ Tower Defense\\Sacred Meadow\\Textures\\Stylized_Rocks_002_normalEDIT.png
+map_Kd C:\\Users\\cyan2\\Desktop\\Art\\Projects\\LOZ Tower Defense\\Sacred Meadow\\TexturesMap\\Stylized_Rocks_002_basecolorEDIT2.png
+
+newmtl Scarf
+Ns 10.948310
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.300000 Textures\\Scarf_Normal.png
+map_Kd Textures\\Scarf.psd
+map_d Textures\\Scarf.psd
+
+newmtl Shorts
+Ns 49.826984
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.300000 Textures\\TunicSleeves_Normal.png
+map_Kd Textures\\Shorts_ALB.png
+map_d Textures\\Shorts_ALB.png
+
+newmtl SkullKidHat
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.300000 Textures\\SkullKidHat_Normal.png
+map_Kd Textures\\SkullKidHat_ALB.png
+map_d Textures\\SkullKidHat_ALB.png
+
+newmtl Tunic
+Ns 46.761453
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.300000 Textures\\SkullKidTunic_Normal.png
+map_Kd Textures\\SkullKidTunic_ALB.png
+map_d Textures\\SkullKidTunic_ALB.png
+
+newmtl TunicSleeves
+Ns 49.826984
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 0.300000 Textures\\TunicSleeves_Normal.png
+map_Kd Textures\\TunicSleeves_ALB.png
+map_d Textures\\TunicSleeves_ALB.png
