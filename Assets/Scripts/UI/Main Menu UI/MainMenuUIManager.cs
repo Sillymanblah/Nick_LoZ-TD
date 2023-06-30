@@ -28,12 +28,13 @@ public class MainMenuUIManager : MonoBehaviour
         connectingMenu.SetActive(false);
         multiplayerLobby.SetActive(false);
         currentMenu = startMenu;
+        instance = this;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        instance = this;
+        
     }
 
     // Update is called once per frame
@@ -41,6 +42,8 @@ public class MainMenuUIManager : MonoBehaviour
     {
         
     }
+
+
 
     public void GoToGamemodes()
     {

@@ -8,8 +8,9 @@ public class WaveManager : NetworkBehaviour
     public static WaveManager instance;
     public bool spawnEnemies = false;
 
-    [SerializeField] GameObject enemy1;
-    [SerializeField] GameObject boss;
+    [SerializeField] List<GameObject> enemies = new List<GameObject>();
+    [SerializeField] List<GameObject> bosses = new List<GameObject>();
+
 
     [SerializeField] bool intermission = false;
 
@@ -39,7 +40,7 @@ public class WaveManager : NetworkBehaviour
     [Space]
 
     [Header("Enemy code things")]
-    float healthMultiplier = 1;
+    public float healthMultiplier = 1;
     float playerMultiplier = 1;
     [SerializeField] int enemiesKilled;
 
@@ -85,9 +86,11 @@ public class WaveManager : NetworkBehaviour
     [Server]
     IEnumerator SpawnUnits()
     {
+        int randomEnemy = Random.Range(0, enemies.Count);
+
         while (unitSpawnCount < groupSize)
         {
-            EnemyUnit newEnemy = Instantiate(enemy1, WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
+            EnemyUnit newEnemy = Instantiate(enemies[randomEnemy], WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
             
             NetworkServer.Spawn(newEnemy.gameObject);
             newEnemy.SetMaxHealthMultiplier(healthMultiplier);
@@ -99,10 +102,15 @@ public class WaveManager : NetworkBehaviour
             
         }
 
-        if (currentWave == waveAmount && currentGroup == waveSize - 1)
+        // if the current spawned group is equal to the size of the waves ( - 1 to account for 0)
+        if (currentGroup == waveSize - 1)
+        {
             SpawnBoss();
-        else if (currentGroup == waveSize - 1)
-            StartCoroutine(ActivateSkipWave());
+
+            // if the wave we are on isnt the final wave
+            if (currentWave != waveAmount)
+                StartCoroutine(ActivateSkipWave());
+        }
 
         yield return new WaitForSeconds(5.0f);
 
@@ -114,7 +122,15 @@ public class WaveManager : NetworkBehaviour
     [Server]
     void SpawnBoss()
     {
-        EnemyUnit newBoss = Instantiate(boss, WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
+        EnemyUnit newBoss = null;
+
+        /*if (currentWave == 1)
+            newBoss = Instantiate(boss1, WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
+        else if (currentWave == waveAmount)
+            newBoss = Instantiate(boss2, WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();*/
+
+        newBoss = Instantiate(bosses[currentWave - 1], WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
+        
         totalEnemiesSpawned++;
         
         NetworkServer.Spawn(newBoss.gameObject);
@@ -221,7 +237,7 @@ public class WaveManager : NetworkBehaviour
         {
             Debug.Log($"Wave complete!");
             currentWave++;
-            healthMultiplier = playerMultiplier * (currentWave);
+            healthMultiplier = playerMultiplier * (currentWave * 1.5f);
             enemiesKilled = 0;
             totalEnemiesSpawned = 0;
             playersReadyToSkip.Clear();

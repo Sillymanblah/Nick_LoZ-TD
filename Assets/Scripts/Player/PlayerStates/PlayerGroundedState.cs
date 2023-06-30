@@ -10,7 +10,7 @@ public class PlayerGroundedState : PlayerBaseState
         player.controller.center = Vector3.zero;
         //player.playerAnimations.LandingJumpAnimation(); TEMP disabled due to switching states code
         
-        player.playerManager.AdjustHeadHeight();
+        //player.playerManager.AdjustHeadHeight();
     }
 
     public override void UpdateState(PlayerStateManager player)

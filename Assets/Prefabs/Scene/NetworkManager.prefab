@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 9173269634202737194}
   - component: {fileID: 9173269634202737193}
   - component: {fileID: 9173269634202737196}
-  - component: {fileID: 9173269634202737195}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -51,10 +50,10 @@ MonoBehaviour:
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
   sendRate: 30
-  offlineScene: 
+  offlineScene: Assets/Scenes/MainMenu.unity
   onlineScene: 
   transport: {fileID: 9173269634202737196}
-  networkAddress: 35.90.56.82
+  networkAddress: localhost
   maxConnections: 4
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 794515074907002375, guid: 66aeec88f1ece2f4fbeb34bcccc82733,
@@ -62,11 +61,15 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 7051703183058129083, guid: bff7b148fcc1cb34c8a6b446318c196f, type: 3}
-  - {fileID: 4014926004409056775, guid: 52b85c6aa83ff234583b274adcb0d057, type: 3}
-  - {fileID: 540426367160929277, guid: 90a4d3a735f0f504a8c8cdd2ead9277b, type: 3}
-  - {fileID: 5865840783461304122, guid: 9ed37fe9a8721dc4b909512fd3b9b3f2, type: 3}
-  - {fileID: 7017908674444291704, guid: ad39f9223bf36ca4aaaf8c0181d09854, type: 3}
+  - {fileID: 6958934365885886503, guid: 2fbc8f01d6272f448ac05f60414d7db2, type: 3}
+  - {fileID: 5928349616074529524, guid: 5389c4597f4e452428129c37f5615ef1, type: 3}
+  - {fileID: 5977893554625882208, guid: ab070dce6f5cafd4d8da52b2e9f1aa7e, type: 3}
+  - {fileID: 2915023377610069180, guid: 5acb3367a8a24b044a8365e15e7561e5, type: 3}
+  - {fileID: 5777884355589571868, guid: 7ecaac6650afd2c40bf17ca19e5c6b3c, type: 3}
+  - {fileID: 1733210408596726202, guid: 73ae55e9d5bcaef45a9f0c36464d110f, type: 3}
+  - {fileID: 1187469130094244461, guid: 99a0b7818b2544f4ab0252927e9fa35f, type: 3}
+  - {fileID: 867883072639063164, guid: 107af37b69827b64f998034450a4165d, type: 3}
+  - {fileID: 7801556227058250581, guid: c13fcafad3f7e50479be4e3116171090, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     catchupNegativeThreshold: -1
@@ -79,7 +82,8 @@ MonoBehaviour:
     deliveryTimeEmaDuration: 2
   timeInterpolationGui: 0
   players: []
-  DeployingAsServer: 1
+  DeployingAsServer: 0
+  sceneTesting: 0
 --- !u!114 &9173269634202737196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  port: 7778
+  port: 7777
   DualMode: 1
   NoDelay: 1
   Interval: 10
@@ -109,17 +113,3 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &9173269634202737195
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9173269634202737192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offsetX: 0
-  offsetY: 0

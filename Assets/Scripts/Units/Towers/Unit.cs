@@ -104,6 +104,7 @@ public class Unit : NetworkBehaviour
     {
         base.OnStartAuthority();
 
+        
         range = unitSO.CurrentRange(level);
 
         rangeCollider.radius = range / 5;
@@ -145,7 +146,7 @@ public class Unit : NetworkBehaviour
         cost = unitSO.NextCost(level + 1);
 
         unitName = unitSO.name;
-        ownedPlayerName = "Player " + attachedPlayer.netIdentity.netId;
+        ownedPlayerName = attachedPlayer.GetComponent<PlayerNetworkInfo>().name;
         attack = unitSO.CurrentAttack(level);
         cooldown = unitSO.CurrentCooldown(level);
         range = unitSO.CurrentRange(level);
@@ -161,8 +162,6 @@ public class Unit : NetworkBehaviour
     [TargetRpc]
     void ClientPlacedUnit()
     {
-        transform.GetChild(0).GetComponent<MeshRenderer>().material.color = Color.red;
-
         isPlaced = true;
     }
 
@@ -323,6 +322,7 @@ public class Unit : NetworkBehaviour
         }
 
         CurrentTargettingMode();
+        
 
         if (enemiesInRange[0] == null)
         {
@@ -331,9 +331,49 @@ public class Unit : NetworkBehaviour
         }
         else
         { 
+            int rand = Random.Range(0, 100);
+            if (rand < unitSO.chanceToMiss)
+            {
+                Debug.Log($"missed attack");
+                goto MissedAttack;
+            }
             enemiesInRange[0].DealDamage(attack);
         }
+        RpcUnitLookAtEnemyAnimation(enemiesInRange[0].transform.position);
+
+        MissedAttack:
         currentCooldown = Time.time + cooldown;
+    }
+
+    [ClientRpc]
+    void RpcUnitLookAtEnemyAnimation(Vector3 firstEnemyPos)
+    {
+        StartCoroutine(UnitLookAtEnemyAnimation(firstEnemyPos));
+    }
+
+    IEnumerator UnitLookAtEnemyAnimation(Vector3 firstEnemyPos)
+    {
+        Vector3 lookEnemyRot = new Vector3(firstEnemyPos.x, 0, firstEnemyPos.z);
+        Vector3 modelUnitRot = new Vector3(transform.GetChild(0).position.x, 0, transform.GetChild(0).position.z);
+
+        Quaternion lookOnLook = Quaternion.LookRotation(lookEnemyRot - modelUnitRot);
+        
+
+        float timer = 0;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime;
+            transform.GetChild(0).rotation = Quaternion.Slerp(transform.GetChild(0).rotation, lookOnLook, Time.deltaTime * 40);
+            yield return null;
+        }
+    }
+
+    public void ChangeVisualRangeSprite(bool red)
+    {
+        if (red)
+            rangeVisualSprite.GetComponent<SpriteRenderer>().color = new Color (1, 0, 0, 0.3f);
+        else
+            rangeVisualSprite.GetComponent<SpriteRenderer>().color = new Color (1, 1, 1, 0.3f);
     }
     
     public virtual void SelectUnit()

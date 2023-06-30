@@ -59,7 +59,6 @@ public class CSNetworkManager : NetworkManager
         // For lobby
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            conn.identity.GetComponent<PlayerManager>().OnStartLobby();
             conn.identity.GetComponent<PlayerNetworkInfo>().OnClientJoinLobby();
             return;
         }

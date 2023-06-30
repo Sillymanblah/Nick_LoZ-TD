@@ -69,6 +69,7 @@ public class EnemyUnit : NetworkBehaviour
         if (wavepointIndex >= WayPointsManager.points.Length - 1)
         {
             BaseManager.instance.ChangeHealth(-maxHealthPoints);
+            WaveManager.instance.EnemyKilled();
             NetworkServer.Destroy(gameObject);
             return;
         }

@@ -4,6 +4,7 @@ using UnityEngine;
 using Mirror;
 using Cinemachine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : NetworkBehaviour
 {
@@ -34,9 +35,25 @@ public class PlayerManager : NetworkBehaviour
 
     private void Start()
     {
+        if (isServer) return;
+
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            foreach (Transform child in this.gameObject.transform)
+            {
+                Debug.Log($"Wtff");
+                child.gameObject.SetActive(false);
+            }
+        }
+
         if (!ingame) return;
 
         if (!isLocalPlayer) return;
+
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            ingame = false;
+        }
 
         controller = GetComponent<CharacterController>();
         playerMovement = GetComponent<PlayerMovement>();
@@ -44,7 +61,6 @@ public class PlayerManager : NetworkBehaviour
 
         cameraControls.CCStart();
 
-        SetNameCmd();
         //playerNameTag.SetActive(false);
     }
 
@@ -67,51 +83,33 @@ public class PlayerManager : NetworkBehaviour
         Physics.IgnoreLayerCollision(8, 3, true);
         Physics.IgnoreLayerCollision(8, 6, true);
         Physics.IgnoreLayerCollision(8, 9, true);
-
-        head.localPosition = new Vector3(0, controller.height - 1.04f, 0);
     }
 
     #region Username shit
 
     [SerializeField] TextMeshProUGUI UsernameText = null;
 
-    // Lets us be able to use this method for when the variable has updated
-    [SyncVar(hook = nameof(HandleUsernameUpdated))]
-    [SerializeField] string Username = "Missing Name";
-
-    [Command] // Makes the username var = to the new username
-    public void SetDisplayName(string newName)
+    [ClientRpc]
+    public void SetUserNameNameTag(string newName)
     {
-        Username = newName;
+        UsernameText.text = newName;
     }
 
-    // A way for the server to know if a variable has updated
-    // Updates the username UI text to the UPDATED username var
-    void HandleUsernameUpdated(string oldUsername, string newUsername)
-    {
-        UsernameText.text = newUsername;
-    }
-
-    void SetNameCmd()
-    {
-        //SetDisplayName(FindObjectOfType<TMP_InputField>().text);
-    }
-
-    public void AdjustHeadHeight()
+    /*public void AdjustHeadHeight()
     {
         head.localPosition = new Vector3(0, controller.height - 1, 0);
-    }
+    }*/
 
     #endregion
 
     #region Menu Lobby shit
 
-    [TargetRpc]
     public void OnStartLobby()
     {
+        ingame = false;
         foreach (Transform child in this.gameObject.transform)
         {
-            ingame = false;
+            Debug.Log($"Wtff");
             child.gameObject.SetActive(false);
         }
     }
@@ -119,9 +117,10 @@ public class PlayerManager : NetworkBehaviour
     [TargetRpc]
     public void OnStartGame(NetworkConnectionToClient conn)
     {
+        ingame = true;
         foreach (Transform child in this.gameObject.transform)
         {
-            ingame = true;
+            
             child.gameObject.SetActive(true);
         }
 

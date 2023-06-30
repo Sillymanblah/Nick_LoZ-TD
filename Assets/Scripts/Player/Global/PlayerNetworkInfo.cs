@@ -10,13 +10,14 @@ public class PlayerNetworkInfo : NetworkBehaviour
     public new string name;
     bool playerReady = false;
     LobbyAuth playerAuth;
+    PlayerManager playerManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (!isLocalPlayer) return;
+        playerManager = GetComponent<PlayerManager>();
 
-        
+        //if (!isLocalPlayer) return;
     }
 
     // Update is called once per frame
@@ -33,8 +34,15 @@ public class PlayerNetworkInfo : NetworkBehaviour
 
         if (CSNetworkManager.instance.sceneTesting) return;
 
-        LobbyManager.instance.player = this;
-        MainMenuUIManager.instance?.LobbyMenu();
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            MainMenuUIManager.instance?.LobbyMenu();
+            LobbyManager.instance.player = this;
+            return;
+        }
+
+        name = PlayerPrefs.GetString("NewName");
+        SetDisplayName(name);
     }
 
     [TargetRpc]
@@ -59,14 +67,31 @@ public class PlayerNetworkInfo : NetworkBehaviour
     {
         name = newName;
 
+        if (SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            
+            playerManager.SetUserNameNameTag(name);
+        }
+        else
+        {
+            SaveClientData(name);
+        }
         CSNetworkManager.instance.AddPlayerName(name);
     }
 
     [TargetRpc]
+    void SaveClientData(string value)
+    {
+        PlayerPrefs.SetString("NewName", value);
+        PlayerPrefs.Save();
+    }
+
+
+    /*[TargetRpc]
     public void SetLobbyUI(string name, int index)
     {
         LobbyManager.instance.SetPlayerListUI(name, index);
-    }
+    }*/
 
     [Command]
     public void ReadyUpButton()

@@ -3,7 +3,22 @@ guid: a13111e04d5fc6041985fabe8cfc16da
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Scrub
+    second: {fileID: 2100000, guid: 18a68bd43a3e32147b9a765aa3e1cb64, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ScrubFace
+    second: {fileID: 2100000, guid: 552195d09457e294e9d702157e3e7c56, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ScrubLeafRed_ALB
+    second: {fileID: 2100000, guid: a1498945a5a33e549a3a552de0eb1750, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

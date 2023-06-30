@@ -9,6 +9,8 @@ public class UnitSO : ScriptableObject
     public int unitID;
     public Sprite icon;
     public GameObject prefab;
+    public int chanceToMiss;
+    [SerializeField] public GridType gridType; 
 
     [Header("Level 1")]
     [SerializeField] int cost1;
@@ -17,6 +19,7 @@ public class UnitSO : ScriptableObject
     [SerializeField] float range1;
     [Space]
     [SerializeField] float DPS1;
+    [SerializeField] float rangeDPS1;
 
     [Header("Level 2")]
     [SerializeField] int cost2;
@@ -25,6 +28,7 @@ public class UnitSO : ScriptableObject
     [SerializeField] float range2;
     [Space]
     [SerializeField] float DPS2;
+    [SerializeField] float rangeDPS2;
 
     [Header("Level 3")]
     [SerializeField] int cost3;
@@ -33,6 +37,7 @@ public class UnitSO : ScriptableObject
     [SerializeField] float range3;
     [Space]
     [SerializeField] float DPS3;
+    [SerializeField] float rangeDPS3;
 
     [Header("Level 4")]
     [SerializeField] int cost4;
@@ -41,6 +46,7 @@ public class UnitSO : ScriptableObject
     [SerializeField] float range4;
     [Space]
     [SerializeField] float DPS4;
+    [SerializeField] float rangeDPS4;
 
     [Header("Level 5")]
     [SerializeField] int cost5;
@@ -49,6 +55,7 @@ public class UnitSO : ScriptableObject
     [SerializeField] float range5;
     [Space]
     [SerializeField] float DPS5;
+    [SerializeField] float rangeDPS5;
 
     public float CurrentAttack(int level)
     {
@@ -163,5 +170,11 @@ public class UnitSO : ScriptableObject
         DPS3 = attack3 / cooldown3;
         DPS4 = attack4 / cooldown4;
         DPS5 = attack5 / cooldown5;
+
+        rangeDPS1 = Mathf.FloorToInt(DPS1 * range1);
+        rangeDPS2 = Mathf.FloorToInt(DPS2 * range2);
+        rangeDPS3 = Mathf.FloorToInt(DPS3 * range3);
+        rangeDPS4 = Mathf.FloorToInt(DPS4 * range4);
+        rangeDPS5 = Mathf.FloorToInt(DPS5 * range5);
     }
 }

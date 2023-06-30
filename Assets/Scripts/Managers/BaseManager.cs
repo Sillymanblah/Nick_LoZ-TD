@@ -53,7 +53,10 @@ public class BaseManager : NetworkBehaviour
             if (deadBase) return;
 
             deadBase = true;
+            HPTEXTGAMEOVER();
             Announcement("YOU LOSE DUM BOY!!!!");
+            StartCoroutine(DelayEndingGame());
+            return;
         }
             
         UpdateBaseHPUI();
@@ -66,9 +69,21 @@ public class BaseManager : NetworkBehaviour
     }
 
     [ClientRpc]
+    void HPTEXTGAMEOVER()
+    {
+        baseHealthText.text = "GAME OVER U VERY DUMB";
+    }
+
+    [ClientRpc]
     void Announcement(string message)
     {
         Debug.Log(message);
 
+    }
+
+    IEnumerator DelayEndingGame()
+    {
+        yield return new WaitForSeconds(2.0f);
+        NetworkServer.DisconnectAll();
     }
 }

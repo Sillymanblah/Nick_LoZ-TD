@@ -25,6 +25,7 @@ public class LobbyManager : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
+        this.gameObject.SetActive(true);
         instance = this;
     }
     // Start is called before the first frame update

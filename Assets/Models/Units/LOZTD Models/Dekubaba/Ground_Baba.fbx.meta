@@ -3,7 +3,12 @@ guid: 32d6f4cfba95ed04381d779d4e0298af
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Leaf_potato_001_ALBEDOTSP
+    second: {fileID: 2100000, guid: cb485677498368146ad2f28008bbc15b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

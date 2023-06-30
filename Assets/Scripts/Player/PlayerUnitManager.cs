@@ -18,6 +18,7 @@ public class PlayerUnitManager : NetworkBehaviour
     [SerializeField] Transform currentGridTransform;
     [SerializeField] GridCell currentGrid;
     [SerializeField] PlayerManager playerManager;
+    GameObject preSpawnedUnit;
 
     bool placedUnit = true;
 
@@ -25,6 +26,8 @@ public class PlayerUnitManager : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerManager = GetComponent<PlayerManager>();
+
         if (!playerManager.ingame) return;
 
         if (!isLocalPlayer) return;
@@ -145,8 +148,6 @@ public class PlayerUnitManager : NetworkBehaviour
     {
         if (currentGridTransform == null) return;
 
-        if (placedUnit == false) return; 
-
         if (Input.GetKeyDown(GetNumberKeyPress()))
         {
             int keyIndex = (int)GetNumberKeyPress();
@@ -159,6 +160,8 @@ public class PlayerUnitManager : NetworkBehaviour
     [Client]
     public void BuyUnit(int unitIndex)
     {
+        placedUnit = true;
+
         if (unitsLoadout[unitIndex] == null) return;
 
         if (loadoutCount[unitIndex] >= 5)
@@ -173,13 +176,15 @@ public class PlayerUnitManager : NetworkBehaviour
             return;
         }
 
+        // for switching units between buying them
+        if (preSpawnedUnit != null)
+            Destroy(preSpawnedUnit);
+                
+        StopCoroutine(nameof(PlaceUnitDown));
+
         placedUnit = false;
 
         GameObject newUnit = Instantiate(unitsLoadout[unitIndex].prefab, currentGridTransform.position, Quaternion.identity);
-
-        var thisRenderer = newUnit.transform.GetChild(0).GetComponent<MeshRenderer>();
-        Color newColor = thisRenderer.material.color;
-        thisRenderer.material.color = new Color(1, 1, 1, 0.5f);
 
         StartCoroutine(PlaceUnitDown(newUnit, unitIndex));
     }
@@ -200,6 +205,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
     IEnumerator PlaceUnitDown(GameObject thisUnit, int loadoutIndex)
     {
+        preSpawnedUnit = thisUnit;
         bool setUnitDown = false;
         Vector3 gridPos = Vector3.zero;
         
@@ -209,8 +215,19 @@ public class PlayerUnitManager : NetworkBehaviour
             selectedUnit = null;
         }
 
+        Unit thisThisUnit = thisUnit.GetComponent<Unit>();
+
         while (setUnitDown == false)
         {
+            if (thisUnit == null) yield break;
+
+            currentGrid = currentGridTransform.GetComponent<GridCell>();
+
+            if (!currentGrid.CheckAvailability(unitsLoadout[loadoutIndex].gridType)) 
+                thisThisUnit.ChangeVisualRangeSprite(true);
+            else
+                thisThisUnit.ChangeVisualRangeSprite(false);
+
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 Destroy(thisUnit);
@@ -220,9 +237,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                currentGrid = currentGridTransform.GetComponent<GridCell>();
-
-                setUnitDown = currentGrid.CheckAvailability();
+                setUnitDown = currentGrid.CheckAvailability(unitsLoadout[loadoutIndex].gridType);
                 yield return null;
                 continue;
             }
@@ -246,7 +261,7 @@ public class PlayerUnitManager : NetworkBehaviour
     void CmdNetworkSpawnUnit(Vector3 newGrid, int gridCellIndex, int loadoutIndex)
     {
         if (loadoutCount[loadoutIndex] >= 5) return;
-        if (GameManager.instance.GetGridCell(gridCellIndex).CheckAvailability() == false) return;
+        if (GameManager.instance.GetGridCell(gridCellIndex).CheckAvailability(unitsLoadout[loadoutIndex].gridType) == false) return;
         if (money < unitsLoadout[loadoutIndex].NextCost(1)) return;
 
         SetMoney(-unitsLoadout[loadoutIndex].NextCost(1));

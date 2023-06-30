@@ -10,7 +10,7 @@ public class PlayerCrouchState : PlayerBaseState
         player.controller.height = 1.34f;
         player.controller.center = new Vector3(0, -0.31f, 0);
 
-        player.playerManager.AdjustHeadHeight();
+        //player.playerManager.AdjustHeadHeight();
     }
 
     public override void UpdateState(PlayerStateManager player)

@@ -8,7 +8,7 @@ public class SizeToCamera : MonoBehaviour
 {
     Camera cam;
     TextMeshProUGUI text;
-    [SerializeField] [Range(1, 100)] float sizeMultiplier = 1;
+    [SerializeField] [Range(1, 500)] float sizeMultiplier = 1;
     
     private void Start()
     {

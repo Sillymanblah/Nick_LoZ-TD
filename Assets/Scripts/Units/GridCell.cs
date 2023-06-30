@@ -6,6 +6,7 @@ using UnityEngine;
 public enum GridType
 {
     ground,
+    air,
     disabled
 }
 public class GridCell : MonoBehaviour
@@ -31,9 +32,11 @@ public class GridCell : MonoBehaviour
         isOccupied = value;
     }
 
-    public bool CheckAvailability()
+    public bool CheckAvailability(GridType unitGridType)
     {
         if (gridType == GridType.disabled) return false;
+
+        if (gridType != unitGridType) return false;
 
         if (isOccupied) return false;
 
