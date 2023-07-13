@@ -70,14 +70,4 @@ public class ClubMoblin : EnemyUnit
             unitsInRange.Add(other.GetComponent<Unit>());
         }
     }
-
-    protected override void OnMouseOver()
-    {
-        base.OnMouseOver();
-    }
-
-    protected override void OnMouseExit()
-    {
-        base.OnMouseExit();
-    }
 }

@@ -593,9 +593,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4267584845084952927}
   - component: {fileID: 280179534659831107}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Unit Collider
-  m_TagString: Untagged
+  m_TagString: Logic
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

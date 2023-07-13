@@ -53,7 +53,11 @@ public class EnemyUnit : NetworkBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (!isServer) return;
+        if (!isServer)
+        {
+            ToggleHPBar();
+            return;
+        }
 
         Vector3 direction = target.position - transform.position;
         transform.Translate(direction.normalized * speed * Time.deltaTime, Space.World);
@@ -133,19 +137,23 @@ public class EnemyUnit : NetworkBehaviour
         thisHealthBar.BarValueOnStart(maxHealthPoints);
     }
 
-    /// <summary>
-    /// Called every frame while the mouse is over the GUIElement or Collider.
-    /// </summary>
-    protected virtual void OnMouseOver()
+    void ToggleHPBar()
     {
-        hpBar.SetActive(true);
-    }
+        RaycastHit hit;
+        
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+        {
+            if(hit.collider.CompareTag("Enemy"))
+            {
+                if (hit.collider.name != this.name) return;
 
-    /// <summary>
-    /// Called when the mouse is not any longer over the GUIElement or Collider.
-    /// </summary>
-    protected virtual void OnMouseExit()
-    {
-        hpBar.SetActive(false);
+                hpBar.SetActive(true);
+            }
+
+            else
+            {
+                hpBar.SetActive(false);
+            }
+        }
     }
 }
