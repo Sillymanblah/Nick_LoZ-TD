@@ -17,7 +17,7 @@ public class EnemyUnit : NetworkBehaviour
     [Space]
     int dropMoney;
     [SerializeField] float moneyMultiplier = 1;
-    [SerializeField] float speed = 10f;
+    [SerializeField] protected float speed = 10f;
     public float distanceCovered;
     Vector3 previousPosition;
     Transform target;
@@ -35,7 +35,7 @@ public class EnemyUnit : NetworkBehaviour
     {
         if (!isServer) return;
     }
-    void Start()
+    protected virtual void Start()
     {
         if (!isServer) return;
 
@@ -51,7 +51,7 @@ public class EnemyUnit : NetworkBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (!isServer) return;
 
@@ -136,7 +136,7 @@ public class EnemyUnit : NetworkBehaviour
     /// <summary>
     /// Called every frame while the mouse is over the GUIElement or Collider.
     /// </summary>
-    private void OnMouseOver()
+    protected virtual void OnMouseOver()
     {
         hpBar.SetActive(true);
     }
@@ -144,7 +144,7 @@ public class EnemyUnit : NetworkBehaviour
     /// <summary>
     /// Called when the mouse is not any longer over the GUIElement or Collider.
     /// </summary>
-    private void OnMouseExit()
+    protected virtual void OnMouseExit()
     {
         hpBar.SetActive(false);
     }

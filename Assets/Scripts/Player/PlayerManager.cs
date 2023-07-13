@@ -41,7 +41,6 @@ public class PlayerManager : NetworkBehaviour
         {
             foreach (Transform child in this.gameObject.transform)
             {
-                Debug.Log($"Wtff");
                 child.gameObject.SetActive(false);
             }
         }

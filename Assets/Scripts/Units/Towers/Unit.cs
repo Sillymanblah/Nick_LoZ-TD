@@ -14,8 +14,16 @@ public class Unit : NetworkBehaviour
 {
     [SerializeField] UnitSO unitSO;
 
+    [Space]
+
+    bool isAttacking = true;
+
+    [Space]
+
     [SyncVar]
     [SerializeField] TargettingMode targetMode;
+    [SerializeField] GameObject projectile;
+    [SerializeField] Transform projectileOutput;
 
     [Space]
 
@@ -310,6 +318,8 @@ public class Unit : NetworkBehaviour
     [Server]
     protected virtual void AttackEnemy()
     {
+        if (isAttacking == false) return;
+
         if (enemiesInRange[0].isDead)
         {
             enemiesInRange.RemoveAt(0);
@@ -338,17 +348,26 @@ public class Unit : NetworkBehaviour
                 goto MissedAttack;
             }
             enemiesInRange[0].DealDamage(attack);
+            RpcClientUnitActions(enemiesInRange[0].transform.position);
         }
-        RpcUnitLookAtEnemyAnimation(enemiesInRange[0].transform.position);
+        
 
         MissedAttack:
         currentCooldown = Time.time + cooldown;
     }
 
     [ClientRpc]
-    void RpcUnitLookAtEnemyAnimation(Vector3 firstEnemyPos)
+    void RpcClientUnitActions(Vector3 firstEnemyPos)
     {
-        StartCoroutine(UnitLookAtEnemyAnimation(firstEnemyPos));
+        // CODE IS BROKEN | TEMPORARILY DISABLED
+        //StartCoroutine(UnitLookAtEnemyAnimation(firstEnemyPos));
+        Vector3 lookEnemyRot = new Vector3(firstEnemyPos.x, 0, firstEnemyPos.z);
+        Vector3 modelUnitRot = new Vector3(transform.GetChild(0).position.x, 0, transform.GetChild(0).position.z);
+        Debug.Log(transform.GetChild(0));
+        Quaternion lookOnLook = Quaternion.LookRotation(lookEnemyRot - modelUnitRot);
+        transform.GetChild(0).rotation = lookOnLook;
+
+        StartCoroutine(UnitShootProjectile(firstEnemyPos));
     }
 
     IEnumerator UnitLookAtEnemyAnimation(Vector3 firstEnemyPos)
@@ -357,15 +376,33 @@ public class Unit : NetworkBehaviour
         Vector3 modelUnitRot = new Vector3(transform.GetChild(0).position.x, 0, transform.GetChild(0).position.z);
 
         Quaternion lookOnLook = Quaternion.LookRotation(lookEnemyRot - modelUnitRot);
-        
 
         float timer = 0;
         while (timer < 1)
         {
             timer += Time.deltaTime;
-            transform.GetChild(0).rotation = Quaternion.Slerp(transform.GetChild(0).rotation, lookOnLook, Time.deltaTime * 40);
+            transform.GetChild(0).rotation = Quaternion.Slerp(transform.GetChild(0).rotation, lookOnLook, 4);
             yield return null;
         }
+
+    }
+
+    IEnumerator UnitShootProjectile(Vector3 firstEnemyPos)
+    {
+        if (projectile == null) yield break;
+
+        Transform newProjectile = Instantiate(projectile, this.transform.position, Quaternion.identity).transform;
+
+        //                   destination  -  origin
+        Vector3 direction = firstEnemyPos - newProjectile.position;
+
+        while (Vector3.Distance(firstEnemyPos, newProjectile.position) > 0.2f)
+        {
+            newProjectile.Translate(direction * (.1f * .9f));
+            yield return null;
+        }
+
+        Destroy(newProjectile.gameObject);
     }
 
     public void ChangeVisualRangeSprite(bool red)
@@ -409,5 +446,14 @@ public class Unit : NetworkBehaviour
     private void OnMouseExit()
     {
         hoverStats.gameObject.SetActive(false);
+    }
+
+    public IEnumerator StunnedEffect(float seconds)
+    {
+        isAttacking = false;
+        
+        yield return new WaitForSeconds(seconds);
+
+        isAttacking = true;
     }
 }
