@@ -55,7 +55,7 @@ public class EnemyUnit : NetworkBehaviour
     {
         if (!isServer)
         {
-            ToggleHPBar();
+            RaycastHpBar();
             return;
         }
 
@@ -137,7 +137,7 @@ public class EnemyUnit : NetworkBehaviour
         thisHealthBar.BarValueOnStart(maxHealthPoints);
     }
 
-    void ToggleHPBar()
+    void RaycastHpBar()
     {
         RaycastHit hit;
         
@@ -145,9 +145,7 @@ public class EnemyUnit : NetworkBehaviour
         {
             if(hit.collider.CompareTag("Enemy"))
             {
-                if (hit.collider.name != this.name) return;
-
-                hpBar.SetActive(true);
+                hit.collider.GetComponent<EnemyUnit>().ToggleHPBar(true);
             }
 
             else
@@ -155,5 +153,10 @@ public class EnemyUnit : NetworkBehaviour
                 hpBar.SetActive(false);
             }
         }
+    }
+
+    public void ToggleHPBar(bool active)
+    {
+        hpBar.SetActive(active);
     }
 }
