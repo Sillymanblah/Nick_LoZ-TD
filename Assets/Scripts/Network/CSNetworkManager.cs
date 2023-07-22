@@ -59,7 +59,13 @@ public class CSNetworkManager : NetworkManager
         // For lobby
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            conn.identity.GetComponent<PlayerNetworkInfo>().OnClientJoinLobby();
+            var newPlayer = conn.identity.GetComponent<PlayerNetworkInfo>();
+
+            newPlayer.OnClientJoinLobby();
+            
+            if (players.Count == 0)
+                newPlayer.playerIsHost = true;
+
             return;
         }
 
@@ -86,7 +92,7 @@ public class CSNetworkManager : NetworkManager
         {
             conn.identity.GetComponent<PlayerNetworkInfo>().OnClientLeaveLobby(conn);
             SetLobbyPlayerNames();
-            Debug.Log($"disc alooo");
+            
             base.OnServerDisconnect(conn);
             return;
         }

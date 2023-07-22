@@ -14,6 +14,7 @@ public class LobbyManager : NetworkBehaviour
     public int playerReadyCount;
     [SerializeField] [Scene] string playerTest;
 
+
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>

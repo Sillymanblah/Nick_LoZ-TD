@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Mirror;
 
-public class LevelSelectorUI : MonoBehaviour
+public class LevelSelectorUI : NetworkBehaviour
 {
     [SerializeField] List<LevelSO> levels = new List<LevelSO>();
-    int levelNumSelector = 0;
+    [SyncVar] int levelNumSelector = 0;
 
     [SerializeField] Image levelImage;
     [SerializeField] TextMeshProUGUI levelNameText;
@@ -15,15 +16,19 @@ public class LevelSelectorUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetLevel();
+        if (!isServer) return;
+
+        levelNumSelector = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnStartClient()
     {
-        
+        base.OnStartClient();
+
+        UponJoining();
     }
 
+    [Command(requiresAuthority = false)]
     public void LeftButton()
     {
         levelNumSelector--;
@@ -32,6 +37,7 @@ public class LevelSelectorUI : MonoBehaviour
         SetLevel();
     }
 
+    [Command(requiresAuthority = false)]
     public void RightButton()
     {
         levelNumSelector++;
@@ -40,6 +46,14 @@ public class LevelSelectorUI : MonoBehaviour
         SetLevel();
     }
 
+    void UponJoining()
+    {
+        LevelSO selectedLevel = levels[levelNumSelector];
+        levelImage.sprite = selectedLevel.levelPicture;
+        levelNameText.text = selectedLevel.levelName;
+    }
+
+    [ClientRpc]
     void SetLevel()
     {
         LevelSO selectedLevel = levels[levelNumSelector];

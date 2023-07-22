@@ -11,6 +11,7 @@ public class PlayerNetworkInfo : NetworkBehaviour
     bool playerReady = false;
     LobbyAuth playerAuth;
     PlayerManager playerManager;
+    public bool playerIsHost;
 
     // Start is called before the first frame update
     void Start()
