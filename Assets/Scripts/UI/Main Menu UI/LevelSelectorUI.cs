@@ -9,6 +9,7 @@ public class LevelSelectorUI : NetworkBehaviour
 {
     [SerializeField] List<LevelSO> levels = new List<LevelSO>();
     [SyncVar] int levelNumSelector = 0;
+    public static LevelSelectorUI instance;
 
     [SerializeField] Image levelImage;
     [SerializeField] TextMeshProUGUI levelNameText;
@@ -16,11 +17,18 @@ public class LevelSelectorUI : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+
         if (!isServer) return;
 
         levelNumSelector = 0;
     }
 
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        instance = this;
+    }
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -28,7 +36,7 @@ public class LevelSelectorUI : NetworkBehaviour
         UponJoining();
     }
 
-    [Command(requiresAuthority = false)]
+    [Command]
     public void LeftButton()
     {
         levelNumSelector--;
@@ -37,7 +45,7 @@ public class LevelSelectorUI : NetworkBehaviour
         SetLevel();
     }
 
-    [Command(requiresAuthority = false)]
+    [Command]
     public void RightButton()
     {
         levelNumSelector++;

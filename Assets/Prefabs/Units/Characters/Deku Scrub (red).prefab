@@ -477,6 +477,8 @@ MonoBehaviour:
   syncInterval: 0
   unitSO: {fileID: 11400000, guid: 32ff02de205499342b26d8322ee68599, type: 2}
   targetMode: 0
+  projectile: {fileID: 0}
+  projectileOutput: {fileID: 0}
   enemiesInRange: []
   rangeCollider: {fileID: 2477211855792811513}
   rangeVisualSprite: {fileID: 2290552256558394094}
@@ -1962,17 +1964,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: a13111e04d5fc6041985fabe8cfc16da,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 19.259695
+      value: 18.7556
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a13111e04d5fc6041985fabe8cfc16da,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 19.259695
+      value: 18.7556
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a13111e04d5fc6041985fabe8cfc16da,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 19.259695
+      value: 18.7556
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a13111e04d5fc6041985fabe8cfc16da,
         type: 3}

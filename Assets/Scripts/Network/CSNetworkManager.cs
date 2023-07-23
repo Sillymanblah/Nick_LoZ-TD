@@ -53,18 +53,25 @@ public class CSNetworkManager : NetworkManager
     {
         base.OnServerAddPlayer(conn);
 
-        Debug.Log(conn.identity.GetComponent<PlayerNetworkInfo>().name + " has joined the game!");
+        var newPlayer = conn.identity.GetComponent<PlayerNetworkInfo>();
+
+        Debug.Log(newPlayer.name + " has joined the game!");
+
+        
+
         players.Add(conn.identity);
+
+        if (players.Count == 1)
+        {
+            newPlayer.playerIsHost = true;
+
+            LevelSelectorUI.instance.netIdentity.AssignClientAuthority(newPlayer.netIdentity.connectionToClient);
+        }
 
         // For lobby
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            var newPlayer = conn.identity.GetComponent<PlayerNetworkInfo>();
-
             newPlayer.OnClientJoinLobby();
-            
-            if (players.Count == 0)
-                newPlayer.playerIsHost = true;
 
             return;
         }
@@ -81,10 +88,21 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
-        Debug.Log(conn.identity.GetComponent<PlayerNetworkInfo>().name + " has left the game");
-        playerNames.Remove(conn.identity.GetComponent<PlayerNetworkInfo>().name);
+        var newPlayer = conn.identity.GetComponent<PlayerNetworkInfo>();
+
+        Debug.Log(newPlayer.name + " has left the game");
+        playerNames.Remove(newPlayer.name);
         players.Remove(conn.identity);
         
+        if (newPlayer.playerIsHost)
+        {
+            LevelSelectorUI.instance.netIdentity.RemoveClientAuthority();
+
+            if (players.Count == 0) return;
+            
+            players[0].GetComponent<PlayerNetworkInfo>().playerIsHost = true;
+            LevelSelectorUI.instance.netIdentity.AssignClientAuthority(players[0].connectionToClient);
+        }
         
 
         // for lobby
@@ -92,7 +110,7 @@ public class CSNetworkManager : NetworkManager
         {
             conn.identity.GetComponent<PlayerNetworkInfo>().OnClientLeaveLobby(conn);
             SetLobbyPlayerNames();
-            
+
             base.OnServerDisconnect(conn);
             return;
         }

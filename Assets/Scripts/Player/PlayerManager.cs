@@ -35,8 +35,6 @@ public class PlayerManager : NetworkBehaviour
 
     private void Start()
     {
-        if (isServer) return;
-
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             foreach (Transform child in this.gameObject.transform)
@@ -44,6 +42,10 @@ public class PlayerManager : NetworkBehaviour
                 child.gameObject.SetActive(false);
             }
         }
+
+        if (isServer) return;
+
+        
 
         if (!ingame) return;
 
