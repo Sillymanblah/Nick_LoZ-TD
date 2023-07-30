@@ -7,6 +7,7 @@ public class WaveManager : NetworkBehaviour
 {
     public static WaveManager instance;
     public bool spawnEnemies = false;
+    public bool endless = false;
 
     [SerializeField] List<GameObject> enemies = new List<GameObject>();
     [SerializeField] List<GameObject> bosses = new List<GameObject>();
@@ -90,7 +91,7 @@ public class WaveManager : NetworkBehaviour
 
         while (unitSpawnCount < groupSize)
         {
-            EnemyUnit newEnemy = Instantiate(enemies[randomEnemy], WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
+            EnemyUnit newEnemy = Instantiate(enemies[randomEnemy], WayPointsManager.instance.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
             
             NetworkServer.Spawn(newEnemy.gameObject);
             newEnemy.SetMaxHealthMultiplier(healthMultiplier);
@@ -129,7 +130,7 @@ public class WaveManager : NetworkBehaviour
         else if (currentWave == waveAmount)
             newBoss = Instantiate(boss2, WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();*/
 
-        newBoss = Instantiate(bosses[currentWave - 1], WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
+        newBoss = Instantiate(bosses[currentWave - 1], WayPointsManager.instance.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
         
         totalEnemiesSpawned++;
         

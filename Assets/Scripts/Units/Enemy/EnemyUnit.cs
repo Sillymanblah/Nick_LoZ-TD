@@ -21,7 +21,7 @@ public class EnemyUnit : NetworkBehaviour
     public float distanceCovered;
     Vector3 previousPosition;
     Transform target;
-    int wavepointIndex = 1;
+    int waypointIndex = 1;
     public bool isDead = false;
 
     [SerializeField] HealthBar thisHealthBar;
@@ -40,7 +40,7 @@ public class EnemyUnit : NetworkBehaviour
         if (!isServer) return;
 
         dropMoney = Mathf.FloorToInt(moneyMultiplier * healthPoints);
-        target = WayPointsManager.points[1];
+        target = WayPointsManager.instance.points[1];
 
         var lookAtWaypoint = new Vector3(target.position.x, transform.position.y, target.position.z);
 
@@ -68,18 +68,29 @@ public class EnemyUnit : NetworkBehaviour
         }
     }
 
+    // return 0 = false
+    // return 1 = true with damaging base
+    // return 2 = true without damaging base
     void GetNextWayPoint()
     {
-        if (wavepointIndex >= WayPointsManager.points.Length - 1)
+        int wayPointsCheck = WayPointsManager.instance.CheckForEnemyPosition(waypointIndex);
+
+        if (wayPointsCheck == 1)
         {
             BaseManager.instance.ChangeHealth(-maxHealthPoints);
             WaveManager.instance.EnemyKilled();
             NetworkServer.Destroy(gameObject);
             return;
         }
+        else if (wayPointsCheck == 2)
+        {
+            WaveManager.instance.EnemyKilled();
+            NetworkServer.Destroy(gameObject);
+            return;
+        }
 
-        wavepointIndex++;
-        target = WayPointsManager.points[wavepointIndex];
+        waypointIndex++;
+        target = WayPointsManager.instance.points[waypointIndex];
 
         var lookAtWaypoint = new Vector3(target.position.x, transform.position.y, target.position.z);
 

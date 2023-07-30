@@ -30,6 +30,10 @@ public class UIWaveBar : MonoBehaviour
 
         waveSlider.maxValue = wavemanager.waveSize * wavemanager.groupSize;
         waveSlider.value = wavemanager.totalEnemiesSpawned;
-        waveCountText.text = "Wave " + (wavemanager.currentWave) + "/" + wavemanager.waveAmount;
+
+        if (wavemanager.endless)
+            waveCountText.text = "Wave " + (wavemanager.currentWave);
+        else
+            waveCountText.text = "Wave " + (wavemanager.currentWave) + "/" + wavemanager.waveAmount;
     }
 }

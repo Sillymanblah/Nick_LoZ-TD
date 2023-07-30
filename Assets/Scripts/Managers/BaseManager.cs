@@ -46,7 +46,6 @@ public class BaseManager : NetworkBehaviour
     {
         baseHealth += points;
         
-
         if (baseHealth <= 0)
         {
             baseHealth = 0;

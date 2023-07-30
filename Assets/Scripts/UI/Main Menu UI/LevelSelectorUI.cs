@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Mirror;
+using UnityEngine.SceneManagement;
 
 public class LevelSelectorUI : NetworkBehaviour
 {
@@ -13,6 +14,8 @@ public class LevelSelectorUI : NetworkBehaviour
 
     [SerializeField] Image levelImage;
     [SerializeField] TextMeshProUGUI levelNameText;
+
+    public string currentLevel;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +30,7 @@ public class LevelSelectorUI : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
+        currentLevel = levels[levelNumSelector].sceneName;
         instance = this;
     }
     public override void OnStartClient()
@@ -42,6 +46,7 @@ public class LevelSelectorUI : NetworkBehaviour
         levelNumSelector--;
         if (levelNumSelector < 0) levelNumSelector = levels.Count - 1;
 
+        currentLevel = levels[levelNumSelector].sceneName;
         SetLevel();
     }
 
@@ -51,11 +56,14 @@ public class LevelSelectorUI : NetworkBehaviour
         levelNumSelector++;
         if (levelNumSelector >= levels.Count) levelNumSelector = 0;
 
+        currentLevel = levels[levelNumSelector].sceneName;
         SetLevel();
     }
 
     void UponJoining()
     {
+        
+
         LevelSO selectedLevel = levels[levelNumSelector];
         levelImage.sprite = selectedLevel.levelPicture;
         levelNameText.text = selectedLevel.levelName;

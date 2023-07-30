@@ -98,19 +98,19 @@ public class CSNetworkManager : NetworkManager
         {
             LevelSelectorUI.instance.netIdentity.RemoveClientAuthority();
 
-            if (players.Count == 0) return;
-            
-            players[0].GetComponent<PlayerNetworkInfo>().playerIsHost = true;
-            LevelSelectorUI.instance.netIdentity.AssignClientAuthority(players[0].connectionToClient);
+            if (players.Count != 0)
+            {
+                players[0].GetComponent<PlayerNetworkInfo>().playerIsHost = true;
+                LevelSelectorUI.instance.netIdentity.AssignClientAuthority(players[0].connectionToClient);
+            }
         }
-        
 
         // for lobby
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             conn.identity.GetComponent<PlayerNetworkInfo>().OnClientLeaveLobby(conn);
             SetLobbyPlayerNames();
-
+            Debug.Log($"ayo bitch wtfg");
             base.OnServerDisconnect(conn);
             return;
         }
