@@ -4,24 +4,10 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class BBAWayPointsManager : NetworkBehaviour
+public class BBAWayPointsManager : WayPointsManager
 {
-    public Transform[] points;
-    public static BBAWayPointsManager instance;
+    public new static BBAWayPointsManager instance;
 
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-
-        instance = this;
-
-        points = new Transform[transform.childCount];
-
-        for (int i = 0; i < points.Length; i++)
-        {
-            points[i] = transform.GetChild(i);
-        }
-    }
 
     int currentTarget = 0;
     public UnityEvent takeDownTarget1;
@@ -30,7 +16,8 @@ public class BBAWayPointsManager : NetworkBehaviour
     // return 0 = false
     // return 1 = true with damaging base
     // return 2 = true without damaging base
-    public int CheckForEnemyPosition(int index)
+    [Server]
+    public new int CheckForEnemyPosition(int index)
     {
         Debug.Log(index);
 

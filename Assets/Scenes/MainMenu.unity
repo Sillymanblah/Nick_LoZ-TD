@@ -4489,6 +4489,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c631b894c15cc894eb043a1859b500d7, type: 2}
   levelImage: {fileID: 524608424}
   levelNameText: {fileID: 196022167}
+  currentLevel: 
 --- !u!114 &2100918297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4666,6 +4667,17 @@ PrefabInstance:
       propertyPath: networkSceneManager
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.data[9]
+      value: 
+      objectReference: {fileID: 8913681948144860196, guid: 0092965130386cc4cb311ebd53bc6e56,
+        type: 3}
     - target: {fileID: 9173269634202737194, guid: b2a0ad4f75f9115449816e14d5a6be18,
         type: 3}
       propertyPath: m_RootOrder
