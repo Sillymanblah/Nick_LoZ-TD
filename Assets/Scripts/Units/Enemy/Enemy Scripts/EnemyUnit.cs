@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class EnemyUnit : NetworkBehaviour
 {
-    [SerializeField] int maxHealthPoints;
+    [SerializeField] protected int maxHealthPoints;
     public int GetMaxHealth() { return maxHealthPoints; }
 
     [Space]
@@ -20,8 +20,8 @@ public class EnemyUnit : NetworkBehaviour
     [SerializeField] protected float speed = 10f;
     public float distanceCovered;
     Vector3 previousPosition;
-    Transform target;
-    int waypointIndex = 1;
+    protected Transform target;
+    protected int waypointIndex = 1;
     public bool isDead = false;
 
     [SerializeField] HealthBar thisHealthBar;
@@ -71,19 +71,13 @@ public class EnemyUnit : NetworkBehaviour
     // return 0 = false
     // return 1 = true with damaging base
     // return 2 = true without damaging base
-    void GetNextWayPoint()
+    protected virtual void GetNextWayPoint()
     {
-        int wayPointsCheck = WayPointsManager.instance.CheckForEnemyPosition(waypointIndex);
+        bool wayPointsCheck = WayPointsManager.instance.CheckForEnemyPosition(waypointIndex);
 
-        if (wayPointsCheck == 1)
+        if (wayPointsCheck)
         {
             BaseManager.instance.ChangeHealth(-maxHealthPoints);
-            WaveManager.instance.EnemyKilled();
-            NetworkServer.Destroy(gameObject);
-            return;
-        }
-        else if (wayPointsCheck == 2)
-        {
             WaveManager.instance.EnemyKilled();
             NetworkServer.Destroy(gameObject);
             return;

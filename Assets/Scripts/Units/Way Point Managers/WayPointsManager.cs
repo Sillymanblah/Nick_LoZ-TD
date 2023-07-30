@@ -25,14 +25,13 @@ public class WayPointsManager : NetworkBehaviour
     // return 0 = false
     // return 1 = true with damaging base
     // return 2 = true without damaging base
-    [Server]
-    public virtual int CheckForEnemyPosition(int index)
+    public virtual bool CheckForEnemyPosition(int index)
     {
         if (index >= points.Length - 1)
         {
-            return 1;
+            return true;
         }
 
-        else return 0;
+        else return false;
     }
 }
