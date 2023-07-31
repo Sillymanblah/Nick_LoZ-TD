@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
 public class ClubMoblin : EnemyUnit
 {
     [SerializeField] List<Unit> unitsInRange = new List<Unit>();
 
-    // Start is called before the first frame update
+    [SerializeField] int abilityCooldown;
+
+
     protected override void Start()
     {
         base.Start();
+
+        if (!isServer) return;
 
         StartCoroutine(SmashAbility());
     }
@@ -26,13 +31,13 @@ public class ClubMoblin : EnemyUnit
         {
             float originalSpeed = speed;
 
-            yield return new WaitForSeconds(20);
+            yield return new WaitForSeconds(abilityCooldown);
 
             speed = 0;
 
-            yield return new WaitForSeconds(1);
+            RpcAttackAnimation();
 
-            Debug.Log($"just stunned lel");
+            yield return new WaitForSeconds(2.6f);
 
             for (int i = 0; i < unitsInRange.Count; i++)
             {
@@ -70,4 +75,14 @@ public class ClubMoblin : EnemyUnit
             unitsInRange.Add(other.GetComponent<Unit>());
         }
     }
+
+    #region ClientRPC ANIMATIONS
+
+    [ClientRpc]
+    void RpcAttackAnimation()
+    {
+        animManager.AttackingAnim(0.1f);
+    }
+
+    #endregion
 }

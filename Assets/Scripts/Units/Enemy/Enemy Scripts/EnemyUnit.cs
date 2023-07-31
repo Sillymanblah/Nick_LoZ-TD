@@ -6,6 +6,18 @@ using UnityEngine.EventSystems;
 
 public class EnemyUnit : NetworkBehaviour
 {
+    protected EnemyAnimationManager animManager;
+
+    #region Moving
+
+    CharacterController controller;
+    float gravity = -9.81f;
+    Vector3 velocity;
+    [SerializeField] bool isGrounded = false;
+
+    #endregion
+
+
     [SerializeField] protected int maxHealthPoints;
     public int GetMaxHealth() { return maxHealthPoints; }
 
@@ -17,6 +29,7 @@ public class EnemyUnit : NetworkBehaviour
     [Space]
     int dropMoney;
     [SerializeField] float moneyMultiplier = 1;
+
     [SerializeField] protected float speed = 10f;
     public float distanceCovered;
     Vector3 previousPosition;
@@ -31,14 +44,19 @@ public class EnemyUnit : NetworkBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    void Awake()
     {
-        if (!isServer) return;
+        animManager = GetComponent<EnemyAnimationManager>();
     }
     protected virtual void Start()
     {
+        
+
+        
+
         if (!isServer) return;
 
+        controller = GetComponent<CharacterController>();
         dropMoney = Mathf.FloorToInt(moneyMultiplier * healthPoints);
         target = WayPointsManager.instance.points[1];
 
@@ -56,10 +74,19 @@ public class EnemyUnit : NetworkBehaviour
         if (!isServer)
         {
             RaycastHpBar();
+
             return;
         }
 
-        Vector3 direction = target.position - transform.position;
+        if (speed > 0)
+        {
+            WalkingAnimation();
+        }
+
+        GravityControl();
+        Vector3 thisTarget = new Vector3(target.position.x, transform.position.y, target.position.z);
+
+        Vector3 direction = thisTarget - transform.position;
         transform.Translate(direction.normalized * speed * Time.deltaTime, Space.World);
 
         if (Vector3.Distance(transform.position, target.position) <= 0.1f)
@@ -89,6 +116,19 @@ public class EnemyUnit : NetworkBehaviour
         var lookAtWaypoint = new Vector3(target.position.x, transform.position.y, target.position.z);
 
         transform.LookAt(lookAtWaypoint, Vector3.up);
+    }
+
+    void GravityControl()
+    {
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+
+        if (!isGrounded) { return; }
+
+        if (velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
     }
 
     void TrackDistance()
@@ -164,4 +204,16 @@ public class EnemyUnit : NetworkBehaviour
     {
         hpBar.SetActive(active);
     }
+
+    #region CLIENTRPC ANIMATIONS
+
+    [ClientRpc]
+    void WalkingAnimation()
+    {
+        if (animManager == null) return;
+
+        animManager.WalkingAnim(0.1f);
+    }
+
+    #endregion
 }

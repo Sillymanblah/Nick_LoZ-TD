@@ -13,14 +13,19 @@ public class BBAWayPointsManager : WayPointsManager
     public UnityEvent takeDownTarget1;
     public UnityEvent takeDownTarget2;
 
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+
+        instance = this;
+    }
+
     // return 0 = false
     // return 1 = true with damaging base
     // return 2 = true without damaging base
     [Server]
     public new int CheckForEnemyPosition(int index)
     {
-        Debug.Log(index);
-
         switch(index)
         {
             // final target

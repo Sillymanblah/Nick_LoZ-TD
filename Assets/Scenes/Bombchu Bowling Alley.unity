@@ -222,7 +222,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 12039396}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.994884, y: -12.875477, z: -16.164818}
+  m_LocalPosition: {x: -18.994884, y: -12.27, z: -16.164818}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5924,7 +5924,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564473512}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22, y: 3.4667158, z: 1.0000002}
+  m_LocalPosition: {x: -22, y: 3.621, z: 1.0000002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6923,7 +6923,7 @@ PrefabInstance:
     - target: {fileID: 1594223382469578491, guid: 8d2922e4769194f4182508fb3c83927c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.742
+      value: 13.753
       objectReference: {fileID: 0}
     - target: {fileID: 1594223382469578491, guid: 8d2922e4769194f4182508fb3c83927c,
         type: 3}
@@ -13028,7 +13028,7 @@ PrefabInstance:
     - target: {fileID: 1594223382469578491, guid: 8d2922e4769194f4182508fb3c83927c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.742
+      value: 13.753
       objectReference: {fileID: 0}
     - target: {fileID: 1594223382469578491, guid: 8d2922e4769194f4182508fb3c83927c,
         type: 3}
@@ -19554,7 +19554,7 @@ PrefabInstance:
     - target: {fileID: 1594223382469578491, guid: 8d2922e4769194f4182508fb3c83927c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.742
+      value: 13.753
       objectReference: {fileID: 0}
     - target: {fileID: 1594223382469578491, guid: 8d2922e4769194f4182508fb3c83927c,
         type: 3}
@@ -22982,7 +22982,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1194516337149643731}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -21.44, y: -0.389, z: -0.17}
+  m_LocalPosition: {x: -21.44, y: 0.2164768, z: -0.17}
   m_LocalScale: {x: 0.9758081, y: 0.9758081, z: 0.9758081}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -24791,8 +24791,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.010353858, y: 0.058205932, z: 0.009783918}
-  m_Center: {x: 0.000019167783, y: -0.028795678, z: 0.0005552724}
+  m_Size: {x: 0.0103538595, y: 0.05820593, z: 0.00945411}
+  m_Center: {x: 0.000019167639, y: -0.028795676, z: 0.00039036898}
 --- !u!23 &8131620073263613671
 MeshRenderer:
   m_ObjectHideFlags: 0

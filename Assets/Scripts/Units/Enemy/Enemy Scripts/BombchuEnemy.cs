@@ -17,7 +17,7 @@ public class BombchuEnemy : EnemyUnit
             return;
         }
 
-        else if (wayPointsCheck == 1)
+        else if (wayPointsCheck == 2)
         {
             WaveManager.instance.EnemyKilled();
             NetworkServer.Destroy(gameObject);
