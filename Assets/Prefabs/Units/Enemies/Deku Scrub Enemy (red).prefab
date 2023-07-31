@@ -281,7 +281,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 1.7}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &8397539994036006294
@@ -417,7 +417,7 @@ MonoBehaviour:
   maxHealthPoints: 15
   healthPoints: 1
   moneyMultiplier: 1
-  speed: 1
+  speed: 1.5
   distanceCovered: 0
   isDead: 0
   thisHealthBar: {fileID: 1963050528760577150}
@@ -615,17 +615,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.16473497
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.16473497
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.16473497
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}

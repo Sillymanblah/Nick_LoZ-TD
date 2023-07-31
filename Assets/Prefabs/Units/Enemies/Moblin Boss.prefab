@@ -2213,7 +2213,7 @@ MonoBehaviour:
   maxHealthPoints: 1000
   healthPoints: 0
   moneyMultiplier: 1
-  speed: 0.5
+  speed: 0.9
   distanceCovered: 0
   isDead: 0
   thisHealthBar: {fileID: 6993998753786032694}

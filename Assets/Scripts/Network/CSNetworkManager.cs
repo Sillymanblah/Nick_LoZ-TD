@@ -57,20 +57,18 @@ public class CSNetworkManager : NetworkManager
 
         Debug.Log(newPlayer.name + " has joined the game!");
 
-        
-
         players.Add(conn.identity);
-
-        if (players.Count == 1)
-        {
-            newPlayer.playerIsHost = true;
-
-            LevelSelectorUI.instance.netIdentity.AssignClientAuthority(newPlayer.netIdentity.connectionToClient);
-        }
 
         // For lobby
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
+            if (players.Count == 1)
+            {
+                newPlayer.playerIsHost = true;
+
+                LevelSelectorUI.instance.netIdentity.AssignClientAuthority(newPlayer.netIdentity.connectionToClient);
+            }
+
             newPlayer.OnClientJoinLobby();
 
             return;
@@ -110,7 +108,6 @@ public class CSNetworkManager : NetworkManager
         {
             conn.identity.GetComponent<PlayerNetworkInfo>().OnClientLeaveLobby(conn);
             SetLobbyPlayerNames();
-            Debug.Log($"ayo bitch wtfg");
             base.OnServerDisconnect(conn);
             return;
         }

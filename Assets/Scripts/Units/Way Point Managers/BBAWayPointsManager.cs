@@ -36,6 +36,8 @@ public class BBAWayPointsManager : WayPointsManager
                 if (currentTarget == 1)
                 {
                     RpcTakeDownTarget2();
+                    takeDownTarget2.Invoke();
+
                     currentTarget++;
                     return 2;
                 }
@@ -45,6 +47,8 @@ public class BBAWayPointsManager : WayPointsManager
                 if (currentTarget == 0)
                 {
                     RpcTakeDownTarget1();
+                    takeDownTarget1.Invoke();
+
                     currentTarget++;
                     return 2;
                 }
@@ -61,6 +65,8 @@ public class BBAWayPointsManager : WayPointsManager
     {
         takeDownTarget1.Invoke();
     }
+
+
 
     [ClientRpc]
     void RpcTakeDownTarget2()

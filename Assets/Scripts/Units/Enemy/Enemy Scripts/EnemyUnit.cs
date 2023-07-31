@@ -89,7 +89,10 @@ public class EnemyUnit : NetworkBehaviour
         Vector3 direction = thisTarget - transform.position;
         transform.Translate(direction.normalized * speed * Time.deltaTime, Space.World);
 
-        if (Vector3.Distance(transform.position, target.position) <= 0.1f)
+        Vector3 targetDistance = new Vector3(target.position.x, 0, target.position.z);
+        Vector3 positionDistance = new Vector3(transform.position.x, 0, transform.position.z);
+
+        if (Vector3.Distance(targetDistance, positionDistance) <= 0.1f)
         {
             GetNextWayPoint();
         }
