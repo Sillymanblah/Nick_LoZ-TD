@@ -35,7 +35,7 @@ public class ClubMoblin : EnemyUnit
 
             speed = 0;
 
-            RpcAttackAnimation();
+            animManager.AttackingAnim(0.1f);
 
             yield return new WaitForSeconds(2.6f);
 
@@ -75,14 +75,4 @@ public class ClubMoblin : EnemyUnit
             unitsInRange.Add(other.GetComponent<Unit>());
         }
     }
-
-    #region ClientRPC ANIMATIONS
-
-    [ClientRpc]
-    void RpcAttackAnimation()
-    {
-        animManager.AttackingAnim(0.1f);
-    }
-
-    #endregion
 }

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public class EnemyAnimationManager : MonoBehaviour
+public class EnemyAnimationManager : NetworkBehaviour
 {
 
     [SerializeField] Animator animator;
@@ -33,7 +34,7 @@ public class EnemyAnimationManager : MonoBehaviour
         if (currentState == newState) return;
 
         // plays the animation
-        animator.Play(newState);
+        AnimatorPlay(newState);
 
         //reassigns the current state
         currentState = newState;
@@ -46,9 +47,21 @@ public class EnemyAnimationManager : MonoBehaviour
         if (currentState == newState) return;
 
         // plays the animation / transitionTime determines how long the transition will take
-        animator.CrossFadeInFixedTime(newState, transitionTime);
+        AnimatorPlay(newState, transitionTime);
 
         //reassigns the current state
         currentState = newState;
+    }
+
+    [ClientRpc]
+    void AnimatorPlay(int newState)
+    {
+        animator.Play(newState);
+    }
+
+    [ClientRpc]
+    void AnimatorPlay(int newState, float transitionTime)
+    {
+        animator.CrossFadeInFixedTime(newState, transitionTime);
     }
 }

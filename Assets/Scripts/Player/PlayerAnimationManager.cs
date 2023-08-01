@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public class PlayerAnimationManager : MonoBehaviour
+public class PlayerAnimationManager : NetworkBehaviour
 {
 
     [SerializeField] Animator playerAnim;
+
     private int currentState;
 
     #region Animation States
@@ -88,18 +90,20 @@ public class PlayerAnimationManager : MonoBehaviour
         ChangeAnimationState(PLAYER_CROUCHWALK, 0.1f);
     }
 
+    [Command]
     public void ChangeAnimationState(int newState)
     {
         // stops the same animation from interrupting itself
         if (currentState == newState) return;
 
         // plays the animation
-        playerAnim.Play(newState);
+        AnimatorPlay(newState);
 
         //reassigns the current state
         currentState = newState;
     }
 
+    [Command]
     // TRANSITION METHOD
     public void ChangeAnimationState(int newState, float transitionTime)
     {
@@ -107,9 +111,21 @@ public class PlayerAnimationManager : MonoBehaviour
         if (currentState == newState) return;
 
         // plays the animation / transitionTime determines how long the transition will take
-        playerAnim.CrossFadeInFixedTime(newState, transitionTime);
+        AnimatorPlay(newState, transitionTime);
 
         //reassigns the current state
         currentState = newState;
+    }
+
+    [ClientRpc]
+    void AnimatorPlay(int newState)
+    {
+        playerAnim.Play(newState);
+    }
+
+    [ClientRpc]
+    void AnimatorPlay(int newState, float transitionTime)
+    {
+        playerAnim.CrossFadeInFixedTime(newState, transitionTime);
     }
 }

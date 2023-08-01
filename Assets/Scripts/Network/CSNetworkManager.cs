@@ -55,13 +55,14 @@ public class CSNetworkManager : NetworkManager
 
         var newPlayer = conn.identity.GetComponent<PlayerNetworkInfo>();
 
-        Debug.Log(newPlayer.name + " has joined the game!");
+        Debug.Log(newPlayer.netIdentity + " connected.");
 
         players.Add(conn.identity);
 
         // For lobby
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
+            // if hes the only one in the lobby
             if (players.Count == 1)
             {
                 newPlayer.playerIsHost = true;
@@ -79,16 +80,15 @@ public class CSNetworkManager : NetworkManager
         GameManager.instance.UpdatePlayerCount();
 
         conn.identity.GetComponent<PlayerManager>().OnStartGame(conn);
-
-        //PlayerManager player = conn.identity.GetComponent<PlayerManager>();
-        
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
         var newPlayer = conn.identity.GetComponent<PlayerNetworkInfo>();
 
+        Debug.Log(newPlayer.netIdentity + " disconnected.");
         Debug.Log(newPlayer.name + " has left the game");
+
         playerNames.Remove(newPlayer.name);
         players.Remove(conn.identity);
         
@@ -176,6 +176,7 @@ public class CSNetworkManager : NetworkManager
     public void AddPlayerName(string name)
     {
         playerNames.Add(name);
+        Debug.Log(name + " has joined the game!");
         SetLobbyPlayerNames();
     }
 

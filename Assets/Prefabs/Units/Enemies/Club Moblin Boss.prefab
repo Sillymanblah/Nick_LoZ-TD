@@ -2954,7 +2954,7 @@ MonoBehaviour:
   maxHealthPoints: 1500
   healthPoints: 0
   moneyMultiplier: 1
-  speed: 0.9
+  speed: 0.6
   distanceCovered: 0
   isDead: 0
   thisHealthBar: {fileID: 6849592758551305111}
@@ -2973,6 +2973,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b8463208e639364b882c6bd62d25e29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   animator: {fileID: 4504653769026163418}
 --- !u!54 &7801556227058250576
 Rigidbody:
@@ -3090,13 +3093,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 3.3
-  m_Radius: 0.7
+  m_Height: 2.36
+  m_Radius: 0.34
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.67, z: 0}
+  m_Center: {x: 0, y: 1.22, z: 0}
 --- !u!1 &7895021344291533756
 GameObject:
   m_ObjectHideFlags: 0

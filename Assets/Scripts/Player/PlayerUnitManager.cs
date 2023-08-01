@@ -164,7 +164,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
         if (unitsLoadout[unitIndex] == null) return;
 
-        if (loadoutCount[unitIndex] >= 5)
+        if (loadoutCount[unitIndex] >= 10)
         {
             Debug.Log($"You have the max number of units for that tower");
             return;
@@ -260,7 +260,7 @@ public class PlayerUnitManager : NetworkBehaviour
     [Command]
     void CmdNetworkSpawnUnit(Vector3 newGrid, int gridCellIndex, int loadoutIndex)
     {
-        if (loadoutCount[loadoutIndex] >= 5) return;
+        if (loadoutCount[loadoutIndex] >= 10) return;
         if (GameManager.instance.GetGridCell(gridCellIndex).CheckAvailability(unitsLoadout[loadoutIndex].gridType) == false) return;
         if (money < unitsLoadout[loadoutIndex].NextCost(1)) return;
 

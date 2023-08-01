@@ -80,7 +80,10 @@ public class EnemyUnit : NetworkBehaviour
 
         if (speed > 0)
         {
-            WalkingAnimation();
+            if (animManager != null)
+            {
+                animManager.WalkingAnim(0.1f);
+            }
         }
 
         GravityControl();
@@ -207,16 +210,4 @@ public class EnemyUnit : NetworkBehaviour
     {
         hpBar.SetActive(active);
     }
-
-    #region CLIENTRPC ANIMATIONS
-
-    [ClientRpc]
-    void WalkingAnimation()
-    {
-        if (animManager == null) return;
-
-        animManager.WalkingAnim(0.1f);
-    }
-
-    #endregion
 }

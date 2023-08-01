@@ -137,7 +137,7 @@ MonoBehaviour:
   maxHealthPoints: 500
   healthPoints: 0
   moneyMultiplier: 1
-  speed: 1
+  speed: 0.8
   distanceCovered: 0
   isDead: 0
   thisHealthBar: {fileID: 7824775096563842733}
@@ -220,8 +220,8 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
-  m_Radius: 1.07
+  m_Height: 2.2
+  m_Radius: 0.44
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
