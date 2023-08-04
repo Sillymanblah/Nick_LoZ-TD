@@ -26,6 +26,8 @@ public class UnitCollider : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             unit.enemiesInRange.Add(other.GetComponent<EnemyUnit>());
+
+            
         }
     }
 

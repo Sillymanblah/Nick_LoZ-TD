@@ -107,6 +107,8 @@ public class Unit : NetworkBehaviour
         currentCooldown = Time.time + cooldown;
     }
 
+    
+
     // This is for when u spawn it on the server
     public override void OnStartAuthority()
     {
@@ -138,6 +140,14 @@ public class Unit : NetworkBehaviour
             return;
         }
         AttackEnemy();
+    }
+
+    /// <summary>
+    /// This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
+    /// </summary>
+    private void FixedUpdate()
+    {
+        Physics.IgnoreLayerCollision(6, 9);
     }
 
     [Server]

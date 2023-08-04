@@ -22,9 +22,13 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] TextMeshProUGUI skipWaveCount;
     [SerializeField] GameObject skipWaveButton;
 
+    [Space]
+    [SerializeField] GameObject settingsMenu;
+
     private void Awake()
     {
         instance = this;
+
     }
     // Start is called before the first frame update
     void Start()
@@ -37,6 +41,8 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
         skipWaveButton.SetActive(false);
         exceptionText.text = string.Empty;
+
+        settingsMenu.SetActive(false);
     }
 
     // Update is called once per frame
@@ -49,10 +55,16 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
         if (!player.isLocalPlayer) return;
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+            settingsMenu.SetActive(true);
+
         MoneyText();
     }
 
-
+    public void LeaveButton()
+    {
+        player.GetComponent<PlayerManager>().DisconnectClient();
+    }
 
     void MoneyText()
     {

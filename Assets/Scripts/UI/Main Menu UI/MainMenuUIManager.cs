@@ -10,8 +10,7 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] GameObject gamemodesMenu;
     [SerializeField] GameObject connectingMenu;
     [SerializeField] GameObject multiplayerLobby;
-    
-    [SerializeField] GameObject backButton;
+    [SerializeField] GameObject settingsMenu;
 
     GameObject currentMenu;
 
@@ -22,11 +21,10 @@ public class MainMenuUIManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        
-        backButton.SetActive(false);
         gamemodesMenu.SetActive(false);
         connectingMenu.SetActive(false);
         multiplayerLobby.SetActive(false);
+        settingsMenu.SetActive(false);
         currentMenu = startMenu;
         instance = this;
     }
@@ -50,37 +48,15 @@ public class MainMenuUIManager : MonoBehaviour
         currentMenu = gamemodesMenu;
         gamemodesMenu.SetActive(true);
         startMenu.SetActive(false);
-        backButton.SetActive(true);
     }
 
-    public void ReturnButton()
-    {
-        if (GameObject.ReferenceEquals(currentMenu, gamemodesMenu))
-        {
-            startMenu.SetActive(true);
-            currentMenu = startMenu;
-
-            gamemodesMenu.SetActive(false);
-            backButton.SetActive(false);
-        }
-        else if (GameObject.ReferenceEquals(currentMenu, multiplayerLobby))
-        {
-            gamemodesMenu.SetActive(true);
-            currentMenu = gamemodesMenu;
-
-            multiplayerLobby.SetActive(false);
-            backButton.SetActive(true);
-            LeaveLobby();
-        }
-        
-    }
+    
 
     public void GoMultiplayer()
     {
         currentMenu = multiplayerLobby;
         
         gamemodesMenu.SetActive(false);
-        backButton.SetActive(false);
         connectingMenu.SetActive(true);
         Debug.Log($"starting client");
         NetworkManager.singleton.StartClient();
@@ -97,6 +73,12 @@ public class MainMenuUIManager : MonoBehaviour
     {
         multiplayerLobby.SetActive(true);
         connectingMenu.SetActive(false);
+    }
+
+    public void SettingsMenu()
+    {
+        startMenu.SetActive(false);
+        settingsMenu.SetActive(true);
     }
 
     public void LeaveLobby()
@@ -117,7 +99,6 @@ public class MainMenuUIManager : MonoBehaviour
     public void OnServerStart(NetworkManager server)
     {
         startMenu.SetActive(false);
-        backButton.SetActive(false);
         gamemodesMenu.SetActive(false);
         connectingMenu.SetActive(false);
         multiplayerLobby.SetActive(true);

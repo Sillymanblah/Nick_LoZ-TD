@@ -70,20 +70,18 @@ public class PlayerManager : NetworkBehaviour
         if (!ingame) return;
 
         if (!isLocalPlayer) return;
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            NetworkClient.Disconnect();
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-
         
         cameraControls.SwitchCameraMovementControl();
         Physics.IgnoreLayerCollision(8, 3, true);
         Physics.IgnoreLayerCollision(8, 6, true);
         Physics.IgnoreLayerCollision(8, 9, true);
+    }
+
+    public void DisconnectClient()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        NetworkClient.Disconnect();
     }
 
     #region Username shit

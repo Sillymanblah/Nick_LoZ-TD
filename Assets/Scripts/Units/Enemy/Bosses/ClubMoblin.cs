@@ -41,7 +41,11 @@ public class ClubMoblin : EnemyUnit
 
             for (int i = 0; i < unitsInRange.Count; i++)
             {
-                if (unitsInRange[i] == null) unitsInRange.RemoveAt(i);
+                if (unitsInRange[i] == null)
+                {
+                    unitsInRange.RemoveAt(i);
+                    continue;
+                }
 
                 StartCoroutine(unitsInRange[i].StunnedEffect(10));
             }

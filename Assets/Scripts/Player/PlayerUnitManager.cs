@@ -52,6 +52,7 @@ public class PlayerUnitManager : NetworkBehaviour
         if (!isLocalPlayer) return;
 
         GridPickerRaycast();
+        RaycastHpBar();
 
         SpawnUnit();
 
@@ -326,5 +327,34 @@ public class PlayerUnitManager : NetworkBehaviour
     public void SkipWaveReady()
     {
         WaveManager.instance.PlayersAreReady(playerReady, this.netIdentity);
+    }
+
+    EnemyUnit currentEnemy;
+    void RaycastHpBar()
+    {
+        RaycastHit hit;
+        
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+        {
+            if(hit.collider.CompareTag("Enemy"))
+            {
+                if (currentEnemy != null)
+                {
+                    currentEnemy.ToggleHPBar(false);
+                }
+
+
+                currentEnemy = hit.collider.GetComponent<EnemyUnit>();
+                currentEnemy.ToggleHPBar(true);
+            }
+
+            else
+            {
+                if (currentEnemy == null) return;
+
+                currentEnemy.ToggleHPBar(false);
+                currentEnemy = null;
+            }
+        }
     }
 }

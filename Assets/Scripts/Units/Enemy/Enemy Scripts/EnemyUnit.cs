@@ -57,6 +57,7 @@ public class EnemyUnit : NetworkBehaviour
         if (!isServer) return;
 
         controller = GetComponent<CharacterController>();
+
         dropMoney = Mathf.FloorToInt(moneyMultiplier * healthPoints);
         target = WayPointsManager.instance.points[1];
 
@@ -71,12 +72,8 @@ public class EnemyUnit : NetworkBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (!isServer)
-        {
-            RaycastHpBar();
 
-            return;
-        }
+        if (!isServer) return;
 
         if (speed > 0)
         {
@@ -188,23 +185,7 @@ public class EnemyUnit : NetworkBehaviour
         thisHealthBar.BarValueOnStart(maxHealthPoints);
     }
 
-    void RaycastHpBar()
-    {
-        RaycastHit hit;
-        
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-        {
-            if(hit.collider.CompareTag("Enemy"))
-            {
-                hit.collider.GetComponent<EnemyUnit>().ToggleHPBar(true);
-            }
-
-            else
-            {
-                hpBar.SetActive(false);
-            }
-        }
-    }
+    
 
     public void ToggleHPBar(bool active)
     {
