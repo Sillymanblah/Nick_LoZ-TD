@@ -50,7 +50,7 @@ public class EnemyUnit : NetworkBehaviour
     }
     protected virtual void Start()
     {
-        
+        Debug.Log(speed);
 
         
 
@@ -83,7 +83,7 @@ public class EnemyUnit : NetworkBehaviour
             }
         }
 
-        GravityControl();
+        //GravityControl();
         Vector3 thisTarget = new Vector3(target.position.x, transform.position.y, target.position.z);
 
         Vector3 direction = thisTarget - transform.position;
@@ -121,9 +121,10 @@ public class EnemyUnit : NetworkBehaviour
         transform.LookAt(lookAtWaypoint, Vector3.up);
     }
 
-    void GravityControl()
+    /*void GravityControl()
     {
         velocity.y += gravity * Time.deltaTime;
+
         controller.Move(velocity * Time.deltaTime);
 
         if (!isGrounded) { return; }
@@ -132,7 +133,7 @@ public class EnemyUnit : NetworkBehaviour
         {
             velocity.y = -2f;
         }
-    }
+    }*/
 
     void TrackDistance()
     {

@@ -123,6 +123,8 @@ public class WaveManager : NetworkBehaviour
     [Server]
     void SpawnBoss()
     {
+        if (bosses.Count == 0) return;
+
         EnemyUnit newBoss = null;
 
         /*if (currentWave == 1)
@@ -150,6 +152,8 @@ public class WaveManager : NetworkBehaviour
 
     IEnumerator ActivateSkipWave()
     {
+        if (endless) yield break;
+
         float currentTime = 0;
 
         while (currentTime < 5)

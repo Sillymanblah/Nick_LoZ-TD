@@ -36,7 +36,9 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (!audioSource.isPlaying)
+            audioSource.PlayOneShot(currentClip, volume);
+
     }
 
     public void ChangeVolume(float value)
