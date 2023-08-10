@@ -51,7 +51,6 @@ public class AudioManager : MonoBehaviour
 
         PlayerPrefs.SetFloat("MusicVolume", value);
         PlayerPrefs.Save();
-        Debug.Log(PlayerPrefs.GetFloat("MusicVolume"));
     }
 
     void SetSliderValue()

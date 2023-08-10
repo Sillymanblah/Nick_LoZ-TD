@@ -191,7 +191,7 @@ namespace kcp2k
             return builder.Uri;
         }
         public override bool ServerActive() => server.IsActive();
-        public override void ServerStart() => server.Start(ushort.Parse(System.Environment.GetCommandLineArgs()[1]));
+        public override void ServerStart() => server.Start(Port);
         public override void ServerSend(int connectionId, ArraySegment<byte> segment, int channelId)
         {
             server.Send(connectionId, segment, ToKcpChannel(channelId));

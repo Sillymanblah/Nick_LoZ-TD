@@ -245,6 +245,7 @@ public class WaveManager : NetworkBehaviour
             healthMultiplier = playerMultiplier * (currentWave * 1.5f);
             enemiesKilled = 0;
             totalEnemiesSpawned = 0;
+            
             playersReadyToSkip.Clear();
             playerReadyCount = 0;
 

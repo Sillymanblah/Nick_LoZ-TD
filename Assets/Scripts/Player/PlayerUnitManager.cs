@@ -102,6 +102,8 @@ public class PlayerUnitManager : NetworkBehaviour
 
     void GridPickerRaycast()
     {
+        if (UIManager.instance.MouseOnUI) return;
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -332,6 +334,8 @@ public class PlayerUnitManager : NetworkBehaviour
     EnemyUnit currentEnemy;
     void RaycastHpBar()
     {
+        
+
         RaycastHit hit;
         
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))

@@ -58,7 +58,7 @@ MonoBehaviour:
   maxHealthPoints: 15
   healthPoints: 1
   moneyMultiplier: 1
-  speed: 1.2
+  speed: 1
   distanceCovered: 0
   isDead: 0
   thisHealthBar: {fileID: 2463740299662676197}

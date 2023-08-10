@@ -26,8 +26,15 @@ public class BombchuEnemy : EnemyUnit
         waypointIndex++;
         target = WayPointsManager.instance.points[waypointIndex];
 
-        var lookAtWaypoint = new Vector3(target.position.x, transform.position.y, target.position.z);
+        var lookAtWaypoint = new Vector3(target.position.x, 0, target.position.z);
 
-        transform.LookAt(lookAtWaypoint, Vector3.up);
+        RpcLookAt(lookAtWaypoint);
+    }
+
+    [ClientRpc]
+    void RpcLookAt(Vector3 target)
+    {
+        transform.LookAt(target, Vector3.up);
+
     }
 }

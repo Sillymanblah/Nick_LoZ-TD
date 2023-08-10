@@ -14,15 +14,34 @@ public class CSNetworkManager : NetworkManager
     
 
     [SerializeField] bool DeployingAsServer;
+    [SerializeField] bool ignorePort;
     [SerializeField] public bool sceneTesting;
+
+
+    // NetworkManager.cs source code changes
+    // line - 1112 | if statement is a change
 
     // Start is called before the first frame update
     public override void Start()
     {
         instance = this;
         Debug.Log($"Server has not started");
+        thisTransport = GetComponent<KcpTransport>();
+
+        NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
 
         if (!DeployingAsServer) return;
+
+        string cmdLinePort = System.Environment.GetCommandLineArgs()[1];
+
+        if (!ignorePort)
+        {
+            thisTransport.port = ushort.Parse(cmdLinePort);
+        }
+        else
+        {
+            thisTransport.port = 7777;
+        }
 
         StartServer();
     }
@@ -33,20 +52,31 @@ public class CSNetworkManager : NetworkManager
         
     }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        
+    }
+
+    
+
     public override void OnServerConnect(NetworkConnectionToClient conn)
     {
-        base.OnServerConnect(conn);
-        if (SceneManager.GetActiveScene().buildIndex == 1)
-        {
-            if (GameManager.instance.gameStarted)
-            {
-                conn.Disconnect();
-                Debug.Log($"ONSERVERCONNECT");
 
-            }
+        if (ShouldRefuseConnection(out string reason, conn))
+        {
+
+            conn.Send(new ConnectionRefusedMessage(reason));
+            
+            Debug.Log(reason);
 
             return;
         }
+
+        base.OnServerConnect(conn);
+
+        Debug.Log($"literllay nothing happened");
     }
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
@@ -84,6 +114,12 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
+        if (conn == null)
+        {
+            base.OnServerDisconnect(conn);
+            return;   
+        }
+
         var newPlayer = conn.identity.GetComponent<PlayerNetworkInfo>();
 
         Debug.Log(newPlayer.netIdentity + " disconnected.");
@@ -130,7 +166,7 @@ public class CSNetworkManager : NetworkManager
     public override void OnStartServer()
     {
         base.OnStartServer();
-        thisTransport = GetComponent<KcpTransport>();
+        
         Debug.Log("Server IP: " + networkAddress);
         Debug.Log($"Server Port: " + thisTransport.Port);
 
@@ -185,5 +221,33 @@ public class CSNetworkManager : NetworkManager
     {
         ServerChangeScene(sceneName);
         players.Clear();
+    }
+
+    private bool ShouldRefuseConnection(out string reason, NetworkConnectionToClient conn)
+    {
+        if (SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            reason = "Game has already started";
+            return true;
+        }
+
+        /*else if (conn.identity == null)
+        {
+            reason = "Already connected to this game";
+            return true;
+        }*/
+
+        reason = "Good to go";
+        return false;
+    }
+
+    private void OnConnectionRefused(ConnectionRefusedMessage message)
+    {
+        Debug.Log("Connection refused: " + message.reason);
+        NetworkClient.Disconnect();
+        NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
+
+        // Display the refusal reason to the player
+        //refusalReasonText.text = "Connection refused: " + message.reason;
     }
 }

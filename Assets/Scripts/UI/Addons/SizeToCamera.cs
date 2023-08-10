@@ -17,6 +17,8 @@ public class SizeToCamera : MonoBehaviour
     }
     void Update ()
     {
+        transform.LookAt(transform.position + cam.transform.forward);
+
         if (text != null)
         {
             text.fontSize = Vector3.Distance(transform.position, cam.transform.position) * (0.01f * sizeMultiplier);
@@ -29,6 +31,6 @@ public class SizeToCamera : MonoBehaviour
             
         }
 
-        transform.LookAt(transform.position + cam.transform.forward);
+        
     }
 }

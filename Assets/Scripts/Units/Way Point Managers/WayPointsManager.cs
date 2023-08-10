@@ -22,6 +22,20 @@ public class WayPointsManager : NetworkBehaviour
         }
     }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        instance = this;
+
+        points = new Transform[transform.childCount];
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            points[i] = transform.GetChild(i);
+        }
+    }
+
     // return 0 = false
     // return 1 = true with damaging base
     // return 2 = true without damaging base

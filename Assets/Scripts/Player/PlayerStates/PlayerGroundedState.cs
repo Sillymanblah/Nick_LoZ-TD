@@ -34,6 +34,7 @@ public class PlayerGroundedState : PlayerBaseState
         float horizontal = InputMan.AxisMovementValue(InputMan.right, InputMan.left);
         float vertical = InputMan.AxisMovementValue(InputMan.forward, InputMan.backward);
 
+        // if we arent moving, set velocity to 0
         if (new Vector2(horizontal, vertical) != Vector2.zero) player.SwitchState(player.WalkingState);
         else player.playerMovement.ResetGround();
     }

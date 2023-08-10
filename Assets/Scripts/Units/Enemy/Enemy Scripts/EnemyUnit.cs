@@ -50,20 +50,19 @@ public class EnemyUnit : NetworkBehaviour
     }
     protected virtual void Start()
     {
-        Debug.Log(speed);
+        target = WayPointsManager.instance.points[1];
+        var lookAtWaypoint = new Vector3(target.position.x, transform.position.y, target.position.z);
 
-        
+        transform.LookAt(lookAtWaypoint, Vector3.up);
 
         if (!isServer) return;
 
         controller = GetComponent<CharacterController>();
 
         dropMoney = Mathf.FloorToInt(moneyMultiplier * healthPoints);
-        target = WayPointsManager.instance.points[1];
-
-        var lookAtWaypoint = new Vector3(target.position.x, transform.position.y, target.position.z);
-
-        transform.LookAt(lookAtWaypoint, Vector3.up);
+        
+        Debug.Log(lookAtWaypoint + " | " + WayPointsManager.instance.points[waypointIndex] + " Position: " + WayPointsManager.instance.points[waypointIndex].transform.position);
+        
 
         previousPosition = transform.position;
         InvokeRepeating(nameof(TrackDistance), 0, 0.1f);
@@ -72,7 +71,6 @@ public class EnemyUnit : NetworkBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-
         if (!isServer) return;
 
         if (speed > 0)
@@ -83,11 +81,14 @@ public class EnemyUnit : NetworkBehaviour
             }
         }
 
-        //GravityControl();
+        Physics.IgnoreLayerCollision(9, 3, true);
+        Physics.IgnoreLayerCollision(9, 8, true);
+
+        GravityControl();
         Vector3 thisTarget = new Vector3(target.position.x, transform.position.y, target.position.z);
 
         Vector3 direction = thisTarget - transform.position;
-        transform.Translate(direction.normalized * speed * Time.deltaTime, Space.World);
+        controller.Move(direction.normalized * speed * Time.deltaTime);
 
         Vector3 targetDistance = new Vector3(target.position.x, 0, target.position.z);
         Vector3 positionDistance = new Vector3(transform.position.x, 0, transform.position.z);
@@ -121,7 +122,7 @@ public class EnemyUnit : NetworkBehaviour
         transform.LookAt(lookAtWaypoint, Vector3.up);
     }
 
-    /*void GravityControl()
+    void GravityControl()
     {
         velocity.y += gravity * Time.deltaTime;
 
@@ -133,7 +134,7 @@ public class EnemyUnit : NetworkBehaviour
         {
             velocity.y = -2f;
         }
-    }*/
+    }
 
     void TrackDistance()
     {

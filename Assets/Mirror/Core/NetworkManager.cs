@@ -1109,14 +1109,35 @@ namespace Mirror
             // proceed with the login handshake by calling OnServerConnect
             if (networkSceneName != "" && networkSceneName != offlineScene)
             {
-                SceneMessage msg = new SceneMessage()
+                if (!ShouldRefuseConnection())
                 {
-                    sceneName = networkSceneName
-                };
-                conn.Send(msg);
+                    SceneMessage msg = new SceneMessage()
+                    {
+                        sceneName = networkSceneName
+                    };
+                    conn.Send(msg);
+                }
             }
 
             OnServerConnect(conn);
+        }
+
+        private bool ShouldRefuseConnection()
+        {
+            if (SceneManager.GetActiveScene().buildIndex != 0)
+            {
+                
+                return true;
+            }
+
+            /*else if (conn.identity == null)
+            {
+                reason = "Already connected to this game";
+                return true;
+            }*/
+
+            
+            return false;
         }
 
         void OnServerReadyMessageInternal(NetworkConnectionToClient conn, ReadyMessage msg)
