@@ -17,7 +17,6 @@ public class CSNetworkManager : NetworkManager
     [SerializeField] bool ignorePort;
     [SerializeField] public bool sceneTesting;
 
-
     // NetworkManager.cs source code changes
     // line - 1112 | if statement is a change
 
@@ -178,7 +177,7 @@ public class CSNetworkManager : NetworkManager
     public override void OnClientError(TransportError error, string reason)
     {
         base.OnClientError(error, reason);
-        MainMenuUIManager.instance.FailedToJoinLobby();
+        MainMenuUIManager.instance.FailedToJoinLobby(error + ": " + reason);
     }
 
     void LobbyScene()
@@ -244,6 +243,8 @@ public class CSNetworkManager : NetworkManager
     private void OnConnectionRefused(ConnectionRefusedMessage message)
     {
         Debug.Log("Connection refused: " + message.reason);
+        MainMenuUIManager.instance.FailedToJoinLobby(message.reason);
+
         NetworkClient.Disconnect();
         NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
+using TMPro;
 using UnityEngine;
 
 public class MainMenuUIManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] GameObject connectingMenu;
     [SerializeField] GameObject multiplayerLobby;
     [SerializeField] GameObject settingsMenu;
+
+    [SerializeField] TextMeshProUGUI joinExceptionText;
 
     GameObject currentMenu;
 
@@ -32,7 +35,7 @@ public class MainMenuUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        joinExceptionText.text = string.Empty;
     }
 
     // Update is called once per frame
@@ -62,11 +65,14 @@ public class MainMenuUIManager : MonoBehaviour
         NetworkManager.singleton.StartClient();
     }
 
-    public void FailedToJoinLobby()
+    public void FailedToJoinLobby(string reason)
     {
         GoToGamemodes();
         connectingMenu.SetActive(false);
-        Debug.Log($"Failed to connect");
+        
+        StopCoroutine(nameof(ExceptionText));
+        joinExceptionText.text = "Failed To Join: " + reason;
+        StartCoroutine(nameof(ExceptionText));
     }
 
     public void LobbyMenu()
@@ -104,5 +110,10 @@ public class MainMenuUIManager : MonoBehaviour
         multiplayerLobby.SetActive(true);
     }
 
-    
+    IEnumerator ExceptionText()
+    {
+        yield return new WaitForSeconds(5.0f);
+
+        joinExceptionText.text = string.Empty;
+    }
 }
