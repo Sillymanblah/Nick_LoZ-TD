@@ -5284,7 +5284,7 @@ PrefabInstance:
     - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
         type: 3}
       propertyPath: networkAddress
-      value: localhost
+      value: 54.245.215.124
       objectReference: {fileID: 0}
     - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
         type: 3}

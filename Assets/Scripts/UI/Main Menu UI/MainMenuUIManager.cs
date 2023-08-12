@@ -16,7 +16,6 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI joinExceptionText;
 
     GameObject currentMenu;
-
     public static MainMenuUIManager instance;
 
     /// <summary>

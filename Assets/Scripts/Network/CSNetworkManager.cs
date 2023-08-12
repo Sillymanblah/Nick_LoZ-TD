@@ -97,7 +97,11 @@ public class CSNetworkManager : NetworkManager
                 newPlayer.playerIsHost = true;
 
                 LevelSelectorUI.instance.netIdentity.AssignClientAuthority(newPlayer.netIdentity.connectionToClient);
+                LevelSelectorUI.instance.OnAssignAuthority(conn);
             }
+            
+            else
+                LevelSelectorUI.instance.OnDeAssignAuthority(conn);
 
             newPlayer.OnClientJoinLobby();
 
@@ -135,6 +139,7 @@ public class CSNetworkManager : NetworkManager
             {
                 players[0].GetComponent<PlayerNetworkInfo>().playerIsHost = true;
                 LevelSelectorUI.instance.netIdentity.AssignClientAuthority(players[0].connectionToClient);
+                LevelSelectorUI.instance.OnAssignAuthority(players[0].connectionToClient);
             }
         }
 

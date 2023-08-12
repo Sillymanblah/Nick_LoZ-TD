@@ -15,6 +15,9 @@ public class LevelSelectorUI : NetworkBehaviour
     [SerializeField] Image levelImage;
     [SerializeField] TextMeshProUGUI levelNameText;
 
+    [SerializeField] GameObject leftButton;
+    [SerializeField] GameObject rightButton;
+
     public string currentLevel;
 
     // Start is called before the first frame update
@@ -38,6 +41,20 @@ public class LevelSelectorUI : NetworkBehaviour
         base.OnStartClient();
 
         UponJoining();
+    }
+
+    [TargetRpc]
+    public void OnAssignAuthority(NetworkConnectionToClient conn)
+    {
+        if (!isOwned) return;
+
+        ToggleButtons(true);
+    }
+
+    [TargetRpc]
+    public void OnDeAssignAuthority(NetworkConnectionToClient conn)
+    {
+        ToggleButtons(false);
     }
 
     [Command]
@@ -75,5 +92,11 @@ public class LevelSelectorUI : NetworkBehaviour
         LevelSO selectedLevel = levels[levelNumSelector];
         levelImage.sprite = selectedLevel.levelPicture;
         levelNameText.text = selectedLevel.levelName;
+    }
+
+    void ToggleButtons(bool toggle)
+    {
+        leftButton.SetActive(toggle);
+        rightButton.SetActive(toggle);
     }
 }
