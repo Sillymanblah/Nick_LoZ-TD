@@ -10,6 +10,7 @@ public class LobbyManager : NetworkBehaviour
     public static LobbyManager instance;
     [SerializeField] Transform lobbyParent;
     [SerializeField] TextMeshProUGUI readyButtonText;
+    [SerializeField] Button readyButton;
     public PlayerNetworkInfo player;
     public int playerReadyCount;
     [SerializeField] [Scene] string playerTest;
@@ -32,6 +33,10 @@ public class LobbyManager : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*if (CSNetworkManager.instance.numPlayers < 2)
+            readyButton.interactable = false;
+        else
+            readyButton.interactable = true;*/
     }
 
     // Update is called once per frame
@@ -88,6 +93,9 @@ public class LobbyManager : NetworkBehaviour
     void RpcUpdatePlayerCount(int playerReady, int maxPlayerCount)
     {
         readyButtonText.text = $"READY {playerReady}/{maxPlayerCount}";
+
+        //if (maxPlayerCount > 1) readyButton.interactable = true;
+        //else if (maxPlayerCount < 2) readyButton.interactable = false;
     }
 
     [ClientRpc]

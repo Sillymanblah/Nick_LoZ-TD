@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1259566301177165859}
   - component: {fileID: 906838734081893309}
-  - component: {fileID: 833689387416278443}
   - component: {fileID: 1259566301177165858}
   - component: {fileID: 2562607088628723016}
   - component: {fileID: 2795892101142708751}
   - component: {fileID: 8361145006587234255}
+  - component: {fileID: 8665543529866328443}
   m_Layer: 9
   m_Name: Deku Scrub Enemy (green)
   m_TagString: Enemy
@@ -63,22 +63,6 @@ MonoBehaviour:
   isDead: 0
   thisHealthBar: {fileID: 2463740299662676197}
   hpBar: {fileID: 2819124811157983726}
---- !u!114 &833689387416278443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1259566301177165863}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b8463208e639364b882c6bd62d25e29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  animator: {fileID: 6596677833651328621}
 --- !u!54 &1259566301177165858
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -164,6 +148,23 @@ CharacterController:
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.67, z: 0}
+--- !u!114 &8665543529866328443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1259566301177165863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c8ff5256421dce46acefef877a0500f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  animator: {fileID: 6596677833651328621}
+  attackAnim: {fileID: 7400000, guid: aed95b1048e59b943b1031b45845599f, type: 2}
 --- !u!1 &2463740298690018601
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,7 +844,7 @@ Animator:
   m_GameObject: {fileID: 2383378604037497069}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 6f37e0f6e7a54594199107cdcecca9ea, type: 2}
-  m_Controller: {fileID: 9100000, guid: fc28719c67ddef84ba96c0857a7b1bd3, type: 2}
+  m_Controller: {fileID: 9100000, guid: 521913a62191df14c878af952476c447, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -20,31 +20,31 @@ MonoBehaviour:
   gridType: 1
   cost1: 125
   attack1: 5
-  cooldown1: 3
+  cooldown1: 2
   range1: 15
-  DPS1: 1.6666666
-  rangeDPS1: 25
+  DPS1: 2.5
+  rangeDPS1: 37
   cost2: 100
-  attack2: 8
-  cooldown2: 3
+  attack2: 6
+  cooldown2: 2
   range2: 20
-  DPS2: 2.6666667
-  rangeDPS2: 53
+  DPS2: 3
+  rangeDPS2: 60
   cost3: 300
-  attack3: 10
-  cooldown3: 2.5
+  attack3: 9
+  cooldown3: 2
   range3: 20
-  DPS3: 4
-  rangeDPS3: 80
+  DPS3: 4.5
+  rangeDPS3: 90
   cost4: 550
   attack4: 15
   cooldown4: 2
-  range4: 20
+  range4: 25
   DPS4: 7.5
-  rangeDPS4: 150
-  cost5: 750
+  rangeDPS4: 187
+  cost5: 1000
   attack5: 10
   cooldown5: 1
-  range5: 15
+  range5: 30
   DPS5: 10
-  rangeDPS5: 150
+  rangeDPS5: 300

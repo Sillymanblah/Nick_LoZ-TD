@@ -570,7 +570,7 @@ MonoBehaviour:
   target: {fileID: 8913681948144860192}
   clientAuthority: 0
   syncPosition: 1
-  syncRotation: 0
+  syncRotation: 1
   syncScale: 0
   interpolatePosition: 1
   interpolateRotation: 1

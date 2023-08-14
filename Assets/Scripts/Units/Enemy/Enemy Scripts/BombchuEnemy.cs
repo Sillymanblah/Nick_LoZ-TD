@@ -28,13 +28,6 @@ public class BombchuEnemy : EnemyUnit
 
         var lookAtWaypoint = new Vector3(target.position.x, 0, target.position.z);
 
-        RpcLookAt(lookAtWaypoint);
-    }
-
-    [ClientRpc]
-    void RpcLookAt(Vector3 target)
-    {
         transform.LookAt(target, Vector3.up);
-
     }
 }

@@ -32,6 +32,7 @@ public class Unit : NetworkBehaviour
     [SerializeField] protected SphereCollider rangeCollider;
     [SerializeField] protected Transform rangeVisualSprite;
     [SerializeField] UIUnitHoverStats hoverStats;
+    [SerializeField] UnitAnimationManager animations;
 
     [SyncVar]
     string unitName;
@@ -69,6 +70,7 @@ public class Unit : NetworkBehaviour
     public UnitSO GetUnitSO() { return unitSO; }
     public TargettingMode GetTargetMode() { return targetMode; }
 
+    bool attacking = false;
 
     #endregion
 
@@ -80,7 +82,6 @@ public class Unit : NetworkBehaviour
 
     //void UpdateAttackStat(float oldValue, float newValue)
 
-    // Start is called before the first frame update
     protected virtual void Start()
     {
         if (!isClient)
@@ -107,9 +108,6 @@ public class Unit : NetworkBehaviour
         currentCooldown = Time.time + cooldown;
     }
 
-    
-
-    // This is for when u spawn it on the server
     public override void OnStartAuthority()
     {
         base.OnStartAuthority();
@@ -126,13 +124,21 @@ public class Unit : NetworkBehaviour
         GameManager.instance.SyncGridCellOccupence(false, gridCellIndex);
     }
 
-    // Update is called once per frame
     protected virtual void Update()
     {
         if (!isPlaced) return;
 
-        if (!isServer) return;
+        if (!isServer) return; 
         
+            
+        if (attacking)
+            animations.AttackingAnim(0);
+    
+        else
+            animations.IdleAnim(0.2f);
+            
+        
+
         if (enemiesInRange.Count == 0) return;
         if (enemiesInRange[0] == null) 
         {
@@ -142,9 +148,6 @@ public class Unit : NetworkBehaviour
         AttackEnemy();
     }
 
-    /// <summary>
-    /// This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
-    /// </summary>
     private void FixedUpdate()
     {
         Physics.IgnoreLayerCollision(6, 9);
@@ -158,6 +161,11 @@ public class Unit : NetworkBehaviour
 
         gridCellIndex = cellIndex;
         this.loadoutIndex = loadoutIndex;
+
+        // This sets the grid cells states for EVERYONE \\
+        GameManager.instance.GetGridCell(gridCellIndex).SetOccupence(true);
+        GameManager.instance.SyncGridCellOccupence(true, gridCellIndex);
+        // -/////////////////////\\\\\\\\\\\\\\\\\\\\\- \\
 
         level = 1;
         sellCost += unitSO.NextCost(level) / 4;
@@ -274,8 +282,6 @@ public class Unit : NetworkBehaviour
 
     #endregion
 
-    
-
     [Command]
     public void UpgradeUnit(NetworkIdentity conn)
     {
@@ -289,7 +295,6 @@ public class Unit : NetworkBehaviour
 
         attachedPlayer.SetMoney(-unitSO.NextCost(GetLevel()));
 
-        
         sellCost += unitSO.NextCost(level) / 4;
         cost = unitSO.NextCost(level + 1);
 
@@ -299,7 +304,6 @@ public class Unit : NetworkBehaviour
 
         rangeCollider.radius = range / 5;
         rangeVisualSprite.localScale = new Vector3(1,1) * (rangeCollider.radius * 0.2f);
-
         
         UpdateLocalClient(rangeVisualSprite.localScale, true);
     }
@@ -357,6 +361,8 @@ public class Unit : NetworkBehaviour
                 Debug.Log($"missed attack");
                 goto MissedAttack;
             }
+
+            StartCoroutine(AttackingAnimationLength());
             enemiesInRange[0].DealDamage(attack);
             RpcClientUnitActions(enemiesInRange[0].transform.position);
         }
@@ -364,6 +370,15 @@ public class Unit : NetworkBehaviour
 
         MissedAttack:
         currentCooldown = Time.time + cooldown;
+    }
+
+    IEnumerator AttackingAnimationLength()
+    {
+        attacking = true;
+
+        yield return new WaitForSeconds(animations.GetAttackAnimLength());
+
+        attacking = false;
     }
 
     [ClientRpc]
@@ -439,9 +454,6 @@ public class Unit : NetworkBehaviour
         UIUnitStats.instance.UpdateUnitStats(this, false);
     }
 
-    /// <summary>
-    /// Called every frame while the mouse is over the GUIElement or Collider.
-    /// </summary>
     private void OnMouseOver()
     {
         if (!isClient) return;
@@ -450,9 +462,6 @@ public class Unit : NetworkBehaviour
         hoverStats.UpdateHoverStats();
     }
 
-    /// <summary>
-    /// Called when the mouse is not any longer over the GUIElement or Collider.
-    /// </summary>
     private void OnMouseExit()
     {
         hoverStats.gameObject.SetActive(false);

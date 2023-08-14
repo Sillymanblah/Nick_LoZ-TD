@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class EnemyUnit : NetworkBehaviour
 {
-    protected EnemyAnimationManager animManager;
+    protected UnitAnimationManager animManager;
 
     #region Moving
 
@@ -46,7 +46,7 @@ public class EnemyUnit : NetworkBehaviour
     /// </summary>
     void Awake()
     {
-        animManager = GetComponent<EnemyAnimationManager>();
+        animManager = GetComponent<UnitAnimationManager>();
     }
     protected virtual void Start()
     {
@@ -58,12 +58,8 @@ public class EnemyUnit : NetworkBehaviour
         if (!isServer) return;
 
         controller = GetComponent<CharacterController>();
-
         dropMoney = Mathf.FloorToInt(moneyMultiplier * healthPoints);
         
-        Debug.Log(lookAtWaypoint + " | " + WayPointsManager.instance.points[waypointIndex] + " Position: " + WayPointsManager.instance.points[waypointIndex].transform.position);
-        
-
         previousPosition = transform.position;
         InvokeRepeating(nameof(TrackDistance), 0, 0.1f);
     }

@@ -306,6 +306,7 @@ GameObject:
   - component: {fileID: 536484514037542084}
   - component: {fileID: 2507930554488858186}
   - component: {fileID: 7239370937959412973}
+  - component: {fileID: 3868838234961079782}
   m_Layer: 6
   m_Name: Deku Scrub (green)
   m_TagString: Unit
@@ -368,6 +369,7 @@ MonoBehaviour:
   rangeCollider: {fileID: 4472418445380619240}
   rangeVisualSprite: {fileID: 268042018701855999}
   hoverStats: {fileID: 5566793144199681515}
+  animations: {fileID: 3868838234961079782}
   cost: 0
   sellCost: 0
   cooldown: 2
@@ -436,7 +438,7 @@ Animator:
   m_GameObject: {fileID: 1187469130094244461}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b2860590ba602944e94a7ed7dc025405, type: 3}
-  m_Controller: {fileID: 9100000, guid: fc28719c67ddef84ba96c0857a7b1bd3, type: 2}
+  m_Controller: {fileID: 9100000, guid: 521913a62191df14c878af952476c447, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -447,6 +449,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3868838234961079782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187469130094244461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c8ff5256421dce46acefef877a0500f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  animator: {fileID: 7239370937959412973}
+  attackAnim: {fileID: 7400000, guid: aed95b1048e59b943b1031b45845599f, type: 2}
 --- !u!1 &1688672012932954153
 GameObject:
   m_ObjectHideFlags: 0

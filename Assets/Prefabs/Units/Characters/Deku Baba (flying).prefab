@@ -1221,6 +1221,7 @@ GameObject:
   - component: {fileID: 8987697883072451242}
   - component: {fileID: 5126343248700431285}
   - component: {fileID: 263410575910088324}
+  - component: {fileID: 7878522520819199030}
   m_Layer: 6
   m_Name: Deku Baba (flying)
   m_TagString: Unit
@@ -1285,6 +1286,7 @@ MonoBehaviour:
   rangeCollider: {fileID: 9098589792767540377}
   rangeVisualSprite: {fileID: 4894798301711055758}
   hoverStats: {fileID: 942570680638792346}
+  animations: {fileID: 7878522520819199030}
   cost: 0
   sellCost: 0
   cooldown: 2
@@ -1343,6 +1345,22 @@ MonoBehaviour:
   positionPrecision: 0.01
   scalePrecision: 0.01
   timelineOffset: 0
+--- !u!114 &7878522520819199030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5777884355589571868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c8ff5256421dce46acefef877a0500f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  animator: {fileID: 0}
 --- !u!1 &6285558241778028376
 GameObject:
   m_ObjectHideFlags: 0

@@ -92,6 +92,7 @@ public class PlayerUnitManager : NetworkBehaviour
         {
             if (money < selectedUnit.CostToUpgrade(selectedUnit.GetLevel() + 1))
             {
+                ExceptionMsgUI.instance.UIExceptionMessage("You don't have enough money");
                 Debug.Log($"You don't have enough money to upgrade");
                 return;
             }
@@ -169,13 +170,17 @@ public class PlayerUnitManager : NetworkBehaviour
 
         if (loadoutCount[unitIndex] >= 10)
         {
+            ExceptionMsgUI.instance.UIExceptionMessage("You have the maximum units placed for that unit");
+
             Debug.Log($"You have the max number of units for that tower");
             return;
         }
 
         if (money < unitsLoadout[unitIndex].NextCost(1))
         {
+            ExceptionMsgUI.instance.UIExceptionMessage("You don't have enough money");
             Debug.Log($"You don't have enough money");
+
             return;
         }
 
@@ -241,6 +246,10 @@ public class PlayerUnitManager : NetworkBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 setUnitDown = currentGrid.CheckAvailability(unitsLoadout[loadoutIndex].gridType);
+
+                if (setUnitDown == false)
+                    ExceptionMsgUI.instance.UIExceptionMessage("You cannot place that unit there");
+                    
                 yield return null;
                 continue;
             }
@@ -274,11 +283,8 @@ public class PlayerUnitManager : NetworkBehaviour
 
         Unit thisUnit = newUnit.GetComponent<Unit>();
         thisUnit.PlacedUnit(gridCellIndex, loadoutIndex);
-        PlaceUnit(thisUnit, loadoutIndex);
         loadoutCount[loadoutIndex]++;
-
-        GameManager.instance.GetGridCell(gridCellIndex).SetOccupence(true);
-        GameManager.instance.SyncGridCellOccupence(true, gridCellIndex);
+        PlaceUnit(thisUnit, loadoutIndex);
     }
 
     [TargetRpc]

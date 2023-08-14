@@ -58,6 +58,8 @@ public class PlayerNetworkInfo : NetworkBehaviour
     {
         if (playerReady == true)
         {
+            
+
             playerReady = !playerReady;
             LobbyManager.instance.PlayersAreReady(false);
         }
@@ -98,6 +100,8 @@ public class PlayerNetworkInfo : NetworkBehaviour
     public void ReadyUpButton()
     {
         if (SceneManager.GetActiveScene().buildIndex != 0) return;
+
+        //if (CSNetworkManager.instance.numPlayers < 2) return; 
 
         playerReady = !playerReady;
         LobbyManager.instance.PlayersAreReady(playerReady);
