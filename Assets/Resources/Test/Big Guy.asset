@@ -12,32 +12,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af7ea85760c3d1a4fa8f706a9c26095f, type: 3}
   m_Name: Big Guy
   m_EditorClassIdentifier: 
+  uniqueName: Big Guy
   name: Big Guy
   unitID: 1
   icon: {fileID: 21300000, guid: ab377b9df53e1c8409dce965ea394086, type: 3}
   prefab: {fileID: 5865840783461304122, guid: 9ed37fe9a8721dc4b909512fd3b9b3f2, type: 3}
+  chanceToMiss: 0
+  gridType: 0
   cost1: 100
   attack1: 4
   cooldown1: 2
   range1: 8
   DPS1: 2
+  rangeDPS1: 16
   cost2: 150
   attack2: 9
   cooldown2: 3
   range2: 12
   DPS2: 3
+  rangeDPS2: 36
   cost3: 300
   attack3: 10
   cooldown3: 2
   range3: 15
   DPS3: 5
+  rangeDPS3: 75
   cost4: 400
   attack4: 25
   cooldown4: 4
   range4: 15
   DPS4: 6.25
+  rangeDPS4: 93
   cost5: 650
   attack5: 30
   cooldown5: 2.5
   range5: 20
   DPS5: 12
+  rangeDPS5: 240

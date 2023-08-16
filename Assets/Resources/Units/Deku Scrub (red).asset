@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af7ea85760c3d1a4fa8f706a9c26095f, type: 3}
   m_Name: Deku Scrub (red)
   m_EditorClassIdentifier: 
+  uniqueName: Deku Scrub Red
   name: Deku Scrub
   unitID: 6
   icon: {fileID: 21300000, guid: cc068cee24d1ac143adaa449b4d85d65, type: 3}

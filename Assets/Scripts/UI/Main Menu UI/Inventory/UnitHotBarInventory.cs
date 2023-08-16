@@ -11,6 +11,7 @@ public class UnitHotBarInventory : MonoBehaviour
     [SerializeField] int maxUnits;
 
     [SerializeField] UnitInventory unitInventory;
+    [SerializeField] LobbyAuth lobbyAuth;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,8 @@ public class UnitHotBarInventory : MonoBehaviour
         units.Add(unit);
         slots[nextFreeIndex].EquipUnit(unit);
 
+        lobbyAuth.UpdateUnitInventory(units);
+
         nextFreeIndex++;
     }
 
@@ -50,6 +53,8 @@ public class UnitHotBarInventory : MonoBehaviour
 
         units.Remove(unit);
         OrganizeUnitSlots();
+
+        lobbyAuth.UpdateUnitInventory(units);
 
         nextFreeIndex = units.Count;
     }

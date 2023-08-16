@@ -1374,6 +1374,7 @@ MonoBehaviour:
   units: []
   maxUnits: 3
   unitInventory: {fileID: 155691859}
+  lobbyAuth: {fileID: 1371893047}
 --- !u!1001 &460338353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4748,6 +4749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Player
+  myUnitInventory: []
 --- !u!1 &1382961792
 GameObject:
   m_ObjectHideFlags: 0

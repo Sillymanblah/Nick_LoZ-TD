@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -11,12 +12,14 @@ public class PlayerNetworkInfo : NetworkBehaviour
     bool playerReady = false;
     LobbyAuth playerAuth;
     PlayerManager playerManager;
+    PlayerUnitManager playerUnitManager;
     public bool playerIsHost;
 
     // Start is called before the first frame update
     void Start()
     {
         playerManager = GetComponent<PlayerManager>();
+        playerUnitManager = GetComponent<PlayerUnitManager>();
 
         //if (!isLocalPlayer) return;
     }
@@ -105,5 +108,21 @@ public class PlayerNetworkInfo : NetworkBehaviour
 
         playerReady = !playerReady;
         LobbyManager.instance.PlayersAreReady(playerReady);
+    }
+
+    [Command]
+    public void UpdateUnitInventory(List<string> units)
+    {
+        List<UnitSO> newList = new List<UnitSO>();
+
+        foreach (string unitName in units)
+        {
+            
+            UnitSO result = UnitSO.Get(unitName);
+            newList.Add(result);
+        }
+
+        playerUnitManager.unitsLoadout = newList;
+        playerUnitManager.UpdateUnitsInventory(this.netIdentity.connectionToClient, units);
     }
 }
