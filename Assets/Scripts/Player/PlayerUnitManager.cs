@@ -367,4 +367,18 @@ public class PlayerUnitManager : NetworkBehaviour
             }
         }
     }
+
+    [TargetRpc]
+    public void UpdateUnitsInventory(NetworkConnectionToClient conn, List<string> unitSOs)
+    {
+        List<UnitSO> newList = new List<UnitSO>();
+
+        foreach (string unitName in unitSOs)
+        {
+            UnitSO result = UnitSO.Get(unitName);
+            newList.Add(result);
+        }
+
+        unitsLoadout = newList;
+    }
 }

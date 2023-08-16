@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Unit", menuName ="Units/Unit")]
-public class UnitSO : ScriptableObject
+public class UnitSO : UnitSOFinder<UnitSO>
 {
     public new string name;
     public int unitID;
@@ -176,5 +176,11 @@ public class UnitSO : ScriptableObject
         rangeDPS3 = Mathf.FloorToInt(DPS3 * range3);
         rangeDPS4 = Mathf.FloorToInt(DPS4 * range4);
         rangeDPS5 = Mathf.FloorToInt(DPS5 * range5);
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void RILoad() 
+    {
+        Load();
     }
 }

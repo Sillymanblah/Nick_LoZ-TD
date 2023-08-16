@@ -12,32 +12,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af7ea85760c3d1a4fa8f706a9c26095f, type: 3}
   m_Name: Spread Sheet
   m_EditorClassIdentifier: 
+  uniqueName: Spread Sheet
   name: Spread Sheet
   unitID: 2
   icon: {fileID: 21300000, guid: 2c843eb3da6a4764791d5110ee01f03a, type: 3}
   prefab: {fileID: 7017908674444291704, guid: ad39f9223bf36ca4aaaf8c0181d09854, type: 3}
+  chanceToMiss: 0
+  gridType: 0
   cost1: 150
   attack1: 3
   cooldown1: 3
   range1: 10
   DPS1: 1
+  rangeDPS1: 10
   cost2: 300
   attack2: 4
   cooldown2: 3
   range2: 14
   DPS2: 1.3333334
+  rangeDPS2: 18
   cost3: 600
   attack3: 8
   cooldown3: 4
   range3: 15
   DPS3: 2
+  rangeDPS3: 30
   cost4: 800
   attack4: 6
   cooldown4: 2
   range4: 20
   DPS4: 3
+  rangeDPS4: 60
   cost5: 1200
   attack5: 6
   cooldown5: 1
   range5: 15
   DPS5: 6
+  rangeDPS5: 90
