@@ -79,7 +79,7 @@ public class LobbyManager : NetworkBehaviour
         {
             Debug.Log($"Loading next scene... " + LevelSelectorUI.instance.currentLevel);
             ToggleReadyButton(false);
-            CSNetworkManager.instance.SwitchScenes(LevelSelectorUI.instance.currentLevel);
+            CSNetworkManager.instance.LoadScene(LevelSelectorUI.instance.currentLevel);
         }
     }
 

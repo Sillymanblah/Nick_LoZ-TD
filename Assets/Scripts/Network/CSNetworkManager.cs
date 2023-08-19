@@ -4,11 +4,15 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using kcp2k;
+using System;
 
 public class CSNetworkManager : NetworkManager
 {
     public static CSNetworkManager instance;
     public List<NetworkIdentity> players = new List<NetworkIdentity>();
+    
+    Vector3 networkPosition;
+
     List<string> playerNames = new List<string>();
     KcpTransport thisTransport;
     
@@ -19,6 +23,7 @@ public class CSNetworkManager : NetworkManager
 
     // NetworkManager.cs source code changes
     // line - 1112 | if statement is a change
+    // line - 1292 | prevents client from reloading current scene
 
     // Start is called before the first frame update
     public override void Start()
@@ -30,6 +35,8 @@ public class CSNetworkManager : NetworkManager
         NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
 
         if (!DeployingAsServer) return;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         string cmdLinePort = System.Environment.GetCommandLineArgs()[1];
 
@@ -44,6 +51,8 @@ public class CSNetworkManager : NetworkManager
 
         StartServer();
     }
+
+    
 
     // Update is called once per frame
     public override void Update()
@@ -108,11 +117,25 @@ public class CSNetworkManager : NetworkManager
             return;
         }
 
-        // For ingame and after lobby
+        // For ingame / after lobby
+
+
+        
+    }
+
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0) return;
 
         GameManager.instance.UpdatePlayerCount();
+        
+        networkPosition = GameObject.FindObjectOfType<NetworkStartPosition>().transform.position;
 
-        conn.identity.GetComponent<PlayerManager>().OnStartGame(conn);
+        foreach (NetworkIdentity player in players)
+        {
+            player.transform.position = networkPosition;
+            player.GetComponent<PlayerManager>().OnStartGame();
+        }
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
@@ -220,14 +243,21 @@ public class CSNetworkManager : NetworkManager
         SetLobbyPlayerNames();
     }
 
-    [Server]
+    /*[Server]
     public void SwitchScenes(string sceneName)
     {
         ServerChangeScene(sceneName);
         players.Clear();
+    }*/
+
+    [Server]
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+        NetworkServer.SendToAll(new SceneChangeMessage { sceneName = sceneName });
     }
 
-    private bool ShouldRefuseConnection(out string reason, NetworkConnectionToClient conn)
+    bool ShouldRefuseConnection(out string reason, NetworkConnectionToClient conn)
     {
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {
