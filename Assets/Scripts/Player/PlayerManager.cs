@@ -5,7 +5,6 @@ using Mirror;
 using Cinemachine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using kcp2k;
 
 public class PlayerManager : NetworkBehaviour
 {
@@ -43,8 +42,6 @@ public class PlayerManager : NetworkBehaviour
                 child.gameObject.SetActive(false);
             }
         }
-        
-        DontDestroyOnLoad(this.gameObject);
 
         if (isServer) return;
 
@@ -58,6 +55,14 @@ public class PlayerManager : NetworkBehaviour
         {
             ingame = false;
         }
+
+        controller = GetComponent<CharacterController>();
+        playerMovement = GetComponent<PlayerMovement>();
+        cameraControls = GetComponent<CameraControls>();
+
+        cameraControls.CCStart();
+
+        //playerNameTag.SetActive(false);
     }
 
     private void Update()
@@ -109,26 +114,16 @@ public class PlayerManager : NetworkBehaviour
     }
 
     [TargetRpc]
-    public void OnStartGame()
+    public void OnStartGame(NetworkConnectionToClient conn)
     {
-        Debug.Log($"player startgame");
-
-        
+        ingame = true;
         foreach (Transform child in this.gameObject.transform)
         {
             
             child.gameObject.SetActive(true);
         }
 
-        controller = GetComponent<CharacterController>();
-        playerMovement = GetComponent<PlayerMovement>();
-        cameraControls = GetComponent<CameraControls>();
-
-        cameraControls.CCStart();
-
         SetCameraPOV();
-
-        ingame = true;
     }
 
     #endregion

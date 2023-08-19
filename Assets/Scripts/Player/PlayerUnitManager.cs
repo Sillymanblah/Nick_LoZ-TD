@@ -12,8 +12,6 @@ public class PlayerUnitManager : NetworkBehaviour
 
     [SerializeField] public List<UnitSO> unitsLoadout = new List<UnitSO>(3);
     [SerializeField] public List<int> loadoutCount = new List<int>(3);
-                            List<string> loadoutNames = new List<string>();
-
     [SerializeField] Unit selectedUnit;
     //public Unit GetSelectedUnit() { return selectedUnit; }
 
@@ -374,7 +372,6 @@ public class PlayerUnitManager : NetworkBehaviour
     public void UpdateUnitsInventory(NetworkConnectionToClient conn, List<string> unitSOs)
     {
         List<UnitSO> newList = new List<UnitSO>();
-        loadoutNames = unitSOs;
 
         foreach (string unitName in unitSOs)
         {
