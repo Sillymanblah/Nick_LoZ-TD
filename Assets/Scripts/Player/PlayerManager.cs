@@ -15,6 +15,7 @@ public class PlayerManager : NetworkBehaviour
     public Transform HeadPos() { return head; }
     [SerializeField] GameObject playerNameTag;
     public PlayerMovement playerMovement;
+    PlayerUnitManager playerUnitManager;
     CameraControls cameraControls;
     public bool ingame = false;
     
@@ -122,6 +123,9 @@ public class PlayerManager : NetworkBehaviour
             
             child.gameObject.SetActive(true);
         }
+
+        playerUnitManager = GetComponent<PlayerUnitManager>();
+        playerUnitManager.OnStartGame();
 
         SetCameraPOV();
     }

@@ -1,7 +1,8 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class PlayerUnitManager : NetworkBehaviour
 {
@@ -255,7 +256,7 @@ public class PlayerUnitManager : NetworkBehaviour
             }
 
             // To prevent units clipping into the ground upon Instantiation
-            gridPos = new Vector3 (currentGridTransform.position.x, currentGridTransform.position.y + 0.5f, currentGridTransform.position.z);
+            gridPos = new Vector3 (currentGridTransform.position.x, currentGridTransform.position.y, currentGridTransform.position.z);
 
             thisUnit.transform.position = gridPos;
 
@@ -368,6 +369,9 @@ public class PlayerUnitManager : NetworkBehaviour
         }
     }
 
+    // Player Prefs - string "Unit1"
+    // Player Prefs - string "Unit2"
+    // Player Prefs - string "Unit3"
     [TargetRpc]
     public void UpdateUnitsInventory(NetworkConnectionToClient conn, List<string> unitSOs)
     {
@@ -380,5 +384,53 @@ public class PlayerUnitManager : NetworkBehaviour
         }
 
         unitsLoadout = newList;
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (i >= unitsLoadout.Count)
+            {
+                PlayerPrefs.DeleteKey($"Unit{i}");
+                continue;
+            }
+
+            PlayerPrefs.SetString($"Unit{i}", unitsLoadout[i].uniqueName);
+        }
+        PlayerPrefs.Save();
+    }
+
+    public void OnStartGame()
+    {
+        unitsLoadout.Clear();
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (!PlayerPrefs.HasKey($"Unit{i}")) continue;
+
+            UnitSO newUnit = UnitSO.Get(PlayerPrefs.GetString($"Unit{i}"));
+
+            unitsLoadout.Add(newUnit);
+        }
+
+        List<string> theseUnits = new List<string>();
+
+        foreach (UnitSO unit in unitsLoadout)
+        {
+            theseUnits.Add(unit.uniqueName);
+        }
+
+        Debug.Log(theseUnits.Count);
+
+        UpdateUnitInventory(theseUnits);
+    }
+
+    [Command]
+    public void UpdateUnitInventory(List<string> units)
+    {
+        unitsLoadout.Clear();
+
+        foreach (string unitName in units)
+        {
+            unitsLoadout.Add(UnitSO.Get(unitName));
+        }
     }
 }

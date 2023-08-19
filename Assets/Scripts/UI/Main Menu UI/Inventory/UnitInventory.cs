@@ -67,7 +67,6 @@ public class UnitInventory : MonoBehaviour
         for (int i = 0; i < slots.Count; i++)
         {
             slots[i].ResetSlot();
-            Debug.Log(i);
 
             if (i >= units.Count) continue;
 
