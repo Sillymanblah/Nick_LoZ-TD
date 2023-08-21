@@ -482,6 +482,7 @@ MonoBehaviour:
   targetMode: 0
   projectile: {fileID: 0}
   projectileOutput: {fileID: 0}
+  unitGridSize: 1
   enemiesInRange: []
   rangeCollider: {fileID: 2477211855792811513}
   rangeVisualSprite: {fileID: 2290552256558394094}

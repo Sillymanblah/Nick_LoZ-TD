@@ -223,6 +223,7 @@ public class PlayerUnitManager : NetworkBehaviour
         }
 
         Unit newUnit = thisUnit.GetComponent<Unit>();
+        int newGridCellSize = (int)Mathf.Pow(newUnit.unitGridSize, 2f);
 
         while (setUnitDown == false)
         {
@@ -263,20 +264,22 @@ public class PlayerUnitManager : NetworkBehaviour
         placedUnit = true;
 
         Destroy(thisUnit);
-        CmdNetworkSpawnUnit(gridPos, currentGridIndex, loadoutIndex);
+        CmdNetworkSpawnUnit(gridPos, currentGridIndex, loadoutIndex, newGridCellSize);
     }
 
     [Command]
-    void CmdNetworkSpawnUnit(Vector3 newGrid, List<int> gridCellIndexes, int loadoutIndex)
+    void CmdNetworkSpawnUnit(Vector3 newGrid, List<int> gridCellIndexes, int loadoutIndex, int unitGridSize)
     {
-        if (loadoutCount[loadoutIndex] >= 10) return;
 
+        // Checks
+        if (loadoutCount[loadoutIndex] >= 10) return;
+        if (gridCellIndexes.Count != unitGridSize) return;
+        if (money < unitsLoadout[loadoutIndex].NextCost(1)) return;
         foreach (int gridCell in gridCellIndexes)
         {
             if (GameManager.instance.GetGridCell(gridCell).CheckAvailability(unitsLoadout[loadoutIndex].gridType) == false) return;
         }
-        
-        if (money < unitsLoadout[loadoutIndex].NextCost(1)) return;
+        // End Checks
 
         SetMoney(-unitsLoadout[loadoutIndex].NextCost(1));
 

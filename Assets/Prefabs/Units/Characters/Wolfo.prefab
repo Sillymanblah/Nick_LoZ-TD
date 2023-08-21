@@ -2409,6 +2409,7 @@ MonoBehaviour:
   projectile: {fileID: 1364479158189863035, guid: dfbd580564c1f8e4d85065e36554230d,
     type: 3}
   projectileOutput: {fileID: 0}
+  unitGridSize: 2
   enemiesInRange: []
   rangeCollider: {fileID: 1286110202203312949}
   rangeVisualSprite: {fileID: 3202147574595114018}

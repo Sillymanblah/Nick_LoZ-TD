@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public enum TargettingMode
@@ -19,12 +20,14 @@ public class Unit : NetworkBehaviour
     bool isAttacking = true;
 
     [Space]
-    
+
     [SyncVar]
     [SerializeField] TargettingMode targetMode;
     [SerializeField] GameObject projectile;
     [SerializeField] Transform projectileOutput;
-    [SerializeField] public int unitGridSize {get; private set;}
+
+    [Tooltip("Value ^ 2")]
+    public int unitGridSize;
 
     [Space]
 

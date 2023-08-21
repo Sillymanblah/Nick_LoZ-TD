@@ -13,6 +13,12 @@ public class CSNetworkManager : NetworkManager
     KcpTransport thisTransport;
     
 
+    [Space]
+
+    public bool isSinglePlayer;
+
+    [Space]
+
     [SerializeField] bool DeployingAsServer;
     [SerializeField] bool ignorePort;
     [SerializeField] public bool sceneTesting;
@@ -62,20 +68,17 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnServerConnect(NetworkConnectionToClient conn)
     {
-
-        if (ShouldRefuseConnection(out string reason, conn))
+        if (!isSinglePlayer && !sceneTesting)
         {
-
-            conn.Send(new ConnectionRefusedMessage(reason));
-            
-            Debug.Log(reason);
-
-            return;
+            if (ShouldRefuseConnection(out string reason, conn))
+            {
+                conn.Send(new ConnectionRefusedMessage(reason));
+                Debug.Log(reason);
+                return;
+            }
         }
-
+        
         base.OnServerConnect(conn);
-
-        Debug.Log($"literllay nothing happened");
     }
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
@@ -175,6 +178,7 @@ public class CSNetworkManager : NetworkManager
         Debug.Log($"Server Port: " + thisTransport.Port);
 
         if (sceneTesting) return;
+        if (isSinglePlayer) return;
 
         LobbyScene();
     }

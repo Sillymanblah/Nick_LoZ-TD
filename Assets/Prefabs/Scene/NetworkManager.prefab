@@ -63,13 +63,15 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 6958934365885886503, guid: 2fbc8f01d6272f448ac05f60414d7db2, type: 3}
   - {fileID: 5928349616074529524, guid: 5389c4597f4e452428129c37f5615ef1, type: 3}
-  - {fileID: 5977893554625882208, guid: ab070dce6f5cafd4d8da52b2e9f1aa7e, type: 3}
+  - {fileID: 1259566301177165863, guid: c49c9c7dbed375241a792e57c0b01827, type: 3}
   - {fileID: 2915023377610069180, guid: 5acb3367a8a24b044a8365e15e7561e5, type: 3}
   - {fileID: 5777884355589571868, guid: 7ecaac6650afd2c40bf17ca19e5c6b3c, type: 3}
   - {fileID: 1733210408596726202, guid: 73ae55e9d5bcaef45a9f0c36464d110f, type: 3}
   - {fileID: 1187469130094244461, guid: 99a0b7818b2544f4ab0252927e9fa35f, type: 3}
   - {fileID: 867883072639063164, guid: 107af37b69827b64f998034450a4165d, type: 3}
   - {fileID: 7801556227058250581, guid: c13fcafad3f7e50479be4e3116171090, type: 3}
+  - {fileID: 8913681948144860196, guid: 0092965130386cc4cb311ebd53bc6e56, type: 3}
+  - {fileID: 4589918344677092016, guid: 6a47dd3f0ee5dbd40a3624eb59a7f2c5, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     catchupNegativeThreshold: -1
@@ -83,6 +85,7 @@ MonoBehaviour:
   timeInterpolationGui: 0
   players: []
   DeployingAsServer: 0
+  ignorePort: 0
   sceneTesting: 0
 --- !u!114 &9173269634202737196
 MonoBehaviour:
@@ -100,7 +103,7 @@ MonoBehaviour:
   DualMode: 1
   NoDelay: 1
   Interval: 10
-  Timeout: 10000
+  Timeout: 5000
   RecvBufferSize: 7361536
   SendBufferSize: 7361536
   FastResend: 2

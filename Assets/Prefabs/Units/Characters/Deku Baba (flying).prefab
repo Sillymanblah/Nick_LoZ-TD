@@ -615,7 +615,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: 148d5c12366ff99418571793239dfae0, type: 3}
+  - {fileID: 2100000, guid: 19a9848fcefc9cc49a1799c44cf9ff04, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1581,6 +1581,7 @@ MonoBehaviour:
   projectile: {fileID: 1364479158189863035, guid: dfbd580564c1f8e4d85065e36554230d,
     type: 3}
   projectileOutput: {fileID: 6539966283755692274}
+  unitGridSize: 1
   enemiesInRange: []
   rangeCollider: {fileID: 9098589792767540377}
   rangeVisualSprite: {fileID: 4894798301711055758}
