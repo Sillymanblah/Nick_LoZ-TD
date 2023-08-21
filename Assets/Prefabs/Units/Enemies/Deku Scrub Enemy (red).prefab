@@ -438,7 +438,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   animator: {fileID: 4035331937643142211}
-  attackAnim: {fileID: 7400000, guid: aed95b1048e59b943b1031b45845599f, type: 2}
+  animationLength: 0
 --- !u!54 &2915023377610069177
 Rigidbody:
   m_ObjectHideFlags: 0

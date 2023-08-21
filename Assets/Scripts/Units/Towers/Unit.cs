@@ -19,11 +19,12 @@ public class Unit : NetworkBehaviour
     bool isAttacking = true;
 
     [Space]
-
+    
     [SyncVar]
     [SerializeField] TargettingMode targetMode;
     [SerializeField] GameObject projectile;
     [SerializeField] Transform projectileOutput;
+    [SerializeField] public int unitGridSize {get; private set;}
 
     [Space]
 
@@ -57,6 +58,9 @@ public class Unit : NetworkBehaviour
     [SyncVar]
     [SerializeField] int level = 1;
 
+    [Space]
+    public List<int> gridCells = new List<int>();
+
     #region Get Unit Stats methods
 
     public string GetUnitName() { return unitName; }
@@ -77,7 +81,6 @@ public class Unit : NetworkBehaviour
 
     public bool isPlaced = false;
     protected bool isSelected = false;
-    int gridCellIndex;
     int loadoutIndex;
 
     //void UpdateAttackStat(float oldValue, float newValue)
@@ -121,7 +124,7 @@ public class Unit : NetworkBehaviour
 
     public override void OnStopServer()
     {
-        GameManager.instance.SyncGridCellOccupence(false, gridCellIndex);
+        GameManager.instance.SyncGridCellOccupence(false, gridCells);
     }
 
     protected virtual void Update()
@@ -132,10 +135,10 @@ public class Unit : NetworkBehaviour
         
             
         if (attacking)
-            animations.AttackingAnim(0);
+            animations.AttackingAnim(0.2f);
     
         else
-            animations.IdleAnim(0.2f);
+            animations.IdleAnim(0.3f);
             
         
 
@@ -154,17 +157,20 @@ public class Unit : NetworkBehaviour
     }
 
     [Server]
-    public void PlacedUnit(int cellIndex, int loadoutIndex)
+    public void PlacedUnit(List<int> cellIndexes, int loadoutIndex)
     {
         isPlaced = true;
         attachedPlayer = netIdentity.connectionToClient.identity.GetComponent<PlayerUnitManager>();
 
-        gridCellIndex = cellIndex;
+        gridCells = cellIndexes;
         this.loadoutIndex = loadoutIndex;
 
         // This sets the grid cells states for EVERYONE \\
-        GameManager.instance.GetGridCell(gridCellIndex).SetOccupence(true);
-        GameManager.instance.SyncGridCellOccupence(true, gridCellIndex);
+        foreach (int cellIndex in cellIndexes)
+        {
+            GameManager.instance.GetGridCell(cellIndex).SetOccupence(true);
+        }       
+        GameManager.instance.SyncGridCellOccupence(true, cellIndexes);
         // -/////////////////////\\\\\\\\\\\\\\\\\\\\\- \\
 
         level = 1;
@@ -313,7 +319,7 @@ public class Unit : NetworkBehaviour
     {
         if (conn.netId != attachedPlayer.netId) return;
 
-        GameManager.instance.SyncGridCellOccupence(false, gridCellIndex);
+        GameManager.instance.SyncGridCellOccupence(false, gridCells);
         attachedPlayer.SetMoney(sellCost);
         attachedPlayer.ChangeLoadoutCount(loadoutIndex, -1);
         NetworkServer.Destroy(gameObject);
@@ -474,5 +480,23 @@ public class Unit : NetworkBehaviour
         yield return new WaitForSeconds(seconds);
 
         isAttacking = true;
+    }
+
+    public bool CheckGridCellAvailability()
+    {
+        if (gridCells.Count == 0) return false;
+
+        foreach (int cellIndex in gridCells)
+        {
+            if (gridCells.Count != Mathf.Pow(unitGridSize, 2)) return false;
+
+            if (!GameManager.instance.GetGridCell(cellIndex).CheckAvailability(unitSO.gridType))
+            {
+                return false;
+            }
+            else continue;
+        }
+
+        return true;
     }
 }

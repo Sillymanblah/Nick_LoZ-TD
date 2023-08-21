@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
-using UnityEngine.Analytics;
 
 public class PlayerUnitManager : NetworkBehaviour
 {
@@ -17,7 +16,6 @@ public class PlayerUnitManager : NetworkBehaviour
     //public Unit GetSelectedUnit() { return selectedUnit; }
 
     [SerializeField] Transform currentGridTransform;
-    [SerializeField] GridCell currentGrid;
     [SerializeField] PlayerManager playerManager;
     GameObject preSpawnedUnit;
 
@@ -224,18 +222,16 @@ public class PlayerUnitManager : NetworkBehaviour
             selectedUnit = null;
         }
 
-        Unit thisThisUnit = thisUnit.GetComponent<Unit>();
+        Unit newUnit = thisUnit.GetComponent<Unit>();
 
         while (setUnitDown == false)
         {
             if (thisUnit == null) yield break;
 
-            currentGrid = currentGridTransform.GetComponent<GridCell>();
-
-            if (!currentGrid.CheckAvailability(unitsLoadout[loadoutIndex].gridType)) 
-                thisThisUnit.ChangeVisualRangeSprite(true);
+            if (!newUnit.CheckGridCellAvailability()) 
+                newUnit.ChangeVisualRangeSprite(true);
             else
-                thisThisUnit.ChangeVisualRangeSprite(false);
+                newUnit.ChangeVisualRangeSprite(false);
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
@@ -246,7 +242,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                setUnitDown = currentGrid.CheckAvailability(unitsLoadout[loadoutIndex].gridType);
+                setUnitDown = newUnit.CheckGridCellAvailability();
 
                 if (setUnitDown == false)
                     ExceptionMsgUI.instance.UIExceptionMessage("You cannot place that unit there");
@@ -263,7 +259,7 @@ public class PlayerUnitManager : NetworkBehaviour
             yield return null;
         }
 
-        int currentGridIndex = currentGrid.listIndex;
+        List<int> currentGridIndex = newUnit.gridCells;
         placedUnit = true;
 
         Destroy(thisUnit);
@@ -271,10 +267,15 @@ public class PlayerUnitManager : NetworkBehaviour
     }
 
     [Command]
-    void CmdNetworkSpawnUnit(Vector3 newGrid, int gridCellIndex, int loadoutIndex)
+    void CmdNetworkSpawnUnit(Vector3 newGrid, List<int> gridCellIndexes, int loadoutIndex)
     {
         if (loadoutCount[loadoutIndex] >= 10) return;
-        if (GameManager.instance.GetGridCell(gridCellIndex).CheckAvailability(unitsLoadout[loadoutIndex].gridType) == false) return;
+
+        foreach (int gridCell in gridCellIndexes)
+        {
+            if (GameManager.instance.GetGridCell(gridCell).CheckAvailability(unitsLoadout[loadoutIndex].gridType) == false) return;
+        }
+        
         if (money < unitsLoadout[loadoutIndex].NextCost(1)) return;
 
         SetMoney(-unitsLoadout[loadoutIndex].NextCost(1));
@@ -283,7 +284,7 @@ public class PlayerUnitManager : NetworkBehaviour
         NetworkServer.Spawn(newUnit, this.gameObject);
 
         Unit thisUnit = newUnit.GetComponent<Unit>();
-        thisUnit.PlacedUnit(gridCellIndex, loadoutIndex);
+        thisUnit.PlacedUnit(gridCellIndexes, loadoutIndex);
         loadoutCount[loadoutIndex]++;
         PlaceUnit(thisUnit, loadoutIndex);
     }

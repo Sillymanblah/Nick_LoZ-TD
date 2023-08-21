@@ -48,27 +48,33 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    [Server]
     public GridCell GetGridCell(int index)
     {
         return totalGridCells[index];
     }
 
     [Server]
-    public void SyncGridCellOccupence(bool busy, int index)
+    public void SyncGridCellOccupence(bool busy, List<int> indexes)
     {
-        totalGridCells[index].SetOccupence(busy);
+        foreach (int index in indexes)
+        {
+            totalGridCells[index].SetOccupence(busy);
+        }
+
 
         foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {
-            RPCSyncGridCellOccupence(player.connectionToClient, busy, index);
+            RPCSyncGridCellOccupence(player.connectionToClient, busy, indexes);
         }
     }
 
     [TargetRpc]
-    void RPCSyncGridCellOccupence(NetworkConnectionToClient sender, bool busy, int index)
+    void RPCSyncGridCellOccupence(NetworkConnectionToClient sender, bool busy, List<int> indexes)
     {
-        totalGridCells[index].SetOccupence(busy);
+        foreach (int index in indexes)
+        {
+            totalGridCells[index].SetOccupence(busy);
+        }
     }
 
     [Server]

@@ -12,6 +12,7 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] GameObject connectingMenu;
     [SerializeField] GameObject multiplayerLobby;
     [SerializeField] GameObject settingsMenu;
+    [SerializeField] GameObject inventoryMenu;
 
     [SerializeField] TextMeshProUGUI joinExceptionText;
 
@@ -27,6 +28,8 @@ public class MainMenuUIManager : MonoBehaviour
         connectingMenu.SetActive(false);
         multiplayerLobby.SetActive(false);
         settingsMenu.SetActive(false);
+        inventoryMenu.SetActive(false);
+
         currentMenu = startMenu;
         instance = this;
     }
@@ -64,11 +67,26 @@ public class MainMenuUIManager : MonoBehaviour
         NetworkManager.singleton.StartClient();
     }
 
+    public void InvBackButton()
+    {
+        if (currentMenu == multiplayerLobby)
+        {
+            inventoryMenu.SetActive(false);
+            multiplayerLobby.SetActive(true);
+        }
+        else
+        {
+            inventoryMenu.SetActive(false);
+            gamemodesMenu.SetActive(true);
+        }
+    }
+
     public void FailedToJoinLobby(string reason)
     {
         GoToGamemodes();
         connectingMenu.SetActive(false);
-        
+        currentMenu = gamemodesMenu;
+
         StopCoroutine(nameof(ExceptionText));
         joinExceptionText.text = "Failed To Join: " + reason;
         StartCoroutine(nameof(ExceptionText));

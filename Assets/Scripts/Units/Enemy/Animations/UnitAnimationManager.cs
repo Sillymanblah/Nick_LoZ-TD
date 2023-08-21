@@ -15,8 +15,7 @@ public class UnitAnimationManager : NetworkBehaviour
     int UNIT_ATTACK = Animator.StringToHash("Attack");
     int UNIT_IDLE = Animator.StringToHash("Idle");
 
-    [SerializeField] AnimationClip attackAnim;
-
+    [SerializeField] float animationLength;
     #endregion
 
     public void WalkingAnim(float transition)
@@ -42,7 +41,7 @@ public class UnitAnimationManager : NetworkBehaviour
 
     public float GetAttackAnimLength()
     {
-        return attackAnim.length;
+        return animationLength;
     }
 
     public void ChangeAnimationState(int newState)
