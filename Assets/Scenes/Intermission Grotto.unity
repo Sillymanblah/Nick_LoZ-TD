@@ -578,6 +578,31 @@ PrefabInstance:
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -4292154010595695564, guid: 17b13256ed6089e4bb32b782375eb03b,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.24480958
+      objectReference: {fileID: 0}
+    - target: {fileID: -4292154010595695564, guid: 17b13256ed6089e4bb32b782375eb03b,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.24480958
+      objectReference: {fileID: 0}
+    - target: {fileID: -4292154010595695564, guid: 17b13256ed6089e4bb32b782375eb03b,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.24480958
+      objectReference: {fileID: 0}
+    - target: {fileID: -4292154010595695564, guid: 17b13256ed6089e4bb32b782375eb03b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.386
+      objectReference: {fileID: 0}
+    - target: {fileID: -4292154010595695564, guid: 17b13256ed6089e4bb32b782375eb03b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.462
+      objectReference: {fileID: 0}
     - target: {fileID: -4141790577045886976, guid: 17b13256ed6089e4bb32b782375eb03b,
         type: 3}
       propertyPath: m_CastShadows

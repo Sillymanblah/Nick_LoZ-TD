@@ -33,7 +33,6 @@ public class PlayerManager : NetworkBehaviour
             camBrain.GetRig(i).GetCinemachineComponent<CinemachineTransposer>().m_ZDamping = 0;
         }
     }
-
     private void Start()
     {
         if (SceneManager.GetActiveScene().buildIndex == 0)
@@ -44,17 +43,25 @@ public class PlayerManager : NetworkBehaviour
             }
         }
 
-        if (isServer) return;
+        if (isServerOnly) return;
 
-        
+        if (!CSNetworkManager.instance.isSinglePlayer)
+        {
+            if (!ingame) return;
 
-        if (!ingame) return;
+            if (!isLocalPlayer) return;
+        }
 
-        if (!isLocalPlayer) return;
-
+        Debug.Log($"bruhhhh");
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             ingame = false;
+        }
+
+        else if (SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            
+            ingame = true;
         }
 
         controller = GetComponent<CharacterController>();
@@ -62,8 +69,6 @@ public class PlayerManager : NetworkBehaviour
         cameraControls = GetComponent<CameraControls>();
 
         cameraControls.CCStart();
-
-        //playerNameTag.SetActive(false);
     }
 
     private void Update()
@@ -72,7 +77,7 @@ public class PlayerManager : NetworkBehaviour
 
         if (!isLocalPlayer) return;
         
-        cameraControls.SwitchCameraMovementControl();
+        cameraControls?.SwitchCameraMovementControl();
         Physics.IgnoreLayerCollision(8, 3, true);
         Physics.IgnoreLayerCollision(8, 6, true);
         Physics.IgnoreLayerCollision(8, 9, true);
@@ -109,7 +114,6 @@ public class PlayerManager : NetworkBehaviour
         ingame = false;
         foreach (Transform child in this.gameObject.transform)
         {
-            Debug.Log($"Wtff");
             child.gameObject.SetActive(false);
         }
     }

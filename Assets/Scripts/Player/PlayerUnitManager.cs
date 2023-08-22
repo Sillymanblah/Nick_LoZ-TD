@@ -33,14 +33,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
         var gameManager = GameManager.instance;
 
-        UIUnitStats.instance.localPlayer = this;
         
-
-        if (GameManager.instance.gameStarted == true)
-            UIManager.instance.DisableReadyButtonLocally();
-
-        UIManager.instance.player = this;
-        UIManager.instance.SlotLoadout();
     }
 
     // Update is called once per frame
@@ -165,7 +158,7 @@ public class PlayerUnitManager : NetworkBehaviour
     {
         placedUnit = true;
 
-        if (unitsLoadout[unitIndex] == null) return;
+        if (unitIndex >= unitsLoadout.Count) return;
 
         if (loadoutCount[unitIndex] >= 10)
         {
@@ -373,9 +366,9 @@ public class PlayerUnitManager : NetworkBehaviour
         }
     }
 
+    // Player Prefs - string "Unit0"
     // Player Prefs - string "Unit1"
     // Player Prefs - string "Unit2"
-    // Player Prefs - string "Unit3"
     [TargetRpc]
     public void UpdateUnitsInventory(NetworkConnectionToClient conn, List<string> unitSOs)
     {
@@ -388,18 +381,6 @@ public class PlayerUnitManager : NetworkBehaviour
         }
 
         unitsLoadout = newList;
-
-        for (int i = 0; i < 3; i++)
-        {
-            if (i >= unitsLoadout.Count)
-            {
-                PlayerPrefs.DeleteKey($"Unit{i}");
-                continue;
-            }
-
-            PlayerPrefs.SetString($"Unit{i}", unitsLoadout[i].uniqueName);
-        }
-        PlayerPrefs.Save();
     }
 
     public void OnStartGame()
@@ -413,6 +394,7 @@ public class PlayerUnitManager : NetworkBehaviour
             UnitSO newUnit = UnitSO.Get(PlayerPrefs.GetString($"Unit{i}"));
 
             unitsLoadout.Add(newUnit);
+            Debug.Log(PlayerPrefs.GetString($"Unit{i}"));
         }
 
         List<string> theseUnits = new List<string>();
@@ -422,15 +404,24 @@ public class PlayerUnitManager : NetworkBehaviour
             theseUnits.Add(unit.uniqueName);
         }
 
-        Debug.Log(theseUnits.Count);
+        UIUnitStats.instance.localPlayer = this;
+        
+        if (GameManager.instance.gameStarted == true)
+            UIManager.instance.DisableReadyButtonLocally();
 
+        UIManager.instance.player = this;
+
+        UIManager.instance.SlotLoadout();
         UpdateUnitInventory(theseUnits);
     }
 
     [Command]
     public void UpdateUnitInventory(List<string> units)
     {
+        if (CSNetworkManager.instance.isSinglePlayer) return;
+
         unitsLoadout.Clear();
+        Debug.Log(unitsLoadout.Count);
 
         foreach (string unitName in units)
         {

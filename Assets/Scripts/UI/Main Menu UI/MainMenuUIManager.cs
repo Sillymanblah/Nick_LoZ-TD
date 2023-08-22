@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuUIManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] GameObject multiplayerLobby;
     [SerializeField] GameObject settingsMenu;
     [SerializeField] GameObject inventoryMenu;
+    [SerializeField] GameObject singlePlayerMenu;
 
     [SerializeField] TextMeshProUGUI joinExceptionText;
 
@@ -29,6 +31,7 @@ public class MainMenuUIManager : MonoBehaviour
         multiplayerLobby.SetActive(false);
         settingsMenu.SetActive(false);
         inventoryMenu.SetActive(false);
+        singlePlayerMenu.SetActive(false);
 
         currentMenu = startMenu;
         instance = this;
@@ -38,6 +41,14 @@ public class MainMenuUIManager : MonoBehaviour
     void Start()
     {
         joinExceptionText.text = string.Empty;
+
+        PlayerPrefs.DeleteKey("Unit0");
+        PlayerPrefs.DeleteKey("Unit1");
+        PlayerPrefs.DeleteKey("Unit2");
+
+        PlayerPrefs.Save();
+
+        Debug.Log(PlayerPrefs.GetString("Unit0"));
     }
 
     // Update is called once per frame
@@ -69,15 +80,20 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void InvBackButton()
     {
+        inventoryMenu.SetActive(false);
+
         if (currentMenu == multiplayerLobby)
         {
-            inventoryMenu.SetActive(false);
+            
             multiplayerLobby.SetActive(true);
         }
-        else
+        else if (currentMenu == gamemodesMenu)
         {
-            inventoryMenu.SetActive(false);
             gamemodesMenu.SetActive(true);
+        }
+        else if (currentMenu == singlePlayerMenu)
+        {
+            singlePlayerMenu.SetActive(true);
         }
     }
 
@@ -104,6 +120,13 @@ public class MainMenuUIManager : MonoBehaviour
         settingsMenu.SetActive(true);
     }
 
+    public void SinglePlayerMenu()
+    {
+        currentMenu = singlePlayerMenu;
+        singlePlayerMenu.SetActive(true);
+        gamemodesMenu.SetActive(false);
+    }
+
     public void LeaveLobby()
     {
         NetworkManager.singleton.StopClient();
@@ -112,11 +135,6 @@ public class MainMenuUIManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-    }
-
-    public void GoSinglePlayer()
-    {
-        // load the second scene from here
     }
 
     public void OnServerStart(NetworkManager server)

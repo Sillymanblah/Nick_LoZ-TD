@@ -129,13 +129,12 @@ MonoBehaviour:
   syncInterval: 0
   money: 500
   unitsLoadout:
-  - {fileID: 11400000, guid: 9f1ffb21a0e9a0b4c873e49e808f3a4b, type: 2}
-  - {fileID: 11400000, guid: 2d2f889c4c7ac0645b0fd45f16b30439, type: 2}
-  - {fileID: 11400000, guid: 32ff02de205499342b26d8322ee68599, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   loadoutCount: 000000000000000000000000
   selectedUnit: {fileID: 0}
   currentGridTransform: {fileID: 0}
-  currentGrid: {fileID: 0}
   playerManager: {fileID: 8470535574437190434}
   playerReady: 0
 --- !u!114 &8470535574437190434

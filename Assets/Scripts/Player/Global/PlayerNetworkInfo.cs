@@ -15,19 +15,13 @@ public class PlayerNetworkInfo : NetworkBehaviour
     PlayerUnitManager playerUnitManager;
     public bool playerIsHost;
 
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
     {
         playerManager = GetComponent<PlayerManager>();
         playerUnitManager = GetComponent<PlayerUnitManager>();
-
-        //if (!isLocalPlayer) return;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public override void OnStartClient()
@@ -121,6 +115,8 @@ public class PlayerNetworkInfo : NetworkBehaviour
             UnitSO result = UnitSO.Get(unitName);
             newList.Add(result);
         }
+
+        
 
         playerUnitManager.unitsLoadout = newList;
         playerUnitManager.UpdateUnitsInventory(this.netIdentity.connectionToClient, units);

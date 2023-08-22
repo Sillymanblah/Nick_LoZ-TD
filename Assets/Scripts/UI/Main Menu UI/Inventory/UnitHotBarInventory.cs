@@ -40,6 +40,18 @@ public class UnitHotBarInventory : MonoBehaviour
         units.Add(unit);
         slots[nextFreeIndex].EquipUnit(unit);
 
+        for (int i = 0; i < 3; i++)
+        {
+            if (i >= units.Count)
+            {
+                PlayerPrefs.DeleteKey($"Unit{i}");
+                continue;
+            }
+
+            PlayerPrefs.SetString($"Unit{i}", units[i].uniqueName);
+        }
+        PlayerPrefs.Save();
+
         lobbyAuth.UpdateUnitInventory(units);
 
         nextFreeIndex++;
@@ -54,9 +66,8 @@ public class UnitHotBarInventory : MonoBehaviour
         units.Remove(unit);
         OrganizeUnitSlots();
 
-        lobbyAuth.UpdateUnitInventory(units);
-
         nextFreeIndex = units.Count;
+        lobbyAuth.UpdateUnitInventory(units);
     }
 
     void OrganizeUnitSlots()

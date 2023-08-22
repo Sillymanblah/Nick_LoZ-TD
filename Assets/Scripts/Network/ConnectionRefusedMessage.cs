@@ -9,6 +9,4 @@ public struct ConnectionRefusedMessage : NetworkMessage
     {
         this.reason = reason;
     }
-
-    
 }

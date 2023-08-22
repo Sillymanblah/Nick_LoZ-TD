@@ -63,6 +63,11 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void LeaveButton()
     {
+        if (CSNetworkManager.instance.isSinglePlayer)
+        {
+            CSNetworkManager.instance.StopServer();
+        }
+
         player.GetComponent<PlayerManager>().DisconnectClient();
     }
 

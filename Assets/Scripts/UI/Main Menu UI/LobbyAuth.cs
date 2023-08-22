@@ -50,7 +50,7 @@ public class LobbyAuth : MonoBehaviour
         {
             transmittedUnitData.Add(unit.uniqueName);
         }
-
+        
         player.UpdateUnitInventory(transmittedUnitData);
     }
 }

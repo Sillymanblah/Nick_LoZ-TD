@@ -302,6 +302,13 @@ public class WaveManager : NetworkBehaviour
     IEnumerator DelayEndingGame()
     {
         yield return new WaitForSeconds(2.0f);
+
+        if (CSNetworkManager.instance.isSinglePlayer)
+        {
+            CSNetworkManager.instance.StopServer();
+            yield break;
+        }
+
         NetworkServer.DisconnectAll();
     }
 }

@@ -87,6 +87,13 @@ public class BaseManager : NetworkBehaviour
     IEnumerator DelayEndingGame()
     {
         yield return new WaitForSeconds(3.0f);
+
+        if (CSNetworkManager.instance.isSinglePlayer)
+        {
+            CSNetworkManager.instance.StopServer();
+            yield break;
+        }
+        
         NetworkServer.DisconnectAll();
     }
 }

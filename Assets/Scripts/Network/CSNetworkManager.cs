@@ -4,6 +4,7 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using kcp2k;
+using System;
 
 public class CSNetworkManager : NetworkManager
 {
@@ -33,6 +34,7 @@ public class CSNetworkManager : NetworkManager
         Debug.Log($"Server has not started");
         thisTransport = GetComponent<KcpTransport>();
 
+        SceneManager.sceneLoaded += OnSceneLoaded;
         NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
 
         if (!DeployingAsServer) return;
@@ -49,6 +51,22 @@ public class CSNetworkManager : NetworkManager
         }
 
         StartServer();
+    }
+
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0) 
+        {
+            NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);   
+            return;
+        }
+
+        if (isSinglePlayer)
+        {
+            StartHost();
+        }
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     // Update is called once per frame
@@ -77,7 +95,7 @@ public class CSNetworkManager : NetworkManager
                 return;
             }
         }
-        
+
         base.OnServerConnect(conn);
     }
 
@@ -99,12 +117,12 @@ public class CSNetworkManager : NetworkManager
             {
                 newPlayer.playerIsHost = true;
 
-                LevelSelectorUI.instance.netIdentity.AssignClientAuthority(newPlayer.netIdentity.connectionToClient);
-                LevelSelectorUI.instance.OnAssignAuthority(conn);
+                NetLevelSelectorUI.instance.netIdentity.AssignClientAuthority(newPlayer.netIdentity.connectionToClient);
+                NetLevelSelectorUI.instance.OnAssignAuthority(conn);
             }
             
             else
-                LevelSelectorUI.instance.OnDeAssignAuthority(conn);
+                NetLevelSelectorUI.instance.OnDeAssignAuthority(conn);
 
             newPlayer.OnClientJoinLobby();
 
@@ -136,13 +154,13 @@ public class CSNetworkManager : NetworkManager
         
         if (newPlayer.playerIsHost)
         {
-            LevelSelectorUI.instance.netIdentity.RemoveClientAuthority();
+            NetLevelSelectorUI.instance.netIdentity.RemoveClientAuthority();
 
             if (players.Count != 0)
             {
                 players[0].GetComponent<PlayerNetworkInfo>().playerIsHost = true;
-                LevelSelectorUI.instance.netIdentity.AssignClientAuthority(players[0].connectionToClient);
-                LevelSelectorUI.instance.OnAssignAuthority(players[0].connectionToClient);
+                NetLevelSelectorUI.instance.netIdentity.AssignClientAuthority(players[0].connectionToClient);
+                NetLevelSelectorUI.instance.OnAssignAuthority(players[0].connectionToClient);
             }
         }
 
@@ -221,6 +239,9 @@ public class CSNetworkManager : NetworkManager
     {
         playerNames.Add(name);
         Debug.Log(name + " has joined the game!");
+
+        if (isSinglePlayer) return;
+
         SetLobbyPlayerNames();
     }
 

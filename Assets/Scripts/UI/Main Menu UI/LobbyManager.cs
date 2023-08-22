@@ -77,9 +77,9 @@ public class LobbyManager : NetworkBehaviour
 
         if (playerReadyCount == CSNetworkManager.instance.players.Count)
         {
-            Debug.Log($"Loading next scene... " + LevelSelectorUI.instance.currentLevel);
+            Debug.Log($"Loading next scene... " + NetLevelSelectorUI.instance.currentLevel);
             ToggleReadyButton(false);
-            CSNetworkManager.instance.SwitchScenes(LevelSelectorUI.instance.currentLevel);
+            CSNetworkManager.instance.SwitchScenes(NetLevelSelectorUI.instance.currentLevel);
         }
     }
 

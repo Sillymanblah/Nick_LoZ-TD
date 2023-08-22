@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Bombchu Bowling Alley
   m_EditorClassIdentifier: 
   sceneName: Assets/Scenes/Bombchu Bowling Alley.unity
-  levelName: Bombchu Bowling Alley
+  levelName: Bombchu Bowling Alley (Endless)
   levelPicture: {fileID: 21300000, guid: 08687d33a60bc82449d0c61a7e155041, type: 3}
   levelID: 0

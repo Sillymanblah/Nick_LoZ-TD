@@ -24,7 +24,7 @@ public class PlayerStateManager : NetworkBehaviour
     {
         playerManager = GetComponent<PlayerManager>();
 
-        if (!playerManager.ingame) return;
+        
 
         if (!isLocalPlayer) return;
 
@@ -34,6 +34,8 @@ public class PlayerStateManager : NetworkBehaviour
 
         currentState = FallingState;
 
+        if (!playerManager.ingame) return;
+        
         currentState.EnterState(this);
     }
 
