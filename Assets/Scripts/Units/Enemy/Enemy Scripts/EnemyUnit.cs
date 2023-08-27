@@ -39,6 +39,7 @@ public class EnemyUnit : NetworkBehaviour
 
     [SerializeField] HealthBar thisHealthBar;
     [SerializeField] GameObject hpBar;
+
     // Start is called before the first frame update
 
     /// <summary>

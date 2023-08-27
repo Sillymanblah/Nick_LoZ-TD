@@ -8,12 +8,13 @@ public class ClubMoblin : EnemyUnit
     [SerializeField] List<Unit> unitsInRange = new List<Unit>();
 
     [SerializeField] int abilityCooldown;
-
+    AudioSource audioSource;
+    [SerializeField] AudioClip attackingClip;
 
     protected override void Start()
     {
         base.Start();
-
+        audioSource = GetComponent<AudioSource>();
         if (!isServer) return;
 
         StartCoroutine(SmashAbility());
@@ -54,6 +55,11 @@ public class ClubMoblin : EnemyUnit
 
             speed = originalSpeed;
         }
+    }
+
+    public void PlayAttackSound()
+    {
+        audioSource.PlayOneShot(attackingClip, 2f);
     }
 
     /// <summary>

@@ -85,14 +85,24 @@ public class Unit : NetworkBehaviour
     protected bool isSelected = false;
     int loadoutIndex;
 
-    //void UpdateAttackStat(float oldValue, float newValue)
+    
+
+    #region Sound Effects
+
+    
+    AudioSource audioSource;
+    [Space]
+    [SerializeField] AudioClip attackSound;
+
+    #endregion
 
     protected virtual void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         if (!isClient)
         {
             range = unitSO.CurrentRange(level);
-
             rangeVisualSprite.gameObject.SetActive(true);
             rangeCollider.radius = range / 5;
             rangeVisualSprite.localScale = new Vector3(1,1) * (rangeCollider.radius * 0.2f);
@@ -330,7 +340,6 @@ public class Unit : NetworkBehaviour
     [TargetRpc]
     protected virtual void UpdateLocalClient(Vector3 newScale, bool activeUI)
     {
-        Debug.Log($"is this being called");
         rangeVisualSprite.localScale = newScale;
         UIUnitStats.instance.UpdateUnitStats(this, activeUI);
     }
@@ -372,6 +381,7 @@ public class Unit : NetworkBehaviour
 
             StartCoroutine(AttackingAnimationLength());
             enemiesInRange[0].DealDamage(attack);
+            
             RpcClientUnitActions(enemiesInRange[0].transform.position);
         }
         
@@ -394,9 +404,9 @@ public class Unit : NetworkBehaviour
     {
         // CODE IS BROKEN | TEMPORARILY DISABLED
         //StartCoroutine(UnitLookAtEnemyAnimation(firstEnemyPos));
+
         Vector3 lookEnemyRot = new Vector3(firstEnemyPos.x, 0, firstEnemyPos.z);
         Vector3 modelUnitRot = new Vector3(transform.GetChild(0).position.x, 0, transform.GetChild(0).position.z);
-        Debug.Log(transform.GetChild(0));
         Quaternion lookOnLook = Quaternion.LookRotation(lookEnemyRot - modelUnitRot);
         transform.GetChild(0).rotation = lookOnLook;
 
@@ -424,14 +434,14 @@ public class Unit : NetworkBehaviour
     {
         if (projectile == null) yield break;
 
-        Transform newProjectile = Instantiate(projectile, this.transform.position, Quaternion.identity).transform;
+        Transform newProjectile = Instantiate(projectile, projectileOutput.position, Quaternion.identity).transform;
+        Vector3 newEnemyPos = new Vector3(firstEnemyPos.x, firstEnemyPos.y + 0.5f, firstEnemyPos.z);
+        //                  destination  -  origin
+        Vector3 direction = newEnemyPos - newProjectile.position;
 
-        //                   destination  -  origin
-        Vector3 direction = firstEnemyPos - newProjectile.position;
-
-        while (Vector3.Distance(firstEnemyPos, newProjectile.position) > 0.2f)
+        while (Vector3.Distance(newEnemyPos, newProjectile.position) > 0.2f)
         {
-            newProjectile.Translate(direction * (.1f * .9f));
+            newProjectile.Translate(direction * (.1f * .4f));
             yield return null;
         }
 
@@ -500,5 +510,10 @@ public class Unit : NetworkBehaviour
         }
 
         return true;
+    }
+
+    public void PlayAttackSoundClip()
+    {
+        audioSource.PlayOneShot(attackSound, 1);
     }
 }

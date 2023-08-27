@@ -20,32 +20,32 @@ MonoBehaviour:
   chanceToMiss: 2
   gridType: 1
   cost1: 125
-  attack1: 5
+  attack1: 4
   cooldown1: 2
   range1: 15
-  DPS1: 2.5
-  rangeDPS1: 37
-  cost2: 100
+  DPS1: 2
+  rangeDPS1: 30
+  cost2: 150
   attack2: 6
   cooldown2: 2
   range2: 20
   DPS2: 3
   rangeDPS2: 60
-  cost3: 300
+  cost3: 230
   attack3: 9
   cooldown3: 2
   range3: 20
   DPS3: 4.5
   rangeDPS3: 90
-  cost4: 550
-  attack4: 15
+  cost4: 350
+  attack4: 12
   cooldown4: 2
   range4: 25
-  DPS4: 7.5
-  rangeDPS4: 187
-  cost5: 1000
-  attack5: 10
+  DPS4: 6
+  rangeDPS4: 150
+  cost5: 700
+  attack5: 8
   cooldown5: 1
   range5: 30
-  DPS5: 10
-  rangeDPS5: 300
+  DPS5: 8
+  rangeDPS5: 240

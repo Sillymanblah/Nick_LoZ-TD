@@ -374,6 +374,7 @@ GameObject:
   - component: {fileID: 1918229014082945491}
   - component: {fileID: 2288919036734566036}
   - component: {fileID: 2860500007102513301}
+  - component: {fileID: 3335465267543230620}
   m_Layer: 9
   m_Name: Deku Scrub Enemy (red)
   m_TagString: Enemy
@@ -437,8 +438,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  animator: {fileID: 4035331937643142211}
-  animationLength: 0
+  animator: {fileID: 3335465267543230620}
+  animationLength: 0.792
 --- !u!54 &2915023377610069177
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -524,6 +525,27 @@ CharacterController:
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.67, z: 0}
+--- !u!95 &3335465267543230620
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2915023377610069180}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 6f37e0f6e7a54594199107cdcecca9ea, type: 2}
+  m_Controller: {fileID: 9100000, guid: 521913a62191df14c878af952476c447, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &9004389242304408901
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,7 +848,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -113.615005
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: b2860590ba602944e94a7ed7dc025405, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b2860590ba602944e94a7ed7dc025405, type: 3}
 --- !u!4 &5839895936868857455 stripped
 Transform:
@@ -834,30 +857,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6233477852691288452}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6503385626096757973 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b2860590ba602944e94a7ed7dc025405,
-    type: 3}
-  m_PrefabInstance: {fileID: 6233477852691288452}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &4035331937643142211
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6503385626096757973}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6f37e0f6e7a54594199107cdcecca9ea, type: 2}
-  m_Controller: {fileID: 9100000, guid: 521913a62191df14c878af952476c447, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0

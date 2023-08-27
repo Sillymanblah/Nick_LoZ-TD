@@ -15,37 +15,37 @@ MonoBehaviour:
   uniqueName: Woflo
   name: Wolfo
   unitID: 7
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 96527f141690b894db6beb2cf172480a, type: 3}
   prefab: {fileID: 4589918344677092016, guid: 6a47dd3f0ee5dbd40a3624eb59a7f2c5, type: 3}
   chanceToMiss: 10
   gridType: 0
-  cost1: 1
+  cost1: 500
   attack1: 30
-  cooldown1: 5
+  cooldown1: 3
   range1: 10
-  DPS1: 6
-  rangeDPS1: 60
-  cost2: 0
-  attack2: 0
-  cooldown2: 0
-  range2: 0
-  DPS2: NaN
-  rangeDPS2: -2.1474836e+9
-  cost3: 0
-  attack3: 0
-  cooldown3: 0
-  range3: 0
-  DPS3: NaN
-  rangeDPS3: -2.1474836e+9
-  cost4: 0
-  attack4: 0
-  cooldown4: 0
-  range4: 0
-  DPS4: NaN
-  rangeDPS4: -2.1474836e+9
-  cost5: 0
-  attack5: 0
-  cooldown5: 0
-  range5: 0
-  DPS5: NaN
-  rangeDPS5: -2.1474836e+9
+  DPS1: 10
+  rangeDPS1: 100
+  cost2: 1100
+  attack2: 50
+  cooldown2: 3
+  range2: 12
+  DPS2: 16.666666
+  rangeDPS2: 200
+  cost3: 1600
+  attack3: 70
+  cooldown3: 2.5
+  range3: 13
+  DPS3: 28
+  rangeDPS3: 364
+  cost4: 2200
+  attack4: 80
+  cooldown4: 2.5
+  range4: 12
+  DPS4: 32
+  rangeDPS4: 384
+  cost5: 3000
+  attack5: 120
+  cooldown5: 2.5
+  range5: 10
+  DPS5: 48
+  rangeDPS5: 480
