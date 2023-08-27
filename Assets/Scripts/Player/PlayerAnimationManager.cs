@@ -17,7 +17,7 @@ public class PlayerAnimationManager : NetworkBehaviour
     int PLAYER_WALKING = Animator.StringToHash("Walking");
     int PLAYER_RUNNING = Animator.StringToHash("Running");
     int PLAYER_FLOSSDANCE = Animator.StringToHash("Flossing");
-    int PLAYER_MIDAIRJUMP = Animator.StringToHash("Mid Air Jump");
+    int PLAYER_MIDAIRJUMP = Animator.StringToHash("Falling");
     int PLAYER_LANDINGJUMP = Animator.StringToHash("Landing Jump");
     int PLAYER_HANDWAVE = Animator.StringToHash("Hand Wave");
     int PLAYER_CROUCHIDLE = Animator.StringToHash("Crouch Idle");

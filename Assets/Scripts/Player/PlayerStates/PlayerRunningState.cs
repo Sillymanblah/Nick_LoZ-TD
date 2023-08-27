@@ -43,7 +43,7 @@ public class PlayerRunningState : PlayerBaseState
             player.playerMovement.PlayerJumped();
             player.SwitchState(player.FallingState);
         }
-        else if (Input.GetKey(InputMan.crouch))
-            player.SwitchState(player.CrouchState);
+        //else if (Input.GetKey(InputMan.crouch))
+        //    player.SwitchState(player.CrouchState);
     }
 }

@@ -47,7 +47,7 @@ public class PlayerGroundedState : PlayerBaseState
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            player.HandWaveAnimation();
+            //player.HandWaveAnimation();
         }
     }
 
@@ -61,9 +61,9 @@ public class PlayerGroundedState : PlayerBaseState
             player.SwitchState(player.FallingState);
         }
 
-        if (Input.GetKey(InputMan.crouch))
+        /*if (Input.GetKey(InputMan.crouch))
         {
             player.SwitchState(player.CrouchState);
-        }
+        }*/
     }
 }

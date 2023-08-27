@@ -45,7 +45,7 @@ public class PlayerWalkingState : PlayerBaseState
             player.SwitchState(player.FallingState);
         }
 
-        else if (Input.GetKey(InputMan.crouch))
-            player.SwitchState(player.CrouchState);
+        //else if (Input.GetKey(InputMan.crouch))
+        //    player.SwitchState(player.CrouchState);
     }
 }
