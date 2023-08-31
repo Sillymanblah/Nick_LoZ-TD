@@ -90,20 +90,19 @@ public class PlayerAnimationManager : NetworkBehaviour
         ChangeAnimationState(PLAYER_CROUCHWALK, 0.1f);
     }
 
-    [Command]
     public void ChangeAnimationState(int newState)
     {
         // stops the same animation from interrupting itself
         if (currentState == newState) return;
 
         // plays the animation
-        AnimatorPlay(newState);
+        CmdAnimatorPlay(newState, 0f);
 
         //reassigns the current state
         currentState = newState;
     }
 
-    [Command]
+    
     // TRANSITION METHOD
     public void ChangeAnimationState(int newState, float transitionTime)
     {
@@ -111,20 +110,20 @@ public class PlayerAnimationManager : NetworkBehaviour
         if (currentState == newState) return;
 
         // plays the animation / transitionTime determines how long the transition will take
-        AnimatorPlay(newState, transitionTime);
+        CmdAnimatorPlay(newState, transitionTime);
 
         //reassigns the current state
         currentState = newState;
     }
 
-    [ClientRpc]
-    void AnimatorPlay(int newState)
+    [Command]
+    void CmdAnimatorPlay(int newState, float transitionTime)
     {
-        playerAnim.Play(newState);
+        RpcAnimatorPlay(newState, transitionTime);
     }
 
     [ClientRpc]
-    void AnimatorPlay(int newState, float transitionTime)
+    void RpcAnimatorPlay(int newState, float transitionTime)
     {
         playerAnim.CrossFadeInFixedTime(newState, transitionTime);
     }

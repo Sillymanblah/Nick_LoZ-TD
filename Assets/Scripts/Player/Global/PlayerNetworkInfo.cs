@@ -69,7 +69,6 @@ public class PlayerNetworkInfo : NetworkBehaviour
 
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {
-            
             playerManager.SetUserNameNameTag(name);
         }
         else

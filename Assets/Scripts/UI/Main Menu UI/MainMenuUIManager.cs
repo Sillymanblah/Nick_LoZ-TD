@@ -15,8 +15,10 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] GameObject settingsMenu;
     [SerializeField] GameObject inventoryMenu;
     [SerializeField] GameObject singlePlayerMenu;
+    [SerializeField] GameObject creditsMenu;
 
     [SerializeField] TextMeshProUGUI joinExceptionText;
+    [SerializeField] GameObject joinExceptionPanel;
 
     GameObject currentMenu;
     public static MainMenuUIManager instance;
@@ -32,6 +34,9 @@ public class MainMenuUIManager : MonoBehaviour
         settingsMenu.SetActive(false);
         inventoryMenu.SetActive(false);
         singlePlayerMenu.SetActive(false);
+        creditsMenu.SetActive(false);
+        joinExceptionPanel.SetActive(false);
+
 
         currentMenu = startMenu;
         instance = this;
@@ -47,8 +52,6 @@ public class MainMenuUIManager : MonoBehaviour
         PlayerPrefs.DeleteKey("Unit2");
 
         PlayerPrefs.Save();
-
-        Debug.Log(PlayerPrefs.GetString("Unit0"));
     }
 
     // Update is called once per frame
@@ -76,6 +79,7 @@ public class MainMenuUIManager : MonoBehaviour
         connectingMenu.SetActive(true);
         Debug.Log($"starting client");
         NetworkManager.singleton.StartClient();
+        //CSNetworkManager.instance.StartClient();
     }
 
     public void InvBackButton()
@@ -102,10 +106,7 @@ public class MainMenuUIManager : MonoBehaviour
         GoToGamemodes();
         connectingMenu.SetActive(false);
         currentMenu = gamemodesMenu;
-
-        StopCoroutine(nameof(ExceptionText));
-        joinExceptionText.text = "Failed To Join: " + reason;
-        StartCoroutine(nameof(ExceptionText));
+        SetExceptionMessage(reason);
     }
 
     public void LobbyMenu()
@@ -145,10 +146,9 @@ public class MainMenuUIManager : MonoBehaviour
         multiplayerLobby.SetActive(true);
     }
 
-    IEnumerator ExceptionText()
+    void SetExceptionMessage(string reason)
     {
-        yield return new WaitForSeconds(5.0f);
-
-        joinExceptionText.text = string.Empty;
+        joinExceptionPanel.SetActive(true);
+        joinExceptionText.text = "Failed To Join: " + reason;
     }
 }

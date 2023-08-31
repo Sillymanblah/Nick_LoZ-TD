@@ -41,7 +41,9 @@ public class WaveManager : NetworkBehaviour
     [Space]
 
     [Header("Enemy code things")]
-    public float healthMultiplier = 1;
+    public float setHealthMultiplier;
+
+    float healthMultiplier = 1;
     float playerMultiplier = 1;
     [SerializeField] int enemiesKilled;
 
@@ -117,7 +119,7 @@ public class WaveManager : NetworkBehaviour
 
         unitSpawnCount = 0;
         currentGroup++;
-        healthMultiplier += 0.08f;
+        healthMultiplier += 0.2f;
     }
 
     [Server]
@@ -242,7 +244,7 @@ public class WaveManager : NetworkBehaviour
         {
             Debug.Log($"Wave complete!");
             currentWave++;
-            healthMultiplier = playerMultiplier * (currentWave * 1.5f);
+            healthMultiplier = playerMultiplier * (currentWave * setHealthMultiplier);
             enemiesKilled = 0;
             totalEnemiesSpawned = 0;
             
@@ -264,7 +266,7 @@ public class WaveManager : NetworkBehaviour
     {
         Debug.Log($"Wave complete!");
         currentWave++;
-        healthMultiplier = playerMultiplier * (currentWave);
+        healthMultiplier = playerMultiplier * (currentWave * setHealthMultiplier);
         totalEnemiesSpawned = 0;
 
         StopCoroutine(nameof(ActivateSkipWave));
@@ -289,7 +291,7 @@ public class WaveManager : NetworkBehaviour
     [Server]
     public void SetHealthWithPlayerCount(int playerCount)
     {
-        playerMultiplier *= (playerCount * 0.75f);
+        playerMultiplier *= (playerCount);
 
         if (playerCount == 1)
         {
@@ -301,13 +303,21 @@ public class WaveManager : NetworkBehaviour
 
     IEnumerator DelayEndingGame()
     {
+        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+        {
+            player.GetComponent<PlayerUnitManager>().SetUnitReward(GameManager.instance.GetRandomUnitReward().uniqueName);
+        }
+
         yield return new WaitForSeconds(2.0f);
 
         if (CSNetworkManager.instance.isSinglePlayer)
         {
             CSNetworkManager.instance.StopServer();
+            NetworkClient.Disconnect();
             yield break;
         }
+
+        
 
         NetworkServer.DisconnectAll();
     }

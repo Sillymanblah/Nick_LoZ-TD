@@ -22,30 +22,30 @@ MonoBehaviour:
   cost1: 500
   attack1: 30
   cooldown1: 3
-  range1: 10
+  range1: 12
   DPS1: 10
-  rangeDPS1: 100
+  rangeDPS1: 120
   cost2: 1100
   attack2: 50
   cooldown2: 3
-  range2: 12
+  range2: 14
   DPS2: 16.666666
-  rangeDPS2: 200
+  rangeDPS2: 233
   cost3: 1600
   attack3: 70
   cooldown3: 2.5
-  range3: 13
+  range3: 15
   DPS3: 28
-  rangeDPS3: 364
+  rangeDPS3: 420
   cost4: 2200
   attack4: 80
   cooldown4: 2.5
-  range4: 12
+  range4: 15
   DPS4: 32
-  rangeDPS4: 384
+  rangeDPS4: 480
   cost5: 3000
   attack5: 120
   cooldown5: 2.5
-  range5: 10
+  range5: 12
   DPS5: 48
-  rangeDPS5: 480
+  rangeDPS5: 576

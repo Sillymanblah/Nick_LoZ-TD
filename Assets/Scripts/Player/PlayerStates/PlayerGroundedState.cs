@@ -8,7 +8,6 @@ public class PlayerGroundedState : PlayerBaseState
         Debug.Log($"Entered ground state");
         player.controller.height = 2f;
         player.controller.center = Vector3.zero;
-        //player.playerAnimations.LandingJumpAnimation(); TEMP disabled due to switching states code
         
         //player.playerManager.AdjustHeadHeight();
     }
@@ -28,7 +27,6 @@ public class PlayerGroundedState : PlayerBaseState
     void MovementDetection(PlayerStateManager player)
     {
         player.playerAnimations.IdleAnimation();
-
         var InputMan = player.inputManager;
 
         float horizontal = InputMan.AxisMovementValue(InputMan.right, InputMan.left);

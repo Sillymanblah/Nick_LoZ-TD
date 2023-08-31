@@ -415,10 +415,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   isGrounded: 0
-  maxHealthPoints: 15
-  healthPoints: 1
-  moneyMultiplier: 1
-  speed: 1
+  maxHealthPoints: 10
+  healthPoints: 8
+  moneyMultiplier: 0.75
+  speed: 0.9
   distanceCovered: 0
   isDead: 0
   thisHealthBar: {fileID: 1963050528760577150}
@@ -641,17 +641,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}

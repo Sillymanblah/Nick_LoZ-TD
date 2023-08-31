@@ -19,33 +19,33 @@ MonoBehaviour:
   prefab: {fileID: 1187469130094244461, guid: 99a0b7818b2544f4ab0252927e9fa35f, type: 3}
   chanceToMiss: 5
   gridType: 0
-  cost1: 100
+  cost1: 75
   attack1: 3
   cooldown1: 3
   range1: 10
   DPS1: 1
   rangeDPS1: 10
-  cost2: 150
-  attack2: 7
+  cost2: 100
+  attack2: 6
   cooldown2: 3
   range2: 12
-  DPS2: 2.3333333
-  rangeDPS2: 28
-  cost3: 400
-  attack3: 9
+  DPS2: 2
+  rangeDPS2: 24
+  cost3: 240
+  attack3: 10
   cooldown3: 2
   range3: 12
-  DPS3: 4.5
-  rangeDPS3: 54
-  cost4: 800
+  DPS3: 5
+  rangeDPS3: 60
+  cost4: 500
   attack4: 12
-  cooldown4: 2
+  cooldown4: 1.5
   range4: 15
-  DPS4: 6
-  rangeDPS4: 90
-  cost5: 1300
-  attack5: 15
+  DPS4: 8
+  rangeDPS4: 120
+  cost5: 900
+  attack5: 12
   cooldown5: 1
   range5: 20
-  DPS5: 15
-  rangeDPS5: 300
+  DPS5: 12
+  rangeDPS5: 240

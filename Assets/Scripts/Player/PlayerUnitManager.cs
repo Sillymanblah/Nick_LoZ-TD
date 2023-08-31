@@ -1,6 +1,7 @@
  using System.Collections;
 using System.Collections.Generic;
 using Mirror;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerUnitManager : NetworkBehaviour
@@ -13,6 +14,7 @@ public class PlayerUnitManager : NetworkBehaviour
     [SerializeField] public List<UnitSO> unitsLoadout = new List<UnitSO>(3);
     [SerializeField] public List<int> loadoutCount = new List<int>(3);
     [SerializeField] Unit selectedUnit;
+    [SerializeField] int unitCap;
     //public Unit GetSelectedUnit() { return selectedUnit; }
 
     [SerializeField] Transform currentGridTransform;
@@ -100,7 +102,7 @@ public class PlayerUnitManager : NetworkBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 60))
+        if (Physics.Raycast(ray, out hit, 100))
         {
             if (hit.collider.gameObject.layer == 3)
             {
@@ -109,6 +111,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
             if (placedUnit == false) return;
 
+            // get unit
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 if (hit.collider.gameObject.layer == 6)
@@ -160,7 +163,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
         if (unitIndex >= unitsLoadout.Count) return;
 
-        if (loadoutCount[unitIndex] >= 10)
+        if (loadoutCount[unitIndex] >= unitCap)
         {
             ExceptionMsgUI.instance.UIExceptionMessage("You have the maximum units placed for that unit");
 
@@ -265,7 +268,7 @@ public class PlayerUnitManager : NetworkBehaviour
     {
 
         // Checks
-        if (loadoutCount[loadoutIndex] >= 10) return;
+        if (loadoutCount[loadoutIndex] >= unitCap) return;
         if (gridCellIndexes.Count != unitGridSize) return;
         if (money < unitsLoadout[loadoutIndex].NextCost(1)) return;
         foreach (int gridCell in gridCellIndexes)
@@ -427,5 +430,13 @@ public class PlayerUnitManager : NetworkBehaviour
         {
             unitsLoadout.Add(UnitSO.Get(unitName));
         }
+    }
+
+    [TargetRpc]
+    public void SetUnitReward(string unitName)
+    {
+        UIManager.instance.UISetUnitReward(UnitSO.Get(unitName));
+        PlayerPrefs.SetString("RewardUnit", unitName);
+        PlayerPrefs.Save();
     }
 }

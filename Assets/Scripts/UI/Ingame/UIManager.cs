@@ -10,7 +10,6 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public PlayerUnitManager player;
     [SerializeField] TextMeshProUGUI moneyText;
     [SerializeField] Transform unitLoadout;
-    [SerializeField] TextMeshProUGUI exceptionText;
     public static UIManager instance;
     public bool MouseOnUI;
 
@@ -24,6 +23,16 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     [Space]
     [SerializeField] GameObject settingsMenu;
+
+    #region Unit Reward UI
+
+    [Space]
+    [SerializeField] GameObject rewardUnitPanel;
+    [SerializeField] TextMeshProUGUI rewardUnitName;
+    [SerializeField] Image rewardUnitSprite;
+
+
+    #endregion
 
     private void Awake()
     {
@@ -40,9 +49,9 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }
 
         skipWaveButton.SetActive(false);
-        exceptionText.text = string.Empty;
 
         settingsMenu.SetActive(false);
+        rewardUnitPanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -104,31 +113,6 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         count.text = player.loadoutCount[index].ToString();
     }
 
-    public void UIExceptionMessage(string message)
-    {
-        StopCoroutine("StartExceptionAnimation");
-        exceptionText.text = message;
-        
-        StartCoroutine("StartExceptionAnimation");
-    }
-
-    IEnumerator StartExceptionAnimation()
-    {
-        exceptionText.color = new Color(1,1,1,1);
-        yield return new WaitForSeconds(1.0f);
-        bool active = false;
-        var alphaColor = 1f;
-        
-        while(active == false)
-        {
-            exceptionText.color = new Color(1, 1, 1, alphaColor -= Time.deltaTime);
-            if (alphaColor <= 0)
-                active = true;
-
-            yield return null;
-        }
-    }
-
     public void UpdateReadyButton(int playerReadyCount, int maxPlayerCount)
     {
         readyCount.text = playerReadyCount + "/" + maxPlayerCount;
@@ -173,5 +157,12 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void OnPointerEnter(PointerEventData eventData)
     {
         MouseOnUI = true;
+    }
+
+    public void UISetUnitReward(UnitSO unit)
+    {
+        rewardUnitPanel.SetActive(true);
+        rewardUnitName.text = unit.name;
+        rewardUnitSprite.sprite = unit.icon;
     }
 }

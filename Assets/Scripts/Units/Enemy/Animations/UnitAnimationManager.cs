@@ -50,7 +50,7 @@ public class UnitAnimationManager : NetworkBehaviour
         if (currentState == newState) return;
 
         // plays the animation
-        AnimatorPlay(newState);
+        RpcAnimatorPlay(newState, 0f);
 
         //reassigns the current state
         currentState = newState;
@@ -63,20 +63,14 @@ public class UnitAnimationManager : NetworkBehaviour
         if (currentState == newState) return;
 
         // plays the animation / transitionTime determines how long the transition will take
-        AnimatorPlay(newState, transitionTime);
+        RpcAnimatorPlay(newState, transitionTime);
 
         //reassigns the current state
         currentState = newState;
     }
 
     [ClientRpc]
-    void AnimatorPlay(int newState)
-    {
-        animator.Play(newState);
-    }
-
-    [ClientRpc]
-    void AnimatorPlay(int newState, float transitionTime)
+    void RpcAnimatorPlay(int newState, float transitionTime)
     {
         animator.CrossFadeInFixedTime(newState, transitionTime);
     }

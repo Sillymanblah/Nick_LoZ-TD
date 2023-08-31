@@ -16,6 +16,8 @@ public class UnitHotBarInventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        units.Clear();
+
         for (int i = 0; i < transform.GetChild(0).childCount; i++)
         { 
             // Gets the child (0) which holds all the inv slot children
@@ -40,17 +42,7 @@ public class UnitHotBarInventory : MonoBehaviour
         units.Add(unit);
         slots[nextFreeIndex].EquipUnit(unit);
 
-        for (int i = 0; i < 3; i++)
-        {
-            if (i >= units.Count)
-            {
-                PlayerPrefs.DeleteKey($"Unit{i}");
-                continue;
-            }
-
-            PlayerPrefs.SetString($"Unit{i}", units[i].uniqueName);
-        }
-        PlayerPrefs.Save();
+        
 
         lobbyAuth.UpdateUnitInventory(units);
 

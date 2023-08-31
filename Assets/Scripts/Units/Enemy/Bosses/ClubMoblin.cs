@@ -38,6 +38,7 @@ public class ClubMoblin : EnemyUnit
 
             animManager.AttackingAnim(0.1f);
 
+
             yield return new WaitForSeconds(2.6f);
 
             for (int i = 0; i < unitsInRange.Count; i++)

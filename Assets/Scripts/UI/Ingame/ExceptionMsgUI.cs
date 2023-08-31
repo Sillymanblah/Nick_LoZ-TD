@@ -10,16 +10,26 @@ public class ExceptionMsgUI : MonoBehaviour
     public static ExceptionMsgUI instance;
     [SerializeField] TextMeshProUGUI exceptionText;
 
+    #region UI AUDIO CLIPS
+
+    [Space]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip errorSound;
+
+    #endregion
+
     private void Start()
     {
         instance = this;
+
+        exceptionText.text = string.Empty;
     }
 
     public void UIExceptionMessage(string message)
     {
         StopCoroutine("StartExceptionAnimation");
         exceptionText.text = message;
-        
+        audioSource.PlayOneShot(errorSound, .5f);
         StartCoroutine("StartExceptionAnimation");
     }
 

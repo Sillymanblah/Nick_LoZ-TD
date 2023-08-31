@@ -5,6 +5,7 @@ using UnityEngine.Analytics;
 
 public class UnitInventory : MonoBehaviour
 {
+    [SerializeField] public List<UnitSO> totalAchievedUnits = new List<UnitSO>();
     [SerializeField] List<UnitSO> units = new List<UnitSO>();
     List<UnitInventorySlot> slots= new List<UnitInventorySlot>();
 
@@ -12,8 +13,34 @@ public class UnitInventory : MonoBehaviour
 
     int nextFreeIndex = 0;
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        
+    }
     void Start()
     {
+        LoadInventoryData();
+
+        if (PlayerPrefs.HasKey("RewardUnit"))
+        {
+            UnitSO rewardUnit = UnitSO.Get(PlayerPrefs.GetString("RewardUnit"));
+
+            if (rewardUnit != null) 
+            {
+                if (!totalAchievedUnits.Contains(rewardUnit)) 
+                {
+                    totalAchievedUnits.Add(rewardUnit);
+                }
+            }
+            PlayerPrefs.DeleteKey("RewardUnit");
+            PlayerPrefs.Save();
+        }
+
+        SaveData.SaveInventory(this);
+
         for (int i = 0; i < transform.GetChild(0).childCount; i++)
         { 
             // Gets the child (0) which holds all the inv slot children
@@ -21,10 +48,9 @@ public class UnitInventory : MonoBehaviour
             slots[i].AssignSlot(i, this);
         }
 
-        if (units.Count <= 0) return;
-
-        foreach (UnitSO unit in units)
+        foreach (UnitSO unit in totalAchievedUnits)
         {
+            units.Add(unit);
             SetUnitsOnStart(unit);
         }
     }
@@ -77,5 +103,21 @@ public class UnitInventory : MonoBehaviour
     public bool CheckInventory()
     {
         return unitHotBarInventory.CheckInventory();
+    }
+
+    void LoadInventoryData()
+    {
+        PlayerData data = SaveData.LoadInventory();
+
+        if (data == null) return;
+
+        Debug.LogWarning($"Loading saved inventory data");
+
+        foreach (string unitName in data.unitNamesInventory)
+        {
+            if (totalAchievedUnits.Contains(UnitSO.Get(unitName))) continue;
+
+            totalAchievedUnits.Add(UnitSO.Get(unitName));
+        }
     }
 }

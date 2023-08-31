@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager instance;
+
     [SerializeField] AudioClip currentClip;
     [SerializeField] AudioSource audioSource;
     [SerializeField] Slider volumeSlider;
@@ -14,10 +17,19 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] bool resetKeys;
      float volume = 1f;
+
+    #region 
+
+    [Space]
+    [SerializeField] AudioClip ErrorSound;
+
+    #endregion
     
     // Start is called before the first frame update
     void Start()
     {
+        instance = GetComponent<AudioManager>();
+
         if (resetKeys)
             PlayerPrefs.DeleteKey("MusicVolume");
 
@@ -30,7 +42,7 @@ public class AudioManager : MonoBehaviour
         }
 
         SetSliderValue();
-        audioSource.PlayOneShot(currentClip, volume);
+        //audioSource.PlayOneShot(currentClip, volume);
     }
 
     // Update is called once per frame

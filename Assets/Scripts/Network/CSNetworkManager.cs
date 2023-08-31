@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using kcp2k;
-using System;
+using UnityEngine.Rendering;
 
 public class CSNetworkManager : NetworkManager
 {
@@ -20,29 +19,30 @@ public class CSNetworkManager : NetworkManager
 
     [Space]
 
-    [SerializeField] bool DeployingAsServer;
-    [SerializeField] bool ignorePort;
+    public bool DeployingAsServer;
+    public bool ignorePort;
     [SerializeField] public bool sceneTesting;
 
     // NetworkManager.cs source code changes
     // line - 1112 | if statement is a change
 
-    // Start is called before the first frame update
     public override void Start()
     {
         instance = this;
         Debug.Log($"Server has not started");
         thisTransport = GetComponent<KcpTransport>();
+        DebugManager.instance.enableRuntimeUI = false;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
 
         if (!DeployingAsServer) return;
 
-        string cmdLinePort = System.Environment.GetCommandLineArgs()[1];
+        GetComponent<NetworkDataBase>().StartDatabase();
 
         if (!ignorePort)
         {
+            string cmdLinePort = System.Environment.GetCommandLineArgs()[1];
             thisTransport.port = ushort.Parse(cmdLinePort);
         }
         else
@@ -51,38 +51,32 @@ public class CSNetworkManager : NetworkManager
         }
 
         StartServer();
+
+        Debug.Log($"brhhh");
+
+        Destroy(FindObjectOfType<AudioManager>().gameObject);
+
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        if (SceneManager.GetActiveScene().buildIndex == 0) 
+               
+
+        /*if (SceneManager.GetActiveScene().buildIndex == 0) 
         {
             NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);   
-            return;
-        }
+        }*/
 
         if (isSinglePlayer)
         {
+            SceneManager.sceneLoaded -= OnSceneLoaded; 
             StartHost();
         }
 
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        if (!DeployingAsServer) return;
+
+        Destroy(GameObject.FindObjectOfType<AudioManager>().gameObject);
     }
-
-    // Update is called once per frame
-    public override void Update()
-    {
-        
-    }
-
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-
-        
-    }
-
-    
 
     public override void OnServerConnect(NetworkConnectionToClient conn)
     {
@@ -95,7 +89,6 @@ public class CSNetworkManager : NetworkManager
                 return;
             }
         }
-
         base.OnServerConnect(conn);
     }
 
@@ -104,9 +97,7 @@ public class CSNetworkManager : NetworkManager
         base.OnServerAddPlayer(conn);
 
         var newPlayer = conn.identity.GetComponent<PlayerNetworkInfo>();
-
         Debug.Log(newPlayer.netIdentity + " connected.");
-
         players.Add(conn.identity);
 
         // For lobby
@@ -128,7 +119,6 @@ public class CSNetworkManager : NetworkManager
 
             return;
         }
-
         // For ingame and after lobby
 
         GameManager.instance.UpdatePlayerCount();
@@ -181,7 +171,6 @@ public class CSNetworkManager : NetworkManager
         {
             Debug.LogWarning($"Changing Scenes");
             ServerChangeScene("MainMenu");
-            
 
             players.Clear();
             playerNames.Clear();
@@ -204,7 +193,7 @@ public class CSNetworkManager : NetworkManager
     public override void OnClientError(TransportError error, string reason)
     {
         base.OnClientError(error, reason);
-        MainMenuUIManager.instance.FailedToJoinLobby(error + ": " + reason);
+        MainMenuUIManager.instance.FailedToJoinLobby(reason);
     }
 
     void LobbyScene()
@@ -280,5 +269,17 @@ public class CSNetworkManager : NetworkManager
 
         // Display the refusal reason to the player
         //refusalReasonText.text = "Connection refused: " + message.reason;
+    }
+
+    public int IngameStatus()
+    {
+        if (GameManager.instance == null) return 0;
+        else return 1;
+        
+    }
+
+    public ushort GetPort()
+    {
+        return thisTransport.Port;
     }
 }

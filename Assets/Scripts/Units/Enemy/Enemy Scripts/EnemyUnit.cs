@@ -68,8 +68,14 @@ public class EnemyUnit : NetworkBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (!isServer) return;
+        
 
+        if (!isServer) 
+        {
+            
+            return;
+        }
+        
         if (speed > 0)
         {
             if (animManager != null)
@@ -80,6 +86,7 @@ public class EnemyUnit : NetworkBehaviour
 
         Physics.IgnoreLayerCollision(9, 3, true);
         Physics.IgnoreLayerCollision(9, 8, true);
+        Physics.IgnoreLayerCollision(9, 9, true);
 
         GravityControl();
         Vector3 thisTarget = new Vector3(target.position.x, transform.position.y, target.position.z);

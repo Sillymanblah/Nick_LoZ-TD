@@ -25,7 +25,7 @@ public class UnitHotBarSlot : MonoBehaviour
     // UI BUTTON
     public void DeEquipUnit()
     {
-        if (currentUnit is null) return; 
+        if (!Occupied()) return; 
 
         unitImage.color = new Color(0, 0, 0, 0);
         unitInventory.RemoveUnit(currentUnit, index);

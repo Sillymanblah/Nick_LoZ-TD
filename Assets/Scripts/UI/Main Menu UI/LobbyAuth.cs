@@ -42,6 +42,18 @@ public class LobbyAuth : MonoBehaviour
             myUnitInventory.RemoveRange(3, 10);
         }
 
+        for (int i = 0; i < 3; i++)
+        {
+            if (i >= newUnits.Count)
+            {
+                PlayerPrefs.DeleteKey($"Unit{i}");
+                continue;
+            }
+
+            PlayerPrefs.SetString($"Unit{i}", myUnitInventory[i].uniqueName);
+        }
+        PlayerPrefs.Save();
+
         if (player == null) return;
 
         List<string> transmittedUnitData = new List<string>();
@@ -50,6 +62,8 @@ public class LobbyAuth : MonoBehaviour
         {
             transmittedUnitData.Add(unit.uniqueName);
         }
+
+        
         
         player.UpdateUnitInventory(transmittedUnitData);
     }

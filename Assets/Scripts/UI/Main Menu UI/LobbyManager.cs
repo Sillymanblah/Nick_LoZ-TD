@@ -57,6 +57,7 @@ public class LobbyManager : NetworkBehaviour
     [ClientRpc]
     public void SetPlayerListUI(string name, int index)
     {
+        Debug.Log(name);
         lobbyParent.GetChild(index).GetComponent<PlayerSlotUI>().AssignPlayer(name);
     }
 

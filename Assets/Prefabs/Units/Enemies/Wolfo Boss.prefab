@@ -1580,7 +1580,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   isGrounded: 0
-  maxHealthPoints: 500
+  maxHealthPoints: 150
   healthPoints: 0
   moneyMultiplier: 1
   speed: 0.6
@@ -1604,6 +1604,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   animator: {fileID: 113971051878118389}
+  animationLength: 0
 --- !u!54 &6958934365885886498
 Rigidbody:
   m_ObjectHideFlags: 0

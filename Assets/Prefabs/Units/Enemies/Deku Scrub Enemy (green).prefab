@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1259566301177165863}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -56,10 +56,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   isGrounded: 0
-  maxHealthPoints: 15
-  healthPoints: 1
-  moneyMultiplier: 1
-  speed: 1
+  maxHealthPoints: 10
+  healthPoints: 8
+  moneyMultiplier: 0.75
+  speed: 0.9
   distanceCovered: 0
   isDead: 0
   thisHealthBar: {fileID: 2463740299662676197}
@@ -641,17 +641,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
         type: 3}

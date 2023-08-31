@@ -26,6 +26,8 @@ public class UnitInventorySlot : MonoBehaviour
     // UI BUTTON
     public void DeEquipUnit()
     {
+        if (!Occupied()) return;
+
         if (unitInventory.CheckInventory() == false) return;
 
         unitImage.color = new Color(0, 0, 0, 0);

@@ -128,13 +128,14 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  money: 500
+  money: 450
   unitsLoadout:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   loadoutCount: 000000000000000000000000
   selectedUnit: {fileID: 0}
+  unitCap: 5
   currentGridTransform: {fileID: 0}
   playerManager: {fileID: 8470535574437190434}
   playerReady: 0
@@ -666,7 +667,7 @@ PrefabInstance:
     - target: {fileID: 6029032175632598101, guid: 4bd577721c02aab4ca38272cc0fc5c84,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.959
+      value: -0.997
       objectReference: {fileID: 0}
     - target: {fileID: 6029032175632598101, guid: 4bd577721c02aab4ca38272cc0fc5c84,
         type: 3}
