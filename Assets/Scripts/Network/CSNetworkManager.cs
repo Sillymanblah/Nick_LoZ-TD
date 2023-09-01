@@ -347,6 +347,11 @@ public class CSNetworkManager : NetworkManager
         return thisTransport.Port;
     }
 
+    public void SetPort(ushort newPort)
+    {
+        thisTransport.Port = newPort;
+    }
+
     IEnumerator LobbyTimers()
     {
         float thisTime = 0;
@@ -383,4 +388,6 @@ public class CSNetworkManager : NetworkManager
             yield return null;
         }
     }
+
+    
 }

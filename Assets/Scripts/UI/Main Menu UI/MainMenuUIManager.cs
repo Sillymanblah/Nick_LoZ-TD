@@ -16,6 +16,7 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] GameObject inventoryMenu;
     [SerializeField] GameObject singlePlayerMenu;
     [SerializeField] GameObject creditsMenu;
+    [SerializeField] GameObject serverListMenu;
 
     [SerializeField] TextMeshProUGUI joinExceptionText;
     [SerializeField] GameObject joinExceptionPanel;
@@ -36,6 +37,7 @@ public class MainMenuUIManager : MonoBehaviour
         singlePlayerMenu.SetActive(false);
         creditsMenu.SetActive(false);
         joinExceptionPanel.SetActive(false);
+        serverListMenu.SetActive(false);
 
 
         currentMenu = startMenu;
@@ -73,13 +75,19 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void GoMultiplayer()
     {
+        currentMenu = serverListMenu;
+        gamemodesMenu.SetActive(false);
+        serverListMenu.SetActive(true);
+    }
+
+    public void JoinServer()
+    {
         currentMenu = multiplayerLobby;
         
         gamemodesMenu.SetActive(false);
         connectingMenu.SetActive(true);
         Debug.Log($"starting client");
         NetworkManager.singleton.StartClient();
-        //CSNetworkManager.instance.StartClient();
     }
 
     public void InvBackButton()
@@ -103,10 +111,9 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void FailedToJoinLobby(string reason)
     {
-        GoToGamemodes();
-        connectingMenu.SetActive(false);
+        serverListMenu.SetActive(true);
         multiplayerLobby.SetActive(false);
-        currentMenu = gamemodesMenu;
+        currentMenu = serverListMenu;
         SetExceptionMessage(reason);
     }
 
@@ -131,7 +138,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void LeaveLobby()
     {
-        currentMenu = gamemodesMenu;
+        currentMenu = serverListMenu;
         NetworkManager.singleton.StopClient();
     }
 
@@ -146,6 +153,7 @@ public class MainMenuUIManager : MonoBehaviour
         startMenu.SetActive(false);
         gamemodesMenu.SetActive(false);
         connectingMenu.SetActive(false);
+        serverListMenu.SetActive(false);
         multiplayerLobby.SetActive(true);
     }
 
