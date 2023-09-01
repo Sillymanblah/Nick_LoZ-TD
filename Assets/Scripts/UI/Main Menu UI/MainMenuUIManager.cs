@@ -105,6 +105,7 @@ public class MainMenuUIManager : MonoBehaviour
     {
         GoToGamemodes();
         connectingMenu.SetActive(false);
+        multiplayerLobby.SetActive(false);
         currentMenu = gamemodesMenu;
         SetExceptionMessage(reason);
     }
@@ -130,6 +131,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void LeaveLobby()
     {
+        currentMenu = gamemodesMenu;
         NetworkManager.singleton.StopClient();
     }
 
@@ -138,8 +140,9 @@ public class MainMenuUIManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void OnServerStart(NetworkManager server)
+    public void OnServerStart()
     {
+        currentMenu = multiplayerLobby;
         startMenu.SetActive(false);
         gamemodesMenu.SetActive(false);
         connectingMenu.SetActive(false);
@@ -149,6 +152,6 @@ public class MainMenuUIManager : MonoBehaviour
     void SetExceptionMessage(string reason)
     {
         joinExceptionPanel.SetActive(true);
-        joinExceptionText.text = "Failed To Join: " + reason;
+        joinExceptionText.text = reason;
     }
 }

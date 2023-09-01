@@ -33,6 +33,8 @@ public class NetworkDataBase : MonoBehaviour
 
     public void StartDatabase()
     {
+        
+
         if (!CSNetworkManager.instance.DeployingAsServer) return;
         if (CSNetworkManager.instance.ignorePort) return;
 
@@ -41,14 +43,18 @@ public class NetworkDataBase : MonoBehaviour
 
     IEnumerator UpdateServerDBValues()
     {
-        string API_KEY = "5c8c6f2d-c58d-4256-a871-b58df3472802";
-        
         while (true)
         {
+            string API_KEY = "123";
+
+            #if UNITY_SERVER
+
             UnityWebRequest req = new UnityWebRequest();
+            API_KEY = "ToJa0okT0YRjwIkDAKhM2r0OWAW0Pfx6";
 
             try
             {
+                
                 ServerStats payloadObj = new ServerStats();
                 var options = new JsonSerializerOptions { IncludeFields = true };
                 string      payloadStr = JsonSerializer.Serialize(payloadObj, options);
@@ -56,7 +62,7 @@ public class NetworkDataBase : MonoBehaviour
                 req.SetRequestHeader("X-API-KEY", API_KEY);
                 req.url                = url;
                 req.SendWebRequest();
-
+                Debug.Log("Server is sending data to the database");
             }
             catch (Exception ex)
             {
@@ -64,7 +70,10 @@ public class NetworkDataBase : MonoBehaviour
                 Debug.Log($"Lost Connection to database");
             }
 
-            yield return new WaitForSeconds(10);
+            #endif
+
+            
+            yield return new WaitForSeconds(5);
         }
     }
 }

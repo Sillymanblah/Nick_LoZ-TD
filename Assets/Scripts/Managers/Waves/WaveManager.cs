@@ -317,8 +317,6 @@ public class WaveManager : NetworkBehaviour
             yield break;
         }
 
-        
-
-        NetworkServer.DisconnectAll();
+        CSNetworkManager.instance.SwitchScenes("MainMenu");
     }
 }

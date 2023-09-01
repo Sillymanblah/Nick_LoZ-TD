@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -12,6 +13,12 @@ public class BBAWayPointsManager : WayPointsManager
     int currentTarget = 0;
     public UnityEvent takeDownTarget1;
     public UnityEvent takeDownTarget2;
+    public UnityEvent takeDownTarget3;
+
+    public UnityEvent SERVERtakeDownTarget1;
+    public UnityEvent SERVERtakeDownTarget2;
+    public UnityEvent SERVERtakeDownTarget3;
+
 
     public override void OnStartServer()
     {
@@ -30,13 +37,25 @@ public class BBAWayPointsManager : WayPointsManager
         {
             // final target
             case 4:
+                if (currentTarget == 2)
+                {
+                    RpcTakeDownTarget3();
+
+                    if (!isServerOnly) return 1;
+
+                    SERVERtakeDownTarget3.Invoke();
+                }
                 return 1;
 
             case 3:
                 if (currentTarget == 1)
                 {
                     RpcTakeDownTarget2();
-                    takeDownTarget2.Invoke();
+
+                    if (isServerOnly)
+                    {   
+                        SERVERtakeDownTarget2.Invoke();
+                    }
 
                     currentTarget++;
                     return 2;
@@ -47,7 +66,11 @@ public class BBAWayPointsManager : WayPointsManager
                 if (currentTarget == 0)
                 {
                     RpcTakeDownTarget1();
-                    takeDownTarget1.Invoke();
+
+                    if (isServerOnly)
+                    { 
+                        SERVERtakeDownTarget1.Invoke();
+                    }
 
                     currentTarget++;
                     return 2;
@@ -58,6 +81,12 @@ public class BBAWayPointsManager : WayPointsManager
             default:
                 return 0;
         }
+    }
+
+    [ClientRpc]
+    private void RpcTakeDownTarget3()
+    {
+        takeDownTarget3.Invoke();
     }
 
     [ClientRpc]

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using kcp2k;
 using UnityEngine.Rendering;
+using System.Collections;
 
 public class CSNetworkManager : NetworkManager
 {
@@ -21,7 +22,14 @@ public class CSNetworkManager : NetworkManager
 
     public bool DeployingAsServer;
     public bool ignorePort;
+    public bool noRestrictions;
     [SerializeField] public bool sceneTesting;
+
+    [Space]
+    float setRealTime;
+    [SerializeField] float lobbyKickTimer;
+    [SerializeField] float gameStartTimer;
+
 
     // NetworkManager.cs source code changes
     // line - 1112 | if statement is a change
@@ -31,7 +39,13 @@ public class CSNetworkManager : NetworkManager
         instance = this;
         Debug.Log($"Server has not started");
         thisTransport = GetComponent<KcpTransport>();
+        //StartCoroutine(GetComponent<NetworkDataBase>().GetServer());
+
         DebugManager.instance.enableRuntimeUI = false;
+        PlayerPrefs.DeleteKey("HostNetID");
+        PlayerPrefs.Save();
+
+        StartCoroutine(nameof(LobbyTimers));
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
@@ -52,29 +66,41 @@ public class CSNetworkManager : NetworkManager
 
         StartServer();
 
-        Debug.Log($"brhhh");
-
         Destroy(FindObjectOfType<AudioManager>().gameObject);
-
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-               
-
-        /*if (SceneManager.GetActiveScene().buildIndex == 0) 
-        {
-            NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);   
-        }*/
-
         if (isSinglePlayer)
         {
             SceneManager.sceneLoaded -= OnSceneLoaded; 
             StartHost();
+            return;
         }
 
-        if (!DeployingAsServer) return;
 
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            if (!DeployingAsServer)
+            {
+                Debug.Log($"oh brother");
+                LobbyManager.instance.SetUpLobbyScene();
+                return;
+            }
+
+            StartCoroutine(nameof(LobbyTimers));
+        }
+        else
+        {
+            StopCoroutine(nameof(LobbyTimers));
+
+            setRealTime = Time.time;
+            StartCoroutine(GameTimers());
+        }
+
+        players.Clear();
+        playerNames.Clear();
+            
         Destroy(GameObject.FindObjectOfType<AudioManager>().gameObject);
     }
 
@@ -96,6 +122,8 @@ public class CSNetworkManager : NetworkManager
     {
         base.OnServerAddPlayer(conn);
 
+        setRealTime = Time.time;
+
         var newPlayer = conn.identity.GetComponent<PlayerNetworkInfo>();
         Debug.Log(newPlayer.netIdentity + " connected.");
         players.Add(conn.identity);
@@ -104,19 +132,41 @@ public class CSNetworkManager : NetworkManager
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             // if hes the only one in the lobby
-            if (players.Count == 1)
+            
+            newPlayer.OnClientJoinLobby();
+
+            // If server doesnt contain the hostnetID key, 
+            //then we go ahead and make first person the host
+            // as well as make the key
+            if (!PlayerPrefs.HasKey("HostNetID"))
             {
                 newPlayer.playerIsHost = true;
+                PlayerPrefs.SetInt("HostNetID", conn.connectionId);
+                PlayerPrefs.Save();
 
                 NetLevelSelectorUI.instance.netIdentity.AssignClientAuthority(newPlayer.netIdentity.connectionToClient);
                 NetLevelSelectorUI.instance.OnAssignAuthority(conn);
             }
-            
+
+            // If the key already exists,
+            // And if it matches this connection,
+            // then make him the host and give privileges
+            // 
+            // THIS IS FOR GOING FROM GAME -> LOBBY client connections
             else
-                NetLevelSelectorUI.instance.OnDeAssignAuthority(conn);
+            {
+                if (conn.connectionId == PlayerPrefs.GetInt("HostNetID"))
+                {
+                    newPlayer.playerIsHost = true;
 
-            newPlayer.OnClientJoinLobby();
+                    NetLevelSelectorUI.instance.netIdentity.AssignClientAuthority(newPlayer.netIdentity.connectionToClient);
+                    NetLevelSelectorUI.instance.OnAssignAuthority(conn);
+                }
 
+                // this is the same as if players.count > 1
+                else
+                    NetLevelSelectorUI.instance.OnDeAssignAuthority(conn);
+            }
             return;
         }
         // For ingame and after lobby
@@ -142,27 +192,46 @@ public class CSNetworkManager : NetworkManager
         playerNames.Remove(newPlayer.name);
         players.Remove(conn.identity);
         
-        if (newPlayer.playerIsHost)
-        {
-            NetLevelSelectorUI.instance.netIdentity.RemoveClientAuthority();
-
-            if (players.Count != 0)
-            {
-                players[0].GetComponent<PlayerNetworkInfo>().playerIsHost = true;
-                NetLevelSelectorUI.instance.netIdentity.AssignClientAuthority(players[0].connectionToClient);
-                NetLevelSelectorUI.instance.OnAssignAuthority(players[0].connectionToClient);
-            }
-        }
+        
 
         // for lobby
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
+            if (newPlayer.connectionToClient.connectionId == PlayerPrefs.GetInt("HostNetID"))
+            {
+                NetLevelSelectorUI.instance.netIdentity.RemoveClientAuthority();
+
+                if (players.Count > 0)
+                {
+                    PlayerPrefs.SetInt("HostNetID", players[0].connectionToClient.connectionId);
+                    PlayerPrefs.Save();
+                    players[0].GetComponent<PlayerNetworkInfo>().playerIsHost = true;
+                    NetLevelSelectorUI.instance.netIdentity.AssignClientAuthority(players[0].connectionToClient);
+                    NetLevelSelectorUI.instance.OnAssignAuthority(players[0].connectionToClient);
+                }
+
+                // for if player count = 0 when a client DISCONNECTS
+                else
+                {
+                    PlayerPrefs.DeleteKey("HostNetID");
+                    PlayerPrefs.Save();
+                }
+            }
+
             conn.identity.GetComponent<PlayerNetworkInfo>().OnClientLeaveLobby(conn);
-            SetLobbyPlayerNames();
+            LobbyManager.instance.SetPlayerListUI(playerNames);
             base.OnServerDisconnect(conn);
             return;
         }
-        // for ingame
+
+        // --------------
+        // | for ingame |
+        // --------------
+        if (newPlayer.connectionToClient.connectionId == PlayerPrefs.GetInt("HostNetID"))
+        {
+            PlayerPrefs.DeleteKey("HostNetID");
+            PlayerPrefs.Save();
+        }
 
         GameManager.instance.UpdatePlayerCount();
         base.OnServerDisconnect(conn);
@@ -170,6 +239,7 @@ public class CSNetworkManager : NetworkManager
         if (numPlayers == 0)
         {
             Debug.LogWarning($"Changing Scenes");
+            PlayerPrefs.DeleteKey("HostNetID");
             ServerChangeScene("MainMenu");
 
             players.Clear();
@@ -187,7 +257,18 @@ public class CSNetworkManager : NetworkManager
         if (sceneTesting) return;
         if (isSinglePlayer) return;
 
-        LobbyScene();
+        //LobbyManager.instance.LobbyScene();
+    }
+
+    public override void OnStopClient()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            MainMenuUIManager.instance.LeaveLobby();;;;;;;;;;;;;;;;;;
+            
+        }
     }
 
     public override void OnClientError(TransportError error, string reason)
@@ -196,42 +277,25 @@ public class CSNetworkManager : NetworkManager
         MainMenuUIManager.instance.FailedToJoinLobby(reason);
     }
 
-    void LobbyScene()
-    {
-        MainMenuUIManager.instance.OnServerStart(this);
-    }
-
     [Server]
-    public void SetLobbyPlayerNames()
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            if (players.Count == 0)
-            {
-                LobbyManager.instance.SetPlayerListUI(string.Empty, i);
-                continue;
-            }
-
-            // if the iteration count is greater than our player count, then we make the null player slots empty
-            if (i + 1 > players.Count)
-            {
-                LobbyManager.instance.SetPlayerListUI(string.Empty, i);
-                continue;
-            }
-
-            LobbyManager.instance.SetPlayerListUI(playerNames[i], i);
-        }
-    }
-
-    [Server]
-    public void AddPlayerName(string name)
+    public void AddPlayerName(string name, NetworkConnectionToClient conn)
     {
         playerNames.Add(name);
         Debug.Log(name + " has joined the game!");
 
         if (isSinglePlayer) return;
 
-        SetLobbyPlayerNames();
+        if (PlayerPrefs.HasKey("HostNetID"))
+        {
+            if (PlayerPrefs.GetInt("HostNetID") == conn.connectionId)
+            {
+                int nameIndex = playerNames.IndexOf(name);
+                playerNames.RemoveAt(nameIndex);
+                playerNames.Insert(0, name);
+            }
+        }
+
+        LobbyManager.instance.SetPlayerListUI(playerNames);
     }
 
     [Server]
@@ -264,6 +328,7 @@ public class CSNetworkManager : NetworkManager
         Debug.Log("Connection refused: " + message.reason);
         MainMenuUIManager.instance.FailedToJoinLobby(message.reason);
 
+
         NetworkClient.Disconnect();
         NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
 
@@ -275,11 +340,47 @@ public class CSNetworkManager : NetworkManager
     {
         if (GameManager.instance == null) return 0;
         else return 1;
-        
     }
 
     public ushort GetPort()
     {
         return thisTransport.Port;
+    }
+
+    IEnumerator LobbyTimers()
+    {
+        float thisTime = 0;
+
+        while (true)
+        {
+            thisTime = Time.time - setRealTime;
+
+            if (players.Count != 0)
+            {
+                if (thisTime >= lobbyKickTimer)
+                {
+                    NetworkServer.SendToAll(new ConnectionRefusedMessage("You have been kicked for being idle"));
+                    setRealTime = 0;
+                }
+            }
+            yield return null;
+        }
+    }
+
+    IEnumerator GameTimers()
+    {
+        float thisTime = 0;
+
+        while (true)
+        {
+            thisTime = Time.time - setRealTime;
+
+            if (thisTime >= gameStartTimer)
+            {
+                GameManager.instance.StartGame();
+                yield break;
+            }
+            yield return null;
+        }
     }
 }

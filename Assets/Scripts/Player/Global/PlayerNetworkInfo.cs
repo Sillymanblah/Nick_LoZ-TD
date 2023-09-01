@@ -75,7 +75,7 @@ public class PlayerNetworkInfo : NetworkBehaviour
         {
             SaveClientData(name);
         }
-        CSNetworkManager.instance.AddPlayerName(name);
+        CSNetworkManager.instance.AddPlayerName(name, this.connectionToClient);
     }
 
     [TargetRpc]

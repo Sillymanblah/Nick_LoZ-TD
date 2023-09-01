@@ -38,11 +38,15 @@ public class AudioManager : MonoBehaviour
             PlayerPrefs.SetFloat("MusicVolume", 0.5f);
             PlayerPrefs.Save();
             volume = PlayerPrefs.GetFloat("MusicVolume");
-            Debug.Log(volume);
+            audioSource.volume = volume;
+        }
+        else
+        {
+            volume = PlayerPrefs.GetFloat("MusicVolume");
+            audioSource.volume = volume;
         }
 
         SetSliderValue();
-        //audioSource.PlayOneShot(currentClip, volume);
     }
 
     // Update is called once per frame

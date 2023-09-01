@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 using TMPro;
+using UnityEngine.SceneManagement;
+using System;
+using Unity.VisualScripting;
 
 public class LobbyManager : NetworkBehaviour
 {
@@ -26,22 +29,30 @@ public class LobbyManager : NetworkBehaviour
 
     public override void OnStartServer()
     {
+        instance = this;
         base.OnStartServer();
         this.gameObject.SetActive(true);
-        instance = this;
+
+        if (!isServerOnly) return;
     }
+
     // Start is called before the first frame update
     void Start()
     {
-        /*if (CSNetworkManager.instance.numPlayers < 2)
-            readyButton.interactable = false;
-        else
-            readyButton.interactable = true;*/
-    }
+        if (!isServer)
+        {
+            SetUpLobbyScene();
 
-    // Update is called once per frame
-    void Update()
-    {
+            if (CSNetworkManager.instance.noRestrictions) return;
+
+            if (CSNetworkManager.instance.numPlayers < 2)
+                readyButton.interactable = false;
+            else
+                readyButton.interactable = true;
+
+            return;
+        }
+        
         
     }
 
@@ -55,13 +66,34 @@ public class LobbyManager : NetworkBehaviour
     #region Server
 
     [ClientRpc]
-    public void SetPlayerListUI(string name, int index)
+    public void SetPlayerListUI(List<string> playerNames)
     {
-        Debug.Log(name);
-        lobbyParent.GetChild(index).GetComponent<PlayerSlotUI>().AssignPlayer(name);
+        for (int i = 0; i < 4; i++)
+        {
+            PlayerSlotUI playerSlotUI = lobbyParent.GetChild(i).GetComponent<PlayerSlotUI>();
+
+            if (playerNames.Count == 0)
+            {
+                playerSlotUI.AssignPlayer(string.Empty);
+                continue;
+            }
+
+            if (i + 1 > playerNames.Count)
+            {
+                playerSlotUI.AssignPlayer(string.Empty);
+                continue;
+            }
+
+            playerSlotUI.AssignPlayer(playerNames[i]);
+        }
     }
 
     #endregion
+
+    public void SetUpLobbyScene()
+    {
+        MainMenuUIManager.instance.OnServerStart();
+    }
 
     public void ReadyButton()
     {
@@ -71,6 +103,15 @@ public class LobbyManager : NetworkBehaviour
     [Server]
     public void PlayersAreReady(bool ready)
     {
+        if (!CSNetworkManager.instance.noRestrictions)
+        {
+            if (CSNetworkManager.instance.players.Count < 2)
+            {
+                Debug.LogWarning($"Cannot start with less than 2 people");
+                return;
+            }
+        }
+
         if (ready == true) playerReadyCount++;
         else playerReadyCount--;
 
@@ -95,8 +136,10 @@ public class LobbyManager : NetworkBehaviour
     {
         readyButtonText.text = $"READY {playerReady}/{maxPlayerCount}";
 
-        //if (maxPlayerCount > 1) readyButton.interactable = true;
-        //else if (maxPlayerCount < 2) readyButton.interactable = false;
+        if (CSNetworkManager.instance.noRestrictions) return;
+
+        if (maxPlayerCount > 1) readyButton.interactable = true;
+        else if (maxPlayerCount < 2) readyButton.interactable = false;
     }
 
     [ClientRpc]
@@ -104,4 +147,6 @@ public class LobbyManager : NetworkBehaviour
     {
         readyButtonText.transform.parent.GetComponent<Button>().interactable = active;
     }
+
+
 }

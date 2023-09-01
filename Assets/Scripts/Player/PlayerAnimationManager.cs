@@ -96,6 +96,7 @@ public class PlayerAnimationManager : NetworkBehaviour
         if (currentState == newState) return;
 
         // plays the animation
+        playerAnim.Play(newState);
         CmdAnimatorPlay(newState, 0f);
 
         //reassigns the current state
@@ -110,11 +111,13 @@ public class PlayerAnimationManager : NetworkBehaviour
         if (currentState == newState) return;
 
         // plays the animation / transitionTime determines how long the transition will take
+        playerAnim.CrossFadeInFixedTime(newState, transitionTime);
         CmdAnimatorPlay(newState, transitionTime);
 
         //reassigns the current state
         currentState = newState;
     }
+
 
     [Command]
     void CmdAnimatorPlay(int newState, float transitionTime)

@@ -110,16 +110,22 @@ public class GameManager : NetworkBehaviour
 
         if (playerReadyCount == CSNetworkManager.instance.numPlayers)
         {
-            gameStarted = true;
-            WaveManager.instance.spawnEnemies = true;
-            WaveManager.instance.SetHealthWithPlayerCount(CSNetworkManager.instance.numPlayers);
-            BaseManager.instance.SetBaseHP(CSNetworkManager.instance.numPlayers);
-            playerReadyCount = 0;
+            StartGame();
+        }
+    }
 
-            foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-            {
-                AllReady(player.connectionToClient);
-            }
+    [Server]
+    public void StartGame()
+    {
+        gameStarted = true;
+        WaveManager.instance.spawnEnemies = true;
+        WaveManager.instance.SetHealthWithPlayerCount(CSNetworkManager.instance.numPlayers);
+        BaseManager.instance.SetBaseHP(CSNetworkManager.instance.numPlayers);
+        playerReadyCount = 0;
+
+        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+        {
+            AllReady(player.connectionToClient);
         }
     }
 

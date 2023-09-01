@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LobbyAuth : MonoBehaviour
 {
     public new string name;
+    [SerializeField] TMP_InputField inputFieldText;
     [SerializeField] List<UnitSO> myUnitInventory = new List<UnitSO>();
     PlayerNetworkInfo player;
 
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+
+        if (PlayerPrefs.HasKey("PlayerName"))
+        {
+            inputFieldText.text = PlayerPrefs.GetString("PlayerName");
+            SetName(PlayerPrefs.GetString("PlayerName"));
+        }
     }
 
     // Update is called once per frame
@@ -31,6 +40,8 @@ public class LobbyAuth : MonoBehaviour
     public void SetName(string newName)
     {
         name = newName;
+        PlayerPrefs.SetString("PlayerName", name);
+        PlayerPrefs.Save();
     }
 
     public void UpdateUnitInventory(List<UnitSO> newUnits)

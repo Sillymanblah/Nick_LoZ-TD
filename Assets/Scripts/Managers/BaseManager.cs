@@ -91,9 +91,10 @@ public class BaseManager : NetworkBehaviour
         if (CSNetworkManager.instance.isSinglePlayer)
         {
             CSNetworkManager.instance.StopServer();
+            NetworkClient.Disconnect();
             yield break;
         }
         
-        NetworkServer.DisconnectAll();
+        CSNetworkManager.instance.SwitchScenes("MainMenu");
     }
 }
