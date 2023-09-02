@@ -5,9 +5,12 @@ using System.Text.Json;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using System;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class NetworkDataBase : MonoBehaviour
 {
+    public static NetworkDataBase instance;
 
     public class ServerStats 
     {
@@ -31,10 +34,13 @@ public class NetworkDataBase : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        instance = this;
+    }
+
     public void StartDatabase()
     {
-        
-
         if (!CSNetworkManager.instance.DeployingAsServer) return;
         if (CSNetworkManager.instance.ignorePort) return;
 
@@ -74,6 +80,36 @@ public class NetworkDataBase : MonoBehaviour
 
             
             yield return new WaitForSeconds(5);
+        }
+    }
+
+    public void RefreshServers()
+    {
+        Debug.Log($"Refreshing server list");
+
+        
+        try
+        {
+
+            for (int i = 0; i < 20; i++)
+            {
+                UnityWebRequest req = new UnityWebRequest();
+                string API_KEY = "ToJa0okT0YRjwIkDAKhM2r0OWAW0Pfx6";
+                var options = new JsonSerializerOptions { IncludeFields = true };
+                string      payloadStr = JsonSerializer.Serialize(1, options);
+                string      url        = "http://143.198.22.120/gameapi.php?method=getServerStats&params=" + payloadStr;
+                req.SetRequestHeader("X-API-KEY", API_KEY);
+                req.url                = url;
+                req.SendWebRequest();
+                string result = req.GetRequestHeader("JSON_PRETTY_PRINT");
+                Debug.Log(result);
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("Error has occurred: " + ex.Message);
+            Debug.Log($"Lost Connection to database");
         }
     }
 }

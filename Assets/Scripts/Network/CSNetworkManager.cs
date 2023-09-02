@@ -191,7 +191,7 @@ public class CSNetworkManager : NetworkManager
 
         playerNames.Remove(newPlayer.name);
         players.Remove(conn.identity);
-        
+        LobbyManager.instance.RpcUpdatePlayerCount(LobbyManager.instance.playerReadyCount, numPlayers);
         
 
         // for lobby
@@ -318,6 +318,12 @@ public class CSNetworkManager : NetworkManager
             reason = "Already connected to this game";
             return true;
         }*/
+
+        else if (numPlayers >= 4)
+        {
+            reason = "Server is full";
+            return true;
+        }
 
         reason = "Good to go";
         return false;

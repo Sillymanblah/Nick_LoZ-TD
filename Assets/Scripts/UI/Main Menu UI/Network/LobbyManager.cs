@@ -132,7 +132,7 @@ public class LobbyManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcUpdatePlayerCount(int playerReady, int maxPlayerCount)
+    public void RpcUpdatePlayerCount(int playerReady, int maxPlayerCount)
     {
         readyButtonText.text = $"READY {playerReady}/{maxPlayerCount}";
 

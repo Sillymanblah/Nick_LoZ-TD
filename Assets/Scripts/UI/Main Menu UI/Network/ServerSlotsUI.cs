@@ -11,13 +11,16 @@ public class ServerSlotsUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI serverNameText;
     [SerializeField] TextMeshProUGUI playerCountText;
     [SerializeField] TextMeshProUGUI ingameBooleanStatusText;
+    [SerializeField] TextMeshProUGUI onlineStatusText;
+
     [SerializeField] Button connectButton;
     ushort Port;
 
     // Start is called before the first frame update
     void Start()
     {
-        SetServerStats("0", 0, false, 0000);
+        SetServerStats("0", 0, false, 7777, false);
+        connectButton.interactable = false;
     }
 
     // Update is called once per frame
@@ -26,22 +29,35 @@ public class ServerSlotsUI : MonoBehaviour
         
     }
 
-    public void SetServerStats(string serverID, int playerCount, bool ingame, ushort port)
+    public void SetServerStats(string serverID, int playerCount, bool ingame, ushort port, bool online)
     {
         if (ingame)
         {
             ingameBooleanStatusText.text = "In game: Yes";
-            connectButton.interactable = true;
+            connectButton.interactable = false;
         }
         else
         {
             ingameBooleanStatusText.text = "In game: No";
-            connectButton.interactable = false;
 
+            if (online)
+            {
+                onlineStatusText.text = "Online: Yes";
+                connectButton.interactable = true;
+            }
+            else
+            {
+                onlineStatusText.text = "Online: No";
+                connectButton.interactable = false;
+
+            }
         }
 
         serverNameText.text = "Server " + serverID;
-        playerCountText.text = playerCountText + "/4";
+        playerCountText.text = playerCount + "/4";
+        
+
+        
         
         Port = port;
     }

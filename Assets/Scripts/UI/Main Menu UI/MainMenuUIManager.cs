@@ -78,6 +78,7 @@ public class MainMenuUIManager : MonoBehaviour
         currentMenu = serverListMenu;
         gamemodesMenu.SetActive(false);
         serverListMenu.SetActive(true);
+        NetworkDataBase.instance.RefreshServers();
     }
 
     public void JoinServer()
@@ -111,6 +112,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void FailedToJoinLobby(string reason)
     {
+        connectingMenu.SetActive(false);
         serverListMenu.SetActive(true);
         multiplayerLobby.SetActive(false);
         currentMenu = serverListMenu;
