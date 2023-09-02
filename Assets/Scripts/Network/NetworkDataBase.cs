@@ -1,12 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Text.Json;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using System;
-using Unity.VisualScripting;
-using UnityEngine.UI;
+using Org.BouncyCastle.Ocsp;
+using System.Collections.Generic;
 
 public class NetworkDataBase : MonoBehaviour
 {
@@ -42,7 +41,7 @@ public class NetworkDataBase : MonoBehaviour
     public void StartDatabase()
     {
         if (!CSNetworkManager.instance.DeployingAsServer) return;
-        if (CSNetworkManager.instance.ignorePort) return;
+        //if (CSNetworkManager.instance.ignorePort) return;
 
         StartCoroutine(UpdateServerDBValues());
     }
@@ -78,38 +77,36 @@ public class NetworkDataBase : MonoBehaviour
 
             #endif
 
-            
             yield return new WaitForSeconds(5);
         }
     }
-
+    
     public void RefreshServers()
+    {
+        //Debug.Log(GetServerData().);
+        StartCoroutine(GetServerData());
+    }
+
+    IEnumerator GetServerData()
     {
         Debug.Log($"Refreshing server list");
 
-        
-        try
-        {
+        UnityWebRequest req = new UnityWebRequest();
 
-            for (int i = 0; i < 20; i++)
-            {
-                UnityWebRequest req = new UnityWebRequest();
-                string API_KEY = "ToJa0okT0YRjwIkDAKhM2r0OWAW0Pfx6";
-                var options = new JsonSerializerOptions { IncludeFields = true };
-                string      payloadStr = JsonSerializer.Serialize(1, options);
-                string      url        = "http://143.198.22.120/gameapi.php?method=getServerStats&params=" + payloadStr;
-                req.SetRequestHeader("X-API-KEY", API_KEY);
-                req.url                = url;
-                req.SendWebRequest();
-                string result = req.GetRequestHeader("JSON_PRETTY_PRINT");
-                Debug.Log(result);
-            }
-            
-        }
-        catch (Exception ex)
+        string      url        = "http://143.198.22.120/gameapi.php?method=getServerStats&params=" + 1;
+        req.url                = url;
+        req.downloadHandler = new DownloadHandlerBuffer();
+        float fuckthis = Time.time;
+        yield return req.SendWebRequest();
+
+        if (req.result != UnityWebRequest.Result.Success)
         {
-            Debug.Log("Error has occurred: " + ex.Message);
-            Debug.Log($"Lost Connection to database");
+            Debug.LogError(req.error);
+        }
+        else
+        {
+            Debug.Log(Time.time - fuckthis);
+            Debug.Log(req.downloadHandler.text);
         }
     }
 }
