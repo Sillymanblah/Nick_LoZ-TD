@@ -4,8 +4,10 @@ using System.Text.Json;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using System;
-using Org.BouncyCastle.Ocsp;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Unity.VisualScripting;
+
 
 public class NetworkDataBase : MonoBehaviour
 {
@@ -13,7 +15,7 @@ public class NetworkDataBase : MonoBehaviour
 
     public class ServerStats 
     {
-        public int      ServerId;
+        public int      ServerID;
         public int      PlayersOnline;
         public int      MaxPlayers;
         public int      Uptime;
@@ -21,27 +23,40 @@ public class NetworkDataBase : MonoBehaviour
         public int      InGame;
         public int      Port;
 
-        public ServerStats()
+        public ServerStats(int _serverID, int _playersOnline, int _maxPlayers, int _Uptime, string _scene, int _ingame, int _port) 
         {
-            this.PlayersOnline = CSNetworkManager.instance.numPlayers;
-            this.MaxPlayers    = 4;
-            this.Uptime        = Mathf.FloorToInt(Time.time);
-            this.Scene         = SceneManager.GetActiveScene().name;
-            this.InGame        = CSNetworkManager.instance.IngameStatus();
-            this.Port          = CSNetworkManager.instance.GetPort();
-            this.ServerId      = CSNetworkManager.instance.GetPort() - 7776;
+            this.PlayersOnline = _playersOnline;
+            this.MaxPlayers    = _maxPlayers;
+            this.Uptime        = _Uptime;
+            this.Scene         = _scene;
+            this.InGame        = _ingame;
+            this.Port          = _port;
+            this.ServerID      = _serverID;
         }
+
+        /*
+        this.PlayersOnline = CSNetworkManager.instance.numPlayers;
+        this.MaxPlayers    = 4;
+        this.Uptime        = Mathf.FloorToInt(Time.time);
+        this.Scene         = SceneManager.GetActiveScene().name;
+        this.InGame        = CSNetworkManager.instance.IngameStatus();
+        this.Port          = CSNetworkManager.instance.GetPort();
+        this.ServerID      = CSNetworkManager.instance.GetPort() - 7776;
+        */
     }
+
+    List<ServerSlotsUI> serverList = new List<ServerSlotsUI>();
 
     private void Start()
     {
         instance = this;
+        RefreshServers();
     }
 
     public void StartDatabase()
     {
         if (!CSNetworkManager.instance.DeployingAsServer) return;
-        //if (CSNetworkManager.instance.ignorePort) return;
+        if (CSNetworkManager.instance.ignorePort) return;
 
         StartCoroutine(UpdateServerDBValues());
     }
@@ -60,9 +75,9 @@ public class NetworkDataBase : MonoBehaviour
             try
             {
                 
-                ServerStats payloadObj = new ServerStats();
+                ServerStats payloadObj = new ServerStats(CSNetworkManager.instance.GetPort() - 7776, CSNetworkManager.instance.numPlayers, 4, Mathf.FloorToInt(Time.time), SceneManager.GetActiveScene().name, CSNetworkManager.instance.IngameStatus(), CSNetworkManager.instance.GetPort());
                 var options = new JsonSerializerOptions { IncludeFields = true };
-                string      payloadStr = JsonSerializer.Serialize(payloadObj, options);
+                string      payloadStr = System.Text.Json.JsonSerializer.Serialize(payloadObj, options);
                 string      url        = "http://143.198.22.120/gameapi.php?method=updateServerStats&params=" + payloadStr;
                 req.SetRequestHeader("X-API-KEY", API_KEY);
                 req.url                = url;
@@ -75,38 +90,80 @@ public class NetworkDataBase : MonoBehaviour
                 Debug.Log($"Lost Connection to database");
             }
 
+            
+
             #endif
+
+            Debug.Log($"bruh");
 
             yield return new WaitForSeconds(5);
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        #if UNITY_SERVER
+
+        string API_KEY = "123";
+
+        UnityWebRequest req = new UnityWebRequest();
+        API_KEY = "ToJa0okT0YRjwIkDAKhM2r0OWAW0Pfx6";
+
+        try
+        {
+            
+            ServerStats payloadObj = new ServerStats(CSNetworkManager.instance.GetPort() - 7776, 0, 0, 0, "NA", 0, CSNetworkManager.instance.GetPort());
+            var options = new JsonSerializerOptions { IncludeFields = true };
+            string      payloadStr = System.Text.Json.JsonSerializer.Serialize(payloadObj, options);
+            string      url        = "http://143.198.22.120/gameapi.php?method=updateServerStats&params=" + payloadStr;
+            req.SetRequestHeader("X-API-KEY", API_KEY);
+            req.url                = url;
+            req.SendWebRequest();
+            Debug.Log("Server is sending data to the database");
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("Error has occurred: " + ex.Message);
+            Debug.Log($"Lost Connection to database");
+        }
+
+        #endif
     }
     
     public void RefreshServers()
     {
         //Debug.Log(GetServerData().);
-        StartCoroutine(GetServerData());
+        StartCoroutine(GetServerData(6));
     }
 
-    IEnumerator GetServerData()
+    IEnumerator GetServerData(int numberOfServers)
     {
         Debug.Log($"Refreshing server list");
 
-        UnityWebRequest req = new UnityWebRequest();
-
-        string      url        = "http://143.198.22.120/gameapi.php?method=getServerStats&params=" + 1;
-        req.url                = url;
-        req.downloadHandler = new DownloadHandlerBuffer();
-        float fuckthis = Time.time;
-        yield return req.SendWebRequest();
-
-        if (req.result != UnityWebRequest.Result.Success)
+        for (int i = 0; i < numberOfServers; i++)
         {
-            Debug.LogError(req.error);
-        }
-        else
-        {
-            Debug.Log(Time.time - fuckthis);
-            Debug.Log(req.downloadHandler.text);
+            
+
+            UnityWebRequest req = new UnityWebRequest();
+
+            string      url        = "http://143.198.22.120/gameapi.php?method=getServerStats&params=" + (i + 1);
+            req.url                = url;
+            req.downloadHandler = new DownloadHandlerBuffer();
+            float timeToReceive = Time.time;
+            yield return req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(req.error);
+            }
+            else
+            {
+                Debug.Log(Time.time - timeToReceive);
+
+                ServerStats newStats = JsonConvert.DeserializeObject<ServerStats>(req.downloadHandler.text);
+
+                MainMenuUIManager.instance.serverSlotsList[i].SetServerStats(newStats);
+            }
         }
     }
 }

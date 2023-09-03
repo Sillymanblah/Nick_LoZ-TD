@@ -119,8 +119,8 @@ public class GameManager : NetworkBehaviour
     {
         gameStarted = true;
         WaveManager.instance.spawnEnemies = true;
-        WaveManager.instance.SetHealthWithPlayerCount(CSNetworkManager.instance.numPlayers);
-        BaseManager.instance.SetBaseHP(CSNetworkManager.instance.numPlayers);
+        WaveManager.instance.SetHealthWithPlayerCount(CSNetworkManager.instance.players.Count);
+        BaseManager.instance.SetBaseHP(CSNetworkManager.instance.players.Count);
         playerReadyCount = 0;
 
         foreach (NetworkIdentity player in CSNetworkManager.instance.players)

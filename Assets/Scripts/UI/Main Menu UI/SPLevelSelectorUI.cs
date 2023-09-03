@@ -50,7 +50,10 @@ public class SPLevelSelectorUI : MonoBehaviour
 
     public void StartGame()
     {
-        CSNetworkManager.instance.isSinglePlayer = true;
-        SceneManager.LoadScene(currentLevel);
+        var networkManager = CSNetworkManager.instance;
+
+        networkManager.StartHost();
+        networkManager.isSinglePlayer = true;
+        networkManager.SwitchScenes(currentLevel);
     }
 }

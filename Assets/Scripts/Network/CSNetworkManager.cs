@@ -45,12 +45,14 @@ public class CSNetworkManager : NetworkManager
         PlayerPrefs.DeleteKey("HostNetID");
         PlayerPrefs.Save();
 
-        StartCoroutine(nameof(LobbyTimers));
+        
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
 
         if (!DeployingAsServer) return;
+
+        StartCoroutine(nameof(LobbyTimers));
 
         GetComponent<NetworkDataBase>().StartDatabase();
 
@@ -74,9 +76,10 @@ public class CSNetworkManager : NetworkManager
         if (isSinglePlayer)
         {
             SceneManager.sceneLoaded -= OnSceneLoaded; 
-            StartHost();
+            
             return;
         }
+
 
 
         if (SceneManager.GetActiveScene().buildIndex == 0)
@@ -92,10 +95,13 @@ public class CSNetworkManager : NetworkManager
         }
         else
         {
-            StopCoroutine(nameof(LobbyTimers));
+            if (DeployingAsServer)
+            {
+                StopCoroutine(nameof(LobbyTimers));
 
-            setRealTime = Time.time;
-            StartCoroutine(GameTimers());
+                setRealTime = Time.time;
+                StartCoroutine(GameTimers());
+            }
         }
 
         players.Clear();
@@ -385,6 +391,8 @@ public class CSNetworkManager : NetworkManager
         while (true)
         {
             thisTime = Time.time - setRealTime;
+
+            if (GameManager.instance.gameStarted) yield break;
 
             if (thisTime >= gameStartTimer)
             {

@@ -172,12 +172,13 @@ public class EnemyUnit : NetworkBehaviour
     }
 
     [Server]
-    public void SetMaxHealthMultiplier(float points)
+    public void SetEnemyMultipliers(float health, float moneyMultiplier)
     {
-        float maxHealthMultiplied = (float)maxHealthPoints * points;
+        float maxHealthMultiplied = (float)maxHealthPoints * health;
 
         maxHealthPoints = Mathf.FloorToInt(maxHealthMultiplied);
         healthPoints = maxHealthPoints;
+        this.moneyMultiplier *= moneyMultiplier;
 
         foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {

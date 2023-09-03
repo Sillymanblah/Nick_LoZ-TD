@@ -42,6 +42,10 @@ public class WaveManager : NetworkBehaviour
 
     [Header("Enemy code things")]
     public float setHealthMultiplier;
+    
+    public float setGroupMultiplier;
+    public float setMoneyDecrements;
+    float moneyMultiplier;
 
     float healthMultiplier = 1;
     float playerMultiplier = 1;
@@ -57,6 +61,7 @@ public class WaveManager : NetworkBehaviour
     void Start()
     {
         instance = this;
+        moneyMultiplier = 1;
     }
 
     // Update is called once per frame
@@ -96,7 +101,8 @@ public class WaveManager : NetworkBehaviour
             EnemyUnit newEnemy = Instantiate(enemies[randomEnemy], WayPointsManager.instance.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
             
             NetworkServer.Spawn(newEnemy.gameObject);
-            newEnemy.SetMaxHealthMultiplier(healthMultiplier);
+
+            newEnemy.SetEnemyMultipliers(healthMultiplier, moneyMultiplier);
             totalEnemiesSpawned++;
 
             unitSpawnCount++;
@@ -119,7 +125,7 @@ public class WaveManager : NetworkBehaviour
 
         unitSpawnCount = 0;
         currentGroup++;
-        healthMultiplier += 0.2f;
+        healthMultiplier += (setGroupMultiplier * currentWave);
     }
 
     [Server]
@@ -139,7 +145,7 @@ public class WaveManager : NetworkBehaviour
         totalEnemiesSpawned++;
         
         NetworkServer.Spawn(newBoss.gameObject);
-        newBoss.SetMaxHealthMultiplier(playerMultiplier);
+        newBoss.SetEnemyMultipliers(playerMultiplier, 2);
     }
 
     IEnumerator Intermission()
@@ -247,6 +253,9 @@ public class WaveManager : NetworkBehaviour
             healthMultiplier = playerMultiplier * (currentWave * setHealthMultiplier);
             enemiesKilled = 0;
             totalEnemiesSpawned = 0;
+            moneyMultiplier -= setMoneyDecrements;
+            if (moneyMultiplier < 0.1f)
+                moneyMultiplier = 0.1f;
             
             playersReadyToSkip.Clear();
             playerReadyCount = 0;
@@ -268,6 +277,9 @@ public class WaveManager : NetworkBehaviour
         currentWave++;
         healthMultiplier = playerMultiplier * (currentWave * setHealthMultiplier);
         totalEnemiesSpawned = 0;
+        moneyMultiplier -= setMoneyDecrements;
+        if (moneyMultiplier < 0.1f)
+            moneyMultiplier = 0.1f;
 
         StopCoroutine(nameof(ActivateSkipWave));
         StartCoroutine(Intermission());
@@ -291,7 +303,7 @@ public class WaveManager : NetworkBehaviour
     [Server]
     public void SetHealthWithPlayerCount(int playerCount)
     {
-        playerMultiplier *= (playerCount);
+        playerMultiplier = playerCount;
 
         if (playerCount == 1)
         {

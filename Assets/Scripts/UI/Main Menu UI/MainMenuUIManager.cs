@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuUIManager : MonoBehaviour
 {
@@ -24,6 +26,15 @@ public class MainMenuUIManager : MonoBehaviour
     GameObject currentMenu;
     public static MainMenuUIManager instance;
 
+    public List<ServerSlotsUI> serverSlotsList = new List<ServerSlotsUI>();
+    [SerializeField] Transform serverListParent;
+
+    #region Network Buttons (necessary because the duplicate network manager is removed along with all its buttons OnClick events)
+
+    [SerializeField] Button refreshServersButton;
+
+    #endregion
+
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -37,16 +48,23 @@ public class MainMenuUIManager : MonoBehaviour
         singlePlayerMenu.SetActive(false);
         creditsMenu.SetActive(false);
         joinExceptionPanel.SetActive(false);
-        serverListMenu.SetActive(false);
+        
 
 
         currentMenu = startMenu;
         instance = this;
+
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        foreach (Transform transform in serverListParent)
+        {
+            serverSlotsList.Add(transform.GetComponent<ServerSlotsUI>());
+        }
+
         joinExceptionText.text = string.Empty;
 
         PlayerPrefs.DeleteKey("Unit0");
@@ -54,6 +72,8 @@ public class MainMenuUIManager : MonoBehaviour
         PlayerPrefs.DeleteKey("Unit2");
 
         PlayerPrefs.Save();
+
+        serverListMenu.SetActive(false);
     }
 
     // Update is called once per frame
@@ -86,6 +106,7 @@ public class MainMenuUIManager : MonoBehaviour
         currentMenu = multiplayerLobby;
         
         gamemodesMenu.SetActive(false);
+        serverListMenu.SetActive(false);
         connectingMenu.SetActive(true);
         Debug.Log($"starting client");
         NetworkManager.singleton.StartClient();
@@ -163,5 +184,10 @@ public class MainMenuUIManager : MonoBehaviour
     {
         joinExceptionPanel.SetActive(true);
         joinExceptionText.text = reason;
+    }
+
+    public void RefreshServersUI()
+    {
+        NetworkDataBase.instance.RefreshServers();
     }
 }

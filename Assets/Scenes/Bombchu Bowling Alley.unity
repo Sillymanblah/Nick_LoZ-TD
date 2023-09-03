@@ -11980,6 +11980,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8962342565863275273, guid: 5a5509f7b3856ea45a2f520f167df568,
         type: 3}
+      propertyPath: setGroupMultiplier
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962342565863275273, guid: 5a5509f7b3856ea45a2f520f167df568,
+        type: 3}
+      propertyPath: setMoneyDecrements
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962342565863275273, guid: 5a5509f7b3856ea45a2f520f167df568,
+        type: 3}
+      propertyPath: setHealthMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8962342565863275273, guid: 5a5509f7b3856ea45a2f520f167df568,
+        type: 3}
       propertyPath: bosses.Array.data[0]
       value: 
       objectReference: {fileID: 0}

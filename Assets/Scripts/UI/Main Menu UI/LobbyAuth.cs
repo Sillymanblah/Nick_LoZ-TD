@@ -39,6 +39,11 @@ public class LobbyAuth : MonoBehaviour
 
     public void SetName(string newName)
     {
+        if (newName.Length > 24) 
+        {
+            inputFieldText.text = string.Empty;
+        }
+
         name = newName;
         PlayerPrefs.SetString("PlayerName", name);
         PlayerPrefs.Save();

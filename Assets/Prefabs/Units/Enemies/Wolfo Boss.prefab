@@ -1580,7 +1580,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   isGrounded: 0
-  maxHealthPoints: 150
+  maxHealthPoints: 200
   healthPoints: 0
   moneyMultiplier: 1
   speed: 0.6

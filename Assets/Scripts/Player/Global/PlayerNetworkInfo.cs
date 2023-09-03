@@ -65,6 +65,11 @@ public class PlayerNetworkInfo : NetworkBehaviour
     [Command]
     public void SetDisplayName(string newName)
     {
+        if (newName.Length > 24)
+        {
+            newName = "Player";
+        }
+
         name = newName;
 
         if (SceneManager.GetActiveScene().buildIndex != 0)
