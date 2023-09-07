@@ -29,7 +29,7 @@ public class CSNetworkManager : NetworkManager
     float setRealTime;
     [SerializeField] float lobbyKickTimer;
     [SerializeField] float gameStartTimer;
-
+    public string gameVersion;
 
     // NetworkManager.cs source code changes
     // line - 1112 | if statement is a change
@@ -42,7 +42,7 @@ public class CSNetworkManager : NetworkManager
         //StartCoroutine(GetComponent<NetworkDataBase>().GetServer());
 
         DebugManager.instance.enableRuntimeUI = false;
-        PlayerPrefs.DeleteKey("HostNetID");
+        PlayerPrefs.DeleteKey($"HostNetID{GetPort() - 7776}");
         PlayerPrefs.Save();
 
         
@@ -144,10 +144,10 @@ public class CSNetworkManager : NetworkManager
             // If server doesnt contain the hostnetID key, 
             //then we go ahead and make first person the host
             // as well as make the key
-            if (!PlayerPrefs.HasKey("HostNetID"))
+            if (!PlayerPrefs.HasKey($"HostNetID{GetPort() - 7776}"))
             {
                 newPlayer.playerIsHost = true;
-                PlayerPrefs.SetInt("HostNetID", conn.connectionId);
+                PlayerPrefs.SetInt($"HostNetID{GetPort() - 7776}", conn.connectionId);
                 PlayerPrefs.Save();
 
                 NetLevelSelectorUI.instance.netIdentity.AssignClientAuthority(newPlayer.netIdentity.connectionToClient);
@@ -158,10 +158,11 @@ public class CSNetworkManager : NetworkManager
             // And if it matches this connection,
             // then make him the host and give privileges
             // 
-            // THIS IS FOR GOING FROM GAME -> LOBBY client connections
+            
             else
             {
-                if (conn.connectionId == PlayerPrefs.GetInt("HostNetID"))
+                // THIS IS FOR GOING FROM GAME -> LOBBY client connections
+                if (conn.connectionId == PlayerPrefs.GetInt($"HostNetID{GetPort() - 7776}"))
                 {
                     newPlayer.playerIsHost = true;
 
@@ -203,13 +204,13 @@ public class CSNetworkManager : NetworkManager
         // for lobby
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            if (newPlayer.connectionToClient.connectionId == PlayerPrefs.GetInt("HostNetID"))
+            if (newPlayer.connectionToClient.connectionId == PlayerPrefs.GetInt($"HostNetID{GetPort() - 7776}"))
             {
                 NetLevelSelectorUI.instance.netIdentity.RemoveClientAuthority();
 
                 if (players.Count > 0)
                 {
-                    PlayerPrefs.SetInt("HostNetID", players[0].connectionToClient.connectionId);
+                    PlayerPrefs.SetInt($"HostNetID{GetPort() - 7776}", players[0].connectionToClient.connectionId);
                     PlayerPrefs.Save();
                     players[0].GetComponent<PlayerNetworkInfo>().playerIsHost = true;
                     NetLevelSelectorUI.instance.netIdentity.AssignClientAuthority(players[0].connectionToClient);
@@ -219,7 +220,7 @@ public class CSNetworkManager : NetworkManager
                 // for if player count = 0 when a client DISCONNECTS
                 else
                 {
-                    PlayerPrefs.DeleteKey("HostNetID");
+                    PlayerPrefs.DeleteKey($"HostNetID{GetPort() - 7776}");
                     PlayerPrefs.Save();
                 }
             }
@@ -233,9 +234,9 @@ public class CSNetworkManager : NetworkManager
         // --------------
         // | for ingame |
         // --------------
-        if (newPlayer.connectionToClient.connectionId == PlayerPrefs.GetInt("HostNetID"))
+        if (newPlayer.connectionToClient.connectionId == PlayerPrefs.GetInt($"HostNetID{GetPort() - 7776}"))
         {
-            PlayerPrefs.DeleteKey("HostNetID");
+            PlayerPrefs.DeleteKey($"HostNetID{GetPort() - 7776}");
             PlayerPrefs.Save();
         }
 
@@ -245,7 +246,7 @@ public class CSNetworkManager : NetworkManager
         if (numPlayers == 0)
         {
             Debug.LogWarning($"Changing Scenes");
-            PlayerPrefs.DeleteKey("HostNetID");
+            PlayerPrefs.DeleteKey($"HostNetID{GetPort() - 7776}");
             ServerChangeScene("MainMenu");
 
             players.Clear();
@@ -291,9 +292,9 @@ public class CSNetworkManager : NetworkManager
 
         if (isSinglePlayer) return;
 
-        if (PlayerPrefs.HasKey("HostNetID"))
+        if (PlayerPrefs.HasKey($"HostNetID{GetPort() - 7776}"))
         {
-            if (PlayerPrefs.GetInt("HostNetID") == conn.connectionId)
+            if (PlayerPrefs.GetInt($"HostNetID{GetPort() - 7776}") == conn.connectionId)
             {
                 int nameIndex = playerNames.IndexOf(name);
                 playerNames.RemoveAt(nameIndex);
@@ -313,17 +314,12 @@ public class CSNetworkManager : NetworkManager
 
     private bool ShouldRefuseConnection(out string reason, NetworkConnectionToClient conn)
     {
+
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {
             reason = "Game has already started";
             return true;
         }
-
-        /*else if (conn.identity == null)
-        {
-            reason = "Already connected to this game";
-            return true;
-        }*/
 
         else if (numPlayers >= 4)
         {

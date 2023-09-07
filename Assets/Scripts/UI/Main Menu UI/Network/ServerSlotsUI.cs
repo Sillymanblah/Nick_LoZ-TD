@@ -31,6 +31,13 @@ public class ServerSlotsUI : MonoBehaviour
 
     public void SetServerStats(NetworkDataBase.ServerStats serverStats)
     {
+        if (serverStats.Version != CSNetworkManager.instance.gameVersion)
+        {
+            connectButton.interactable = false;
+            ingameBooleanStatusText.text = "VersionFail";
+            return;
+        }
+
         if (serverStats.InGame == 1)
         {
             ingameBooleanStatusText.text = "In game: Yes";

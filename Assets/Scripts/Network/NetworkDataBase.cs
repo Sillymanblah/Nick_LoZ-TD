@@ -22,8 +22,9 @@ public class NetworkDataBase : MonoBehaviour
         public string   Scene;
         public int      InGame;
         public int      Port;
+        public string   Version;
 
-        public ServerStats(int _serverID, int _playersOnline, int _maxPlayers, int _Uptime, string _scene, int _ingame, int _port) 
+        public ServerStats(int _serverID, int _playersOnline, int _maxPlayers, int _Uptime, string _scene, int _ingame, int _port, string _version) 
         {
             this.PlayersOnline = _playersOnline;
             this.MaxPlayers    = _maxPlayers;
@@ -32,6 +33,7 @@ public class NetworkDataBase : MonoBehaviour
             this.InGame        = _ingame;
             this.Port          = _port;
             this.ServerID      = _serverID;
+            this.Version       = _version;
         }
 
         /*
@@ -56,7 +58,7 @@ public class NetworkDataBase : MonoBehaviour
     public void StartDatabase()
     {
         if (!CSNetworkManager.instance.DeployingAsServer) return;
-        if (CSNetworkManager.instance.ignorePort) return;
+        //if (CSNetworkManager.instance.ignorePort) return;
 
         StartCoroutine(UpdateServerDBValues());
     }
@@ -75,7 +77,7 @@ public class NetworkDataBase : MonoBehaviour
             try
             {
                 
-                ServerStats payloadObj = new ServerStats(CSNetworkManager.instance.GetPort() - 7776, CSNetworkManager.instance.numPlayers, 4, Mathf.FloorToInt(Time.time), SceneManager.GetActiveScene().name, CSNetworkManager.instance.IngameStatus(), CSNetworkManager.instance.GetPort());
+                ServerStats payloadObj = new ServerStats(CSNetworkManager.instance.GetPort() - 7776, CSNetworkManager.instance.numPlayers, 4, Mathf.FloorToInt(Time.time), SceneManager.GetActiveScene().name, CSNetworkManager.instance.IngameStatus(), CSNetworkManager.instance.GetPort(), CSNetworkManager.instance.gameVersion);
                 var options = new JsonSerializerOptions { IncludeFields = true };
                 string      payloadStr = System.Text.Json.JsonSerializer.Serialize(payloadObj, options);
                 string      url        = "http://143.198.22.120/gameapi.php?method=updateServerStats&params=" + payloadStr;
@@ -104,6 +106,8 @@ public class NetworkDataBase : MonoBehaviour
     {
         #if UNITY_SERVER
 
+        if (!CSNetworkManager.instance.DeployingAsServer) return;
+
         string API_KEY = "123";
 
         UnityWebRequest req = new UnityWebRequest();
@@ -112,7 +116,7 @@ public class NetworkDataBase : MonoBehaviour
         try
         {
             
-            ServerStats payloadObj = new ServerStats(CSNetworkManager.instance.GetPort() - 7776, 0, 0, 0, "NA", 0, CSNetworkManager.instance.GetPort());
+            ServerStats payloadObj = new ServerStats(CSNetworkManager.instance.GetPort() - 7776, 0, 0, 0, "NA", 0, CSNetworkManager.instance.GetPort(), CSNetworkManager.instance.gameVersion);
             var options = new JsonSerializerOptions { IncludeFields = true };
             string      payloadStr = System.Text.Json.JsonSerializer.Serialize(payloadObj, options);
             string      url        = "http://143.198.22.120/gameapi.php?method=updateServerStats&params=" + payloadStr;
