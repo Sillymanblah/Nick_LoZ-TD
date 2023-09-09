@@ -128,7 +128,6 @@ public class PlayerAnimationManager : NetworkBehaviour
     [ClientRpc]
     void RpcAnimatorPlay(int newState, float transitionTime)
     {
-        Debug.Log(isLocalPlayer);
         if (isLocalPlayer) return;
 
         playerAnim.CrossFadeInFixedTime(newState, transitionTime);

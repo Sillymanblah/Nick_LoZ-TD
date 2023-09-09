@@ -10572,7 +10572,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1720022824}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.662069
+  m_Size: 0.6620691
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -13753,6 +13753,23 @@ PrefabInstance:
       propertyPath: DeployingAsServer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.size
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.data[11]
+      value: 
+      objectReference: {fileID: 8062145506032376919, guid: 823be02c78c495f46bf4d7c8d2185acb,
+        type: 3}
+    - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
+        type: 3}
+      propertyPath: spawnPrefabs.Array.data[12]
+      value: 
+      objectReference: {fileID: 5814153406905477011, guid: 08272ecdd26848e4587245f95c927d11,
+        type: 3}
     - target: {fileID: 9173269634202737194, guid: b2a0ad4f75f9115449816e14d5a6be18,
         type: 3}
       propertyPath: m_RootOrder

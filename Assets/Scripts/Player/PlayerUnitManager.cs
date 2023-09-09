@@ -73,6 +73,8 @@ public class PlayerUnitManager : NetworkBehaviour
 
     public void SellUnit()
     {
+        Debug.Log($"Selling unit");
+        
         selectedUnit.SellUnit(this.netIdentity);
         selectedUnit = null;
         UIUnitStats.instance.UpdateUnitStats(null, false);
@@ -80,7 +82,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
     public void UpgradeUnit()
     {
-        Debug.Log($"upgrading this bitch");
+        Debug.Log($"Before Upgrading unit");
 
         if (selectedUnit.GetLevel() < 5)
         {
@@ -93,6 +95,9 @@ public class PlayerUnitManager : NetworkBehaviour
 
             selectedUnit.UpgradeUnit(this.netIdentity);
         }
+
+        Debug.Log($"Upgraded unit");
+
     }
 
     void GridPickerRaycast()
