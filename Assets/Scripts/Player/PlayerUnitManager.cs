@@ -99,6 +99,7 @@ public class PlayerUnitManager : NetworkBehaviour
         Debug.Log($"Upgraded unit");
 
     }
+    [SerializeField] LayerMask layerMask;
 
     void GridPickerRaycast()
     {
@@ -107,7 +108,7 @@ public class PlayerUnitManager : NetworkBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 100))
+        if (Physics.Raycast(ray, out hit, 100, layerMask.value))
         {
             if (hit.collider.gameObject.layer == 3)
             {
@@ -124,8 +125,11 @@ public class PlayerUnitManager : NetworkBehaviour
                     if (selectedUnit != null) selectedUnit.DeSelectUnit();
                     selectedUnit = hit.collider.GetComponent<Unit>();
 
+                    Debug.Log($"Selected unit " + selectedUnit.name);
+
                     if (selectedUnit.isOwned)
                         selectedUnit.SelectUnit();
+
 
                     else if (!selectedUnit.isOwned) selectedUnit = null;
                 }
@@ -137,6 +141,8 @@ public class PlayerUnitManager : NetworkBehaviour
                         selectedUnit.DeSelectUnit();
 
                     selectedUnit = null;
+
+                    Debug.Log($"Deselected unit");
                 }
             }
         }
@@ -164,6 +170,8 @@ public class PlayerUnitManager : NetworkBehaviour
     [Client]
     public void BuyUnit(int unitIndex)
     {
+        Debug.Log($"Before buying unit " + unitsLoadout[unitIndex].name);
+
         placedUnit = true;
 
         if (unitIndex >= unitsLoadout.Count) return;
@@ -183,6 +191,9 @@ public class PlayerUnitManager : NetworkBehaviour
 
             return;
         }
+
+        Debug.Log($"After buying unit " + unitsLoadout[unitIndex].name);
+
 
         // for switching units between buying them
         if (preSpawnedUnit != null)
@@ -213,6 +224,9 @@ public class PlayerUnitManager : NetworkBehaviour
 
     IEnumerator PlaceUnitDown(GameObject thisUnit, int loadoutIndex)
     {
+        Debug.Log($"Before placing unit " + thisUnit.name);
+
+
         preSpawnedUnit = thisUnit;
         bool setUnitDown = false;
         Vector3 gridPos = Vector3.zero;
@@ -237,6 +251,8 @@ public class PlayerUnitManager : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
+                Debug.Log($"Client placed unit " + thisUnit.name);
+
                 Destroy(thisUnit);
                 placedUnit = true;
                 yield break;
@@ -247,7 +263,10 @@ public class PlayerUnitManager : NetworkBehaviour
                 setUnitDown = newUnit.CheckGridCellAvailability();
 
                 if (setUnitDown == false)
+                {
                     ExceptionMsgUI.instance.UIExceptionMessage("You cannot place that unit there");
+                    Debug.Log($"Attempted to placed unit " + thisUnit.name + " in incorrect spot");
+                }
                     
                 yield return null;
                 continue;
@@ -290,6 +309,9 @@ public class PlayerUnitManager : NetworkBehaviour
         Unit thisUnit = newUnit.GetComponent<Unit>();
         thisUnit.PlacedUnit(gridCellIndexes, loadoutIndex);
         loadoutCount[loadoutIndex]++;
+
+        Debug.Log($"Placing client " + this.gameObject.name + " unit " + loadoutCount[loadoutIndex]);
+
         PlaceUnit(thisUnit, loadoutIndex);
     }
 
@@ -346,8 +368,6 @@ public class PlayerUnitManager : NetworkBehaviour
     EnemyUnit currentEnemy;
     void RaycastHpBar()
     {
-        
-
         RaycastHit hit;
         
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))

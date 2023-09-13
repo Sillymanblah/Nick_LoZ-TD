@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af7ea85760c3d1a4fa8f706a9c26095f, type: 3}
+  m_Name: Deku Baba (ground)
+  m_EditorClassIdentifier: 
+  uniqueName: Deku Baba (ground)
+  name: Deku Baba
+  unitID: 3
+  icon: {fileID: 21300000, guid: 302f65b23d2b424458cdfeda738b1bf3, type: 3}
+  prefab: {fileID: 1733210408596726202, guid: 73ae55e9d5bcaef45a9f0c36464d110f, type: 3}
+  chanceToMiss: 5
+  gridType: 0
+  cost1: 200
+  attack1: 5
+  cooldown1: 2
+  range1: 8
+  DPS1: 2.5
+  rangeDPS1: 20
+  cost2: 300
+  attack2: 10
+  cooldown2: 2
+  range2: 12
+  DPS2: 5
+  rangeDPS2: 60
+  cost3: 420
+  attack3: 16
+  cooldown3: 2.5
+  range3: 14
+  DPS3: 6.4
+  rangeDPS3: 89
+  cost4: 600
+  attack4: 30
+  cooldown4: 3
+  range4: 14
+  DPS4: 10
+  rangeDPS4: 140
+  cost5: 1000
+  attack5: 40
+  cooldown5: 2
+  range5: 12
+  DPS5: 20
+  rangeDPS5: 240

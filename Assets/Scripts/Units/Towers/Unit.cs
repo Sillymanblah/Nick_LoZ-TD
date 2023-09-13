@@ -12,11 +12,11 @@ public enum TargettingMode
 }
 public class Unit : NetworkBehaviour
 {
-    [SerializeField] UnitSO unitSO;
+    [SerializeField] protected  UnitSO unitSO;
 
     [Space]
 
-    bool isAttacking = true;
+    protected bool isAttacking = true;
 
     [Space]
 
@@ -36,6 +36,9 @@ public class Unit : NetworkBehaviour
     [SerializeField] protected Transform rangeVisualSprite;
     [SerializeField] UIUnitHoverStats hoverStats;
     [SerializeField] UnitAnimationManager animations;
+    [SerializeField] GridDisplayFade gridDisplayFade;
+
+    [Space]
 
     [SyncVar]
     string unitName;
@@ -228,7 +231,7 @@ public class Unit : NetworkBehaviour
 
     #region Targetting Modes
 
-    void CurrentTargettingMode()
+    protected void CurrentTargettingMode()
     {
         if (enemiesInRange.Count <= 1) return;
 
@@ -363,7 +366,6 @@ public class Unit : NetworkBehaviour
         }
 
         CurrentTargettingMode();
-        
 
         if (enemiesInRange[0] == null)
         {
@@ -381,16 +383,15 @@ public class Unit : NetworkBehaviour
 
             StartCoroutine(AttackingAnimationLength());
             enemiesInRange[0].DealDamage(attack);
-            
             RpcClientUnitActions(enemiesInRange[0].transform.position);
         }
         
-
         MissedAttack:
         currentCooldown = Time.time + cooldown;
     }
 
-    IEnumerator AttackingAnimationLength()
+
+    protected IEnumerator AttackingAnimationLength()
     {
         attacking = true;
 
@@ -400,7 +401,7 @@ public class Unit : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcClientUnitActions(Vector3 firstEnemyPos)
+    protected void RpcClientUnitActions(Vector3 firstEnemyPos)
     {
         // CODE IS BROKEN | TEMPORARILY DISABLED
         //StartCoroutine(UnitLookAtEnemyAnimation(firstEnemyPos));
@@ -451,9 +452,9 @@ public class Unit : NetworkBehaviour
     public void ChangeVisualRangeSprite(bool red)
     {
         if (red)
-            rangeVisualSprite.GetComponent<SpriteRenderer>().color = new Color (1, 0, 0, 0.3f);
+            rangeVisualSprite.GetComponent<SpriteRenderer>().color = new Color (1, 0, 0, 1f);
         else
-            rangeVisualSprite.GetComponent<SpriteRenderer>().color = new Color (1, 1, 1, 0.3f);
+            rangeVisualSprite.GetComponent<SpriteRenderer>().color = new Color (1, 1, 1, 1f);
     }
     
     public virtual void SelectUnit()
@@ -462,6 +463,8 @@ public class Unit : NetworkBehaviour
         rangeVisualSprite.gameObject.SetActive(true);
         rangeCollider.radius = range / 5;
         rangeVisualSprite.localScale = new Vector3(1,1) * (rangeCollider.radius * 0.2f);
+        gridDisplayFade.ToggleCellDisplay(true);
+
         UIUnitStats.instance.UpdateUnitStats(this, true);
     }
 
@@ -469,6 +472,8 @@ public class Unit : NetworkBehaviour
     {
         rangeVisualSprite.gameObject.SetActive(false);
         isSelected = false;
+        gridDisplayFade.ToggleCellDisplay(false);
+
         UIUnitStats.instance.UpdateUnitStats(this, false);
     }
 
@@ -476,12 +481,21 @@ public class Unit : NetworkBehaviour
     {
         if (!isClient) return;
 
+        if (!isSelected)
+            gridDisplayFade.ToggleCellDisplay(true);
+        
         hoverStats.gameObject.SetActive(true);
         hoverStats.UpdateHoverStats();
     }
 
     private void OnMouseExit()
     {
+        if (!isSelected)
+        {
+            if (isPlaced)
+                gridDisplayFade.ToggleCellDisplay(false);
+        }
+
         hoverStats.gameObject.SetActive(false);
     }
 
@@ -516,4 +530,6 @@ public class Unit : NetworkBehaviour
     {
         audioSource.PlayOneShot(attackSound, 1);
     }
+
+    public void DoNothingMethod() {}
 }

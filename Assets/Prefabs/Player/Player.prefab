@@ -139,6 +139,9 @@ MonoBehaviour:
   currentGridTransform: {fileID: 0}
   playerManager: {fileID: 8470535574437190434}
   playerReady: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 584
 --- !u!114 &8470535574437190434
 MonoBehaviour:
   m_ObjectHideFlags: 0

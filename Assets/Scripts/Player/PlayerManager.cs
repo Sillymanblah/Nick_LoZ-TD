@@ -52,7 +52,6 @@ public class PlayerManager : NetworkBehaviour
             if (!isLocalPlayer) return;
         }
 
-        Debug.Log($"bruhhhh");
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             ingame = false;
