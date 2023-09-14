@@ -22,46 +22,9 @@ public class SplashUnit : Unit
         base.Update();
     }
 
-    [Server]
-    protected override void AttackEnemy()
+    protected override void DealDamageToEnemy()
     {
-        if (isAttacking == false) return;
-
-        if (enemiesInRange[0].isDead)
-        {
-            enemiesInRange.RemoveAt(0);
-            return;   
-        }
-
-        if (Time.time < currentCooldown)
-        {
-            return;
-        }
-
-        CurrentTargettingMode();
-
-        if (enemiesInRange[0] == null)
-        {
-            enemiesInRange.RemoveAt(0);
-            return;
-        }
-        else
-        { 
-            StartCoroutine(AttackingAnimationLength());
-
-            int rand = Random.Range(0, 100);
-            if (rand < unitSO.chanceToMiss)
-            {
-                Debug.Log($"missed attack");
-                goto MissedAttack;
-            }
-            
-            SplashDamage();
-            RpcClientUnitActions(enemiesInRange[0].transform.position);
-        }
-        
-        MissedAttack:
-        currentCooldown = Time.time + cooldown;
+        SplashDamage();
     }
 
     [Server]
@@ -72,6 +35,6 @@ public class SplashUnit : Unit
         float splashDamage = attack / splashDamageDivider;
         Vector3 firstEnemyPos = enemiesInRange[0].transform.position;
 
-        splashWeapon.SplashAttack(splashRange, splashDamage, firstEnemyPos, enemiesInRange[0]);
+        splashWeapon.SplashAttack(splashDamage, firstEnemyPos, enemiesInRange[0]);
     }
 }

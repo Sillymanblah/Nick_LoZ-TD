@@ -15,7 +15,7 @@ MonoBehaviour:
   uniqueName: Deku Baba (ground)
   name: Deku Baba
   unitID: 3
-  icon: {fileID: 21300000, guid: 302f65b23d2b424458cdfeda738b1bf3, type: 3}
+  icon: {fileID: 21300000, guid: e4f0c925ff6fedf4caf34409c4f38f25, type: 3}
   prefab: {fileID: 1733210408596726202, guid: 73ae55e9d5bcaef45a9f0c36464d110f, type: 3}
   chanceToMiss: 5
   gridType: 0

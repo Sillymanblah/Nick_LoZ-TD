@@ -590,6 +590,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thisUnit: {fileID: 5393919254752137671}
+  collidersLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &1460464770289904516
 GameObject:
   m_ObjectHideFlags: 0
@@ -3076,7 +3079,7 @@ MonoBehaviour:
   gridCells: 
   isPlaced: 0
   attackSound: {fileID: 8300000, guid: 8fb03c47627ef504aa8404f79bddec02, type: 3}
-  splashRange: 3
+  splashRange: 4
   splashDamageDivider: 4
   splashWeapon: {fileID: 8045066485245681206}
 --- !u!114 &5168795964685465914

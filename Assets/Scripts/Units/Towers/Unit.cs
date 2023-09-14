@@ -350,7 +350,7 @@ public class Unit : NetworkBehaviour
     protected float currentCooldown;
 
     [Server]
-    protected virtual void AttackEnemy()
+    void AttackEnemy()
     {
         if (isAttacking == false) return;
 
@@ -374,6 +374,9 @@ public class Unit : NetworkBehaviour
         }
         else
         { 
+            StartCoroutine(AttackingAnimationLength());
+            RpcClientUnitActions(enemiesInRange[0].transform.position);
+
             int rand = Random.Range(0, 100);
             if (rand < unitSO.chanceToMiss)
             {
@@ -381,13 +384,16 @@ public class Unit : NetworkBehaviour
                 goto MissedAttack;
             }
 
-            StartCoroutine(AttackingAnimationLength());
-            enemiesInRange[0].DealDamage(attack);
-            RpcClientUnitActions(enemiesInRange[0].transform.position);
+            DealDamageToEnemy();
         }
         
         MissedAttack:
         currentCooldown = Time.time + cooldown;
+    }
+
+    protected virtual void DealDamageToEnemy()
+    {
+        enemiesInRange[0].DealDamage(attack);
     }
 
 

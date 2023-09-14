@@ -6,19 +6,19 @@ using UnityEngine;
 public class SplashWeapon : MonoBehaviour
 {
     [SerializeField] SplashUnit thisUnit;
-    SphereCollider rangeCollider;
-    List<EnemyUnit> enemyUnitsInRange = new List<EnemyUnit>();
+    [SerializeField] LayerMask collidersLayer;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        rangeCollider = GetComponent<SphereCollider>();
-        rangeCollider.radius = thisUnit.splashRange;
-    }
-
-    public void SplashAttack(float splashRange, float splashDamage, Vector3 firstEnemyPos, EnemyUnit firstEnemy)
+    public void SplashAttack(float splashDamage, Vector3 firstEnemyPos, EnemyUnit firstEnemy)
     {
         this.transform.position = firstEnemyPos;
+
+        List<EnemyUnit> enemyUnitsInRange = new List<EnemyUnit>();
+
+        foreach (Collider collider in Physics.OverlapSphere(this.transform.position, thisUnit.splashRange, collidersLayer))
+        {
+            Debug.Log(collider.gameObject.name);
+            enemyUnitsInRange.Add(collider.GetComponent<EnemyUnit>());
+        }
 
         for (int i = 0; i < enemyUnitsInRange.Count; i++)
         {
@@ -39,27 +39,15 @@ public class SplashWeapon : MonoBehaviour
             }
             
         }
-
-        foreach (EnemyUnit unit in enemyUnitsInRange)
-        {
-            
-        }
-
     }
 
-    private void OnTriggerEnter(Collider other)
+    /// <summary>
+    /// Callback to draw gizmos that are pickable and always drawn.
+    /// </summary>
+    private void OnDrawGizmos()
     {
-        if (other.CompareTag("Enemy"))
-        {
-            enemyUnitsInRange.Add(other.GetComponent<EnemyUnit>());
-        }
-    }
+        Gizmos.color = Color.blue;
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            enemyUnitsInRange.Remove(other.GetComponent<EnemyUnit>());
-        }
+        Gizmos.DrawWireSphere(this.transform.position, thisUnit.splashRange);
     }
 }

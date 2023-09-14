@@ -15,7 +15,7 @@ MonoBehaviour:
   uniqueName: Woflo
   name: Wolfo
   unitID: 7
-  icon: {fileID: 21300000, guid: 96527f141690b894db6beb2cf172480a, type: 3}
+  icon: {fileID: 21300000, guid: 3f442db67253bff4fb1645134047b72f, type: 3}
   prefab: {fileID: 4589918344677092016, guid: 6a47dd3f0ee5dbd40a3624eb59a7f2c5, type: 3}
   chanceToMiss: 10
   gridType: 0
