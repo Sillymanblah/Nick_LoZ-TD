@@ -56,6 +56,12 @@ public class UnitAnimationManager : NetworkBehaviour
         currentState = newState;
     }
 
+    public void PauseAnimation(bool pause)
+    {
+        if (pause) animator.speed = 0;
+        else       animator.speed = 1;
+    }
+
     // TRANSITION METHOD
     public void ChangeAnimationState(int newState, float transitionTime)
     {

@@ -102,7 +102,9 @@ public class WaveManager : NetworkBehaviour
             
             NetworkServer.Spawn(newEnemy.gameObject);
 
-            newEnemy.SetEnemyMultipliers(healthMultiplier, moneyMultiplier);
+            newEnemy.SetEnemyHPMultiplier(healthMultiplier);
+            newEnemy.SetEnemyMoneyMultiplier(moneyMultiplier);
+
             totalEnemiesSpawned++;
 
             unitSpawnCount++;
@@ -145,7 +147,8 @@ public class WaveManager : NetworkBehaviour
         totalEnemiesSpawned++;
         
         NetworkServer.Spawn(newBoss.gameObject);
-        newBoss.SetEnemyMultipliers(playerMultiplier, 2);
+        newBoss.SetEnemyHPMultiplier(playerMultiplier);
+        newBoss.SetEnemyMoneyMultiplier(2);
     }
 
     IEnumerator Intermission()

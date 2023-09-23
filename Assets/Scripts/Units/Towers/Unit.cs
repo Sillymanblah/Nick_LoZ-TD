@@ -279,8 +279,8 @@ public class Unit : NetworkBehaviour
     {
         enemiesInRange.Sort(delegate(EnemyUnit x, EnemyUnit y) 
         {
-            if (x.healthPoints == y.healthPoints) { return 0; }
-            if (x.healthPoints > y.healthPoints) { return -1; }
+            if (x.GetHealthPoints() == y.GetHealthPoints()) { return 0; }
+            if (x.GetHealthPoints() > y.GetHealthPoints()) { return -1; }
             return 1;
         });
     }
@@ -289,8 +289,8 @@ public class Unit : NetworkBehaviour
     {
         enemiesInRange.Sort(delegate(EnemyUnit x, EnemyUnit y) 
         {
-            if (x.healthPoints == y.healthPoints) { return 0; }
-            if (x.healthPoints < y.healthPoints) { return -1; }
+            if (x.GetHealthPoints() == y.GetHealthPoints()) { return 0; }
+            if (x.GetHealthPoints() < y.GetHealthPoints()) { return -1; }
             return 1;
         });
     }
@@ -373,7 +373,7 @@ public class Unit : NetworkBehaviour
             return;
         }
         else
-        { 
+        {
             StartCoroutine(AttackingAnimationLength());
             RpcClientUnitActions(enemiesInRange[0].transform.position);
 
@@ -391,6 +391,7 @@ public class Unit : NetworkBehaviour
         currentCooldown = Time.time + cooldown;
     }
 
+    [Server]
     protected virtual void DealDamageToEnemy()
     {
         enemiesInRange[0].DealDamage(attack);
@@ -407,7 +408,7 @@ public class Unit : NetworkBehaviour
     }
 
     [ClientRpc]
-    protected void RpcClientUnitActions(Vector3 firstEnemyPos)
+    protected virtual void RpcClientUnitActions(Vector3 firstEnemyPos)
     {
         // CODE IS BROKEN | TEMPORARILY DISABLED
         //StartCoroutine(UnitLookAtEnemyAnimation(firstEnemyPos));
@@ -505,13 +506,29 @@ public class Unit : NetworkBehaviour
         hoverStats.gameObject.SetActive(false);
     }
 
+    [Server]
     public IEnumerator StunnedEffect(float seconds)
     {
         isAttacking = false;
-        
+        RpcStunEffects(true);
+
         yield return new WaitForSeconds(seconds);
 
+        RpcStunEffects(false);
         isAttacking = true;
+    }
+
+    [ClientRpc]
+    void RpcStunEffects(bool stunned)
+    {
+        if (stunned)
+        {
+            animations.PauseAnimation(true);
+        }
+        else
+        {
+            animations.PauseAnimation(false);
+        }
     }
 
     public bool CheckGridCellAvailability()

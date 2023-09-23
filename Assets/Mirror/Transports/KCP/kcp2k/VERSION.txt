@@ -1,3 +1,11 @@
+V1.37 [2023-07-31]
+- fix: #47 KcpServer.Stop now clears connections so they aren't carried over to the next session
+- fix: KcpPeer doesn't log 'received unreliable message while not authenticated' anymore.
+
+V1.36 [2023-06-08]
+- fix: #49 KcpPeer.RawInput message size check now considers cookie as well
+- kcp.cs cleanups
+
 V1.35 [2023-04-05]
 - fix: KcpClients now need to validate with a secure cookie in order to protect against
   UDP spoofing. fixes:

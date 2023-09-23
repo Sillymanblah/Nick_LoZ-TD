@@ -17,13 +17,8 @@ public class AoEUnit : Unit
         base.Update();
     }
 
-    protected override void AttackEnemy()
+    protected override void DealDamageToEnemy()
     {
-        if (Time.time < currentCooldown)
-        {
-            return;
-        }
-
         for (int i = 0; i < enemiesInRange.Count; i++)
         {
             if (enemiesInRange[i] == null)
@@ -41,8 +36,6 @@ public class AoEUnit : Unit
                 enemiesInRange[i].DealDamage(attack);
             }
         }
-
-        currentCooldown = Time.time + cooldown;
     }
 
     public override void SelectUnit()

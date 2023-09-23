@@ -59,7 +59,6 @@ public class EnemyUnit : NetworkBehaviour
         if (!isServer) return;
 
         controller = GetComponent<CharacterController>();
-        dropMoney = Mathf.FloorToInt(moneyMultiplier * healthPoints);
         
         previousPosition = transform.position;
         InvokeRepeating(nameof(TrackDistance), 0, 0.1f);
@@ -68,11 +67,8 @@ public class EnemyUnit : NetworkBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        
-
         if (!isServer) 
         {
-            
             return;
         }
         
@@ -85,7 +81,6 @@ public class EnemyUnit : NetworkBehaviour
         }
 
         Physics.IgnoreLayerCollision(9, 3, true);
-        Physics.IgnoreLayerCollision(9, 8, true);
         Physics.IgnoreLayerCollision(9, 9, true);
 
         GravityControl();
@@ -172,18 +167,24 @@ public class EnemyUnit : NetworkBehaviour
     }
 
     [Server]
-    public void SetEnemyMultipliers(float health, float moneyMultiplier)
+    public void SetEnemyHPMultiplier(float health)
     {
         float maxHealthMultiplied = (float)maxHealthPoints * health;
 
         maxHealthPoints = Mathf.FloorToInt(maxHealthMultiplied);
         healthPoints = maxHealthPoints;
-        this.moneyMultiplier *= moneyMultiplier;
-
+        
         foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {
             HPBarUIStartUp(player.connectionToClient, maxHealthPoints);
         }
+    }
+
+    [Server]
+    public void SetEnemyMoneyMultiplier(float moneyMultiplier)
+    {
+        this.moneyMultiplier *= moneyMultiplier;
+        dropMoney = Mathf.CeilToInt(this.moneyMultiplier * healthPoints);
     }
 
     [TargetRpc]
@@ -191,8 +192,6 @@ public class EnemyUnit : NetworkBehaviour
     {
         thisHealthBar.BarValueOnStart(maxHealthPoints);
     }
-
-    
 
     public void ToggleHPBar(bool active)
     {

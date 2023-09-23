@@ -586,10 +586,17 @@ namespace kcp2k
             }
             else
             {
-                // invalid unreliable messages may be random internet noise.
-                // show a warning, but don't disconnect.
-                // otherwise attackers could disconnect someone with random noise.
-                Log.Warning($"KcpPeer: received unreliable message while not authenticated.");
+                // it's common to receive unreliable messages before being
+                // authenticated, for example:
+                // - random internet noise
+                // - game server may send an unreliable message after authenticating,
+                //   and the unreliable message arrives on the client before the
+                //   'auth_ok' message. this can be avoided by sending a final
+                //   'ready' message after being authenticated, but this would
+                //   add another 'round trip time' of latency to the handshake.
+                //
+                // it's best to simply ignore invalid unreliable messages here.
+                // Log.Info($"KcpPeer: received unreliable message while not authenticated.");
             }
         }
 
@@ -598,8 +605,8 @@ namespace kcp2k
         // feed the rest to kcp.
         public void RawInput(ArraySegment<byte> segment)
         {
-            // ensure valid size: at least 1 byte for channel
-            if (segment.Count <= 0) return;
+            // ensure valid size: at least 1 byte for channel + 4 bytes for cookie
+            if (segment.Count <= 5) return;
 
             // parse channel
             // byte channel = segment[0]; ArraySegment[i] isn't supported in some older Unity Mono versions
@@ -619,7 +626,7 @@ namespace kcp2k
             }
 
             // parse message
-            ArraySegment<byte> message = new ArraySegment<byte>(segment.Array, segment.Offset + 1 + 4, segment.Count - 1 - 4);
+            ArraySegment<byte> message = new ArraySegment<byte>(segment.Array, segment.Offset + 1+4, segment.Count - 1-4);
 
             switch (channel)
             {
@@ -660,7 +667,7 @@ namespace kcp2k
             Buffer.BlockCopy(data, 0, rawSendBuffer, 1+4, length);
 
             // IO send
-            ArraySegment<byte> segment = new ArraySegment<byte>(rawSendBuffer, 0, length + 1 + 4);
+            ArraySegment<byte> segment = new ArraySegment<byte>(rawSendBuffer, 0, length + 1+4);
             RawSend(segment);
         }
 

@@ -2585,7 +2585,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6058219008326219351}
   - component: {fileID: 6058219008326219348}
-  - component: {fileID: 8684772664522957285}
+  - component: {fileID: 8052821363824238401}
   - component: {fileID: 4834714411459111162}
   - component: {fileID: 2900516089518011616}
   - component: {fileID: 3196366752138043360}
@@ -2632,7 +2632,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5573715, y: 1.5617797, z: 0.8464828}
   m_Center: {x: 0.0107809305, y: 0.7759279, z: 0.114792615}
---- !u!114 &8684772664522957285
+--- !u!114 &8052821363824238401
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2641,7 +2641,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6058219008326219347}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1613959132c554443bdf93edf1ce7813, type: 3}
+  m_Script: {fileID: 11500000, guid: 191882f19ca2f7049a3e9158da110ec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
@@ -2660,13 +2660,13 @@ MonoBehaviour:
   gridDisplayFade: {fileID: 798693629097513997}
   cost: 0
   sellCost: 0
-  cooldown: 2
-  attack: 1
-  range: 20
+  cooldown: 0
+  attack: 0
+  range: 0
   level: 1
   gridCells: 
   isPlaced: 0
-  attackSound: {fileID: 8300000, guid: 753b9615398ddc04e8a846bac04adbe7, type: 3}
+  attackSound: {fileID: 0}
 --- !u!114 &4834714411459111162
 MonoBehaviour:
   m_ObjectHideFlags: 0

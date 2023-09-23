@@ -16,7 +16,7 @@ MonoBehaviour:
   name: Bombchu Girl
   unitID: 11
   icon: {fileID: 0}
-  prefab: {fileID: 2463911035311198274, guid: 44df450f486e4f3438698bc51f9acac5, type: 3}
+  prefab: {fileID: 3792259216536069562, guid: b4f97b05c5094254ebadae9e393b2bd4, type: 3}
   chanceToMiss: 5
   gridType: 0
   cost1: 1000
