@@ -31,45 +31,7 @@ public class ClubMoblin : EnemyUnit
         currentCooldown += Time.deltaTime;
     }
 
-    IEnumerator SmashAbility()
-    {
-        while (true)
-        {
-            float originalSpeed = speed;
-
-            yield return new WaitForSeconds(abilityCooldown);
-
-            if (healthPoints > 0.1 * maxHealthPoints)
-            {
-                float newHP = healthPoints - (0.20f * maxHealthPoints);
-
-                while (healthPoints > newHP)
-                {
-                    yield return null;
-                }
-            }
-
-            else if (healthPoints < 0.1 * maxHealthPoints)
-            {
-
-            }
-
-            
-
-            speed = 0;
-
-            animManager.AttackingAnim(0.1f);
-
-
-            yield return new WaitForSeconds(2.6f);
-
-            StunAttack();
-
-            yield return new WaitForSeconds(1);
-
-            speed = originalSpeed;
-        }
-    }
+    
 
     void GotAttacked()
     {
@@ -93,20 +55,25 @@ public class ClubMoblin : EnemyUnit
 
     IEnumerator AbilityAlgorithm()
     {
-        if (!usedAbility)
-        {
-            yield return new WaitForSeconds(5.0f);
-        }
+        float oldHealth = healthPoints;
 
         while (true)
         {
-            currentCooldown
+            if (healthPoints <= (oldHealth - (0.2 * maxHealthPoints)))
+            {
+                StartCoroutine(SmashAbility());
+            }
         }
     }
 
-    [Server]
-    void StunAttack()
+    IEnumerator SmashAbility()
     {
+        float originalSpeed = speed;
+        speed = 0;
+        animManager.AttackingAnim(0.1f);
+
+        yield return new WaitForSeconds(2.6f);
+
         for (int i = 0; i < unitsInRange.Count; i++)
         {
             if (unitsInRange[i] == null)
@@ -117,6 +84,10 @@ public class ClubMoblin : EnemyUnit
 
             StartCoroutine(unitsInRange[i].StunnedEffect(10));
         }
+
+        yield return new WaitForSeconds(1);
+
+        speed = originalSpeed;
     }
 
     [Server]
