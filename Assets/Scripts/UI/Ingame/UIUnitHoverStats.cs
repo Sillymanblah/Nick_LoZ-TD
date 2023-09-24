@@ -14,34 +14,14 @@ public class UIUnitHoverStats : MonoBehaviour
 
     Unit thisUnit;
 
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
     private void Awake()
     {
         thisUnit = transform.parent.GetComponent<Unit>();    
-        gameObject.SetActive(false);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public void UpdateHoverStats()
     {
-        /*if (thisUnit == null)
-        {
-            gameObject.SetActive(false);
-            return;
-        }*/
-
         levelText.text = "Lvl: " + thisUnit.GetLevel();
         attackText.text = thisUnit.GetAttack().ToString();
         rangeText.text = thisUnit.GetRange().ToString();

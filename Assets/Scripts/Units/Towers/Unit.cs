@@ -34,7 +34,14 @@ public class Unit : NetworkBehaviour
     PlayerUnitManager attachedPlayer;
     [SerializeField] protected SphereCollider rangeCollider;
     [SerializeField] protected Transform rangeVisualSprite;
+
+    [Header("WorldSpace UI")]
     [SerializeField] UIUnitHoverStats hoverStats;
+    [SerializeField] GameObject hoverStatsObject;
+    [SerializeField] MissedAttackUI missedAttackUI;
+    [SerializeField] GameObject missedAttackUIObject;
+
+    [Space]
     [SerializeField] UnitAnimationManager animations;
     [SerializeField] GridDisplayFade gridDisplayFade;
 
@@ -44,6 +51,8 @@ public class Unit : NetworkBehaviour
     string unitName;
     [SyncVar]
     string ownedPlayerName;
+
+    [Header("Runtime Stats")]
 
     [SyncVar]
     [SerializeField] int cost;
@@ -102,6 +111,8 @@ public class Unit : NetworkBehaviour
     protected virtual void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        missedAttackUIObject.SetActive(false);
+        hoverStatsObject.SetActive(false);
 
         if (!isClient)
         {
@@ -380,14 +391,11 @@ public class Unit : NetworkBehaviour
             int rand = Random.Range(0, 100);
             if (rand < unitSO.chanceToMiss)
             {
-                Debug.Log($"missed attack");
-                goto MissedAttack;
+                MissedAttack();
             }
-
-            DealDamageToEnemy();
+            else DealDamageToEnemy();
         }
-        
-        MissedAttack:
+
         currentCooldown = Time.time + cooldown;
     }
 
@@ -395,6 +403,14 @@ public class Unit : NetworkBehaviour
     protected virtual void DealDamageToEnemy()
     {
         enemiesInRange[0].DealDamage(attack);
+    }
+
+    [ClientRpc]
+    void MissedAttack()
+    {
+        Debug.Log($"missed attack");
+        missedAttackUIObject.SetActive(true);
+        missedAttackUI.StartAnimation();
     }
 
 
@@ -491,7 +507,7 @@ public class Unit : NetworkBehaviour
         if (!isSelected)
             gridDisplayFade.ToggleCellDisplay(true);
         
-        hoverStats.gameObject.SetActive(true);
+        hoverStatsObject.SetActive(true);
         hoverStats.UpdateHoverStats();
     }
 
@@ -503,7 +519,7 @@ public class Unit : NetworkBehaviour
                 gridDisplayFade.ToggleCellDisplay(false);
         }
 
-        hoverStats.gameObject.SetActive(false);
+        hoverStatsObject.SetActive(false);
     }
 
     [Server]

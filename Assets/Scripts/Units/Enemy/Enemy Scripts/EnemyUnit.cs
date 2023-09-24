@@ -22,12 +22,13 @@ public class EnemyUnit : NetworkBehaviour
     public int GetMaxHealth() { return maxHealthPoints; }
 
     [Space]
-    [SyncVar(hook = nameof(UpdateEnemyHealth))] public int healthPoints = 0;
+    [SyncVar(hook = nameof(UpdateEnemyHealth))] 
+    protected int healthPoints = 0;
 
     public int GetHealthPoints() { return healthPoints; }
 
     [Space]
-    int dropMoney;
+    protected int dropMoney;
     [SerializeField] float moneyMultiplier = 1;
 
     [SerializeField] protected float speed = 10f;
@@ -142,7 +143,7 @@ public class EnemyUnit : NetworkBehaviour
     }
 
     [Server]
-    public void DealDamage(float points)
+    public virtual void DealDamage(float points)
     {
         healthPoints -= Mathf.CeilToInt(points);
 
