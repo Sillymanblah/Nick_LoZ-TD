@@ -511,6 +511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1169c89b6906fc40b127c3dd3f05187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonClip: {fileID: 0}
   startMenu: {fileID: 1734838776}
   gamemodesMenu: {fileID: 54096498}
   connectingMenu: {fileID: 1382961792}
@@ -752,7 +753,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 738140128}
+      - m_Target: {fileID: 54096498}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -3109,6 +3110,18 @@ MonoBehaviour:
       - m_Target: {fileID: 64286420}
         m_TargetAssemblyTypeName: MainMenuUIManager, Assembly-CSharp
         m_MethodName: SinglePlayerMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 64286420}
+        m_TargetAssemblyTypeName: MainMenuUIManager, Assembly-CSharp
+        m_MethodName: ButtonSfx
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7062,7 +7075,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 738140128}
+      - m_Target: {fileID: 54096498}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -15452,9 +15465,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1996450567312285565, guid: 1c62c10d801647f4e8787ba6718007e8,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1996450567312285565, guid: 1c62c10d801647f4e8787ba6718007e8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1996450567312285565, guid: 1c62c10d801647f4e8787ba6718007e8,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 738140128}
+      objectReference: {fileID: 54096498}
+    - target: {fileID: 1996450567312285565, guid: 1c62c10d801647f4e8787ba6718007e8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1996450567312285565, guid: 1c62c10d801647f4e8787ba6718007e8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 1996450567312285565, guid: 1c62c10d801647f4e8787ba6718007e8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1996450567755346897, guid: 1c62c10d801647f4e8787ba6718007e8,
         type: 3}
       propertyPath: m_AnchorMax.y

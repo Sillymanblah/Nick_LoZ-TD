@@ -9,6 +9,9 @@ using UnityEngine.UI;
 
 public class MainMenuUIManager : MonoBehaviour
 {
+    #region Audio
+    [SerializeField] AudioClip buttonClip;
+    #endregion
 
     [SerializeField] GameObject startMenu;
     [SerializeField] GameObject gamemodesMenu;
@@ -38,6 +41,11 @@ public class MainMenuUIManager : MonoBehaviour
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
+
+    public void ButtonSfx()
+    {
+        Debug.Log("click");
+    }
     private void Awake()
     {
         gamemodesMenu.SetActive(false);
@@ -79,6 +87,7 @@ public class MainMenuUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // press any menu
         if(currentMenu == startMenu && Input.anyKey == true)
         {
             currentMenu = gamemodesMenu;

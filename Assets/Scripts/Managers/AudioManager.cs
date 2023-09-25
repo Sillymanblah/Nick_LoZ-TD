@@ -7,10 +7,11 @@ using UnityEngine.UI;
 
 
 public class AudioManager : MonoBehaviour
-{
+{ 
     public static AudioManager instance;
-
+    #region music
     [SerializeField] AudioClip currentClip;
+    #endregion
     [SerializeField] AudioSource audioSource;
     [SerializeField] Slider volumeSlider;
     [SerializeField] TextMeshProUGUI volumeValueText;
