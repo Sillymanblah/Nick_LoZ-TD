@@ -79,7 +79,12 @@ public class MainMenuUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(currentMenu == startMenu && Input.anyKey == true)
+        {
+            currentMenu = gamemodesMenu;
+            gamemodesMenu.SetActive(true);
+            startMenu.SetActive(false);
+        }
     }
 
 
