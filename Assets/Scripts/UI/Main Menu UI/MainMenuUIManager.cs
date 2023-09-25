@@ -14,6 +14,7 @@ public class MainMenuUIManager : MonoBehaviour
     #endregion
 
     [SerializeField] GameObject startMenu;
+    [SerializeField] GameObject selectMenu;
     [SerializeField] GameObject gamemodesMenu;
     [SerializeField] GameObject connectingMenu;
     [SerializeField] GameObject multiplayerLobby;
@@ -162,7 +163,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void SettingsMenu()
     {
-        startMenu.SetActive(false);
+        selectMenu.SetActive(false);
         settingsMenu.SetActive(true);
     }
 
