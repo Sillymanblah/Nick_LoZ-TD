@@ -17,7 +17,7 @@ MonoBehaviour:
   unitID: 10
   icon: {fileID: 21300000, guid: 35efd620372df9a41be5968accdab424, type: 3}
   prefab: {fileID: 6058219008326219347, guid: 89a5621643ffe4544a15b265f7fcf051, type: 3}
-  chanceToMiss: 0
+  chanceToMiss: 20
   gridType: 0
   cost1: 10
   attack1: 15

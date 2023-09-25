@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class ClubMoblin : EnemyUnit
 {
-    [SerializeField] List<Unit> unitsInRange = new List<Unit>();
 
     [SerializeField] int abilityCooldown;
                      float currentCooldown;
@@ -13,42 +12,53 @@ public class ClubMoblin : EnemyUnit
     [SerializeField] AudioClip attackingClip;
     bool beingAttacked;
     bool usedAbility;
+    [SerializeField] LayerMask unitLayer;
 
     protected override void Start()
     {
         base.Start();
         audioSource = GetComponent<AudioSource>();
-        if (!isServer) return;
-
-        StartCoroutine(SmashAbility());
     }
 
     // Update is called once per frame
     protected override void Update()
     {
         base.Update();
-
-        currentCooldown += Time.deltaTime;
     }
 
-    
+    [Server]
+    public override void DealDamage(float points)
+    {
+        GotAttacked();
 
+        base.DealDamage(points);   
+    }
+
+    [Server]
     void GotAttacked()
     {
         if (healthPoints > 0.1 * maxHealthPoints)
         {
-            abilityCooldown = 20;
+            abilityCooldown = 17;
         }
         else if (healthPoints < 0.1 * maxHealthPoints)
         {
-            abilityCooldown = 15;
+            abilityCooldown = 12;
+            Debug.Log($"bitch wtf");
         }
         
         if (!beingAttacked)
         {
-            beingAttacked = true;
-            currentCooldown = 0;
+            StartCoroutine(nameof(BeingAttackedTracker));
+
+            Debug.Log($"got attacked");
+            currentCooldown = abilityCooldown;
             StartCoroutine(AbilityAlgorithm());
+        }
+        else
+        {
+            StopCoroutine(nameof(BeingAttackedTracker));
+            StartCoroutine(nameof(BeingAttackedTracker));
         }
 
     }
@@ -57,23 +67,54 @@ public class ClubMoblin : EnemyUnit
     {
         float oldHealth = healthPoints;
 
-        while (true)
+        while (beingAttacked)
         {
-            if (healthPoints <= (oldHealth - (0.2 * maxHealthPoints)))
+            if (usedAbility)
+            {
+                yield return null;
+                continue;
+            }
+
+            if (currentCooldown < abilityCooldown)
+            {
+                yield return null;
+                continue;
+            }
+
+            Debug.Log($"working on the algorithm");
+
+            if (healthPoints <= 0.1 * maxHealthPoints)
             {
                 StartCoroutine(SmashAbility());
             }
+
+            else if (healthPoints <= (oldHealth - (0.2 * maxHealthPoints)))
+            {
+                StartCoroutine(SmashAbility());
+            }
+
+            yield return null;
         }
     }
 
     IEnumerator SmashAbility()
     {
+        usedAbility = true;
+
         float originalSpeed = speed;
         speed = 0;
         animManager.AttackingAnim(0.1f);
 
         yield return new WaitForSeconds(2.6f);
 
+        List<Unit> unitsInRange = new List<Unit>();
+
+        foreach (Collider collider in Physics.OverlapSphere(this.transform.position, 5, unitLayer))
+        {
+            unitsInRange.Add(collider.GetComponent<Unit>());
+        }
+
+        // STUN ABILITY
         for (int i = 0; i < unitsInRange.Count; i++)
         {
             if (unitsInRange[i] == null)
@@ -84,57 +125,42 @@ public class ClubMoblin : EnemyUnit
 
             StartCoroutine(unitsInRange[i].StunnedEffect(10));
         }
+        //
+        StartCoroutine(CooldownAffect());
 
         yield return new WaitForSeconds(1);
 
+        usedAbility = false;
         speed = originalSpeed;
     }
 
-    [Server]
-    public override void DealDamage(float points)
+    IEnumerator CooldownAffect()
     {
-        healthPoints -= Mathf.CeilToInt(points);
+        currentCooldown = 0;
 
-        if (healthPoints <= 0)
+        while (currentCooldown < abilityCooldown)
         {
-            isDead = true;
-
-            foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-            {
-                player.GetComponent<PlayerUnitManager>().SetMoney(dropMoney);
-            }
-            
-            WaveManager.instance.EnemyKilled();
-            NetworkServer.Destroy(gameObject); 
+            currentCooldown += Time.deltaTime;
+            yield return null;
         }
+    }
+
+    IEnumerator BeingAttackedTracker()
+    {
+        beingAttacked = true;
+        float thisTime = 0;
+
+        while (thisTime < 10)
+        {
+            thisTime += Time.deltaTime;
+            yield return null;
+        }
+
+        beingAttacked = false;
     }
 
     public void PlayAttackSound()
     {
         audioSource.PlayOneShot(attackingClip, 2f);
-    }
-
-    /// <summary>
-    /// OnTriggerEnter is called when the Collider other enters the trigger.
-    /// </summary>
-    /// <param name="other">The other Collider involved in this collision.</param>
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Unit"))
-        {
-            unitsInRange.Add(other.GetComponent<Unit>());
-        }
-    }
-
-    /// <summary>
-    /// OnTriggerExit is called when the Collider other has stopped touching the trigger.
-    /// </summary>
-    /// <param name="other">The other Collider involved in this collision.</param>
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Unit"))
-        {
-            unitsInRange.Add(other.GetComponent<Unit>());
-        }
     }
 }

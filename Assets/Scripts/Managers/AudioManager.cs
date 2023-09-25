@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 
 public class AudioManager : MonoBehaviour
-{ 
-    public static AudioManager instance;
+{
     #region music
     [SerializeField] AudioClip currentClip;
     #endregion
@@ -29,7 +28,6 @@ public class AudioManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        instance = GetComponent<AudioManager>();
 
         if (resetKeys)
             PlayerPrefs.DeleteKey("MusicVolume");

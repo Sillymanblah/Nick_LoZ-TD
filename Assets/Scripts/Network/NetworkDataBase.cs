@@ -158,7 +158,7 @@ public class NetworkDataBase : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError(req.error);
+                Debug.LogWarning(req.error);
             }
             else
             {

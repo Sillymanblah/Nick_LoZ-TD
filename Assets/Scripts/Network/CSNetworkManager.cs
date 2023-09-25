@@ -68,7 +68,10 @@ public class CSNetworkManager : NetworkManager
 
         StartServer();
 
-        Destroy(FindObjectOfType<AudioManager>().gameObject);
+        foreach (AudioSource audio in FindObjectsOfType<AudioSource>())
+        {
+            Destroy(audio.gameObject);
+        }
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
@@ -76,11 +79,8 @@ public class CSNetworkManager : NetworkManager
         if (isSinglePlayer)
         {
             SceneManager.sceneLoaded -= OnSceneLoaded; 
-            
             return;
         }
-
-
 
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
@@ -90,7 +90,6 @@ public class CSNetworkManager : NetworkManager
                 LobbyManager.instance.SetUpLobbyScene();
                 return;
             }
-
             StartCoroutine(nameof(LobbyTimers));
         }
         else
@@ -398,6 +397,4 @@ public class CSNetworkManager : NetworkManager
             yield return null;
         }
     }
-
-    
 }

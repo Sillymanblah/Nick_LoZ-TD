@@ -13,9 +13,10 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] AudioClip buttonClip;
     #endregion
 
+    AudioSource audioSource;
+    [Space]
     [SerializeField] GameObject startMenu;
     [SerializeField] GameObject selectMenu;
-    [SerializeField] GameObject gamemodesMenu;
     [SerializeField] GameObject connectingMenu;
     [SerializeField] GameObject multiplayerLobby;
     [SerializeField] GameObject settingsMenu;
@@ -39,17 +40,16 @@ public class MainMenuUIManager : MonoBehaviour
 
     #endregion
 
+    [Header("Class References")]
+    [SerializeField] MainMenuMusic mainMenuMusic;
+
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
 
-    public void ButtonSfx()
-    {
-        Debug.Log("click");
-    }
+    
     private void Awake()
     {
-        gamemodesMenu.SetActive(false);
         connectingMenu.SetActive(false);
         multiplayerLobby.SetActive(false);
         settingsMenu.SetActive(false);
@@ -57,8 +57,7 @@ public class MainMenuUIManager : MonoBehaviour
         singlePlayerMenu.SetActive(false);
         creditsMenu.SetActive(false);
         joinExceptionPanel.SetActive(false);
-        
-
+        selectMenu.SetActive(false);
 
         currentMenu = startMenu;
         instance = this;
@@ -69,6 +68,13 @@ public class MainMenuUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
+        if (currentMenu == startMenu)
+        {
+            mainMenuMusic.PlayStartMusic();
+        }
+
         foreach (Transform transform in serverListParent)
         {
             serverSlotsList.Add(transform.GetComponent<ServerSlotsUI>());
@@ -89,29 +95,25 @@ public class MainMenuUIManager : MonoBehaviour
     void Update()
     {
         // press any menu
-        if(currentMenu == startMenu && Input.anyKey == true)
+        if(currentMenu == startMenu && Input.anyKeyDown)
         {
-            currentMenu = gamemodesMenu;
-            gamemodesMenu.SetActive(true);
-            startMenu.SetActive(false);
+            ButtonSfx();
+            SelectMenuStuff();
         }
     }
 
-
-
-    public void GoToGamemodes()
+    void SelectMenuStuff()
     {
-        currentMenu = gamemodesMenu;
-        gamemodesMenu.SetActive(true);
+        currentMenu = selectMenu;
+        selectMenu.SetActive(true);
         startMenu.SetActive(false);
+        mainMenuMusic.PlayMenuMusic();
     }
-
-    
 
     public void GoMultiplayer()
     {
         currentMenu = serverListMenu;
-        gamemodesMenu.SetActive(false);
+        selectMenu.SetActive(false);
         serverListMenu.SetActive(true);
         NetworkDataBase.instance.RefreshServers();
     }
@@ -119,8 +121,6 @@ public class MainMenuUIManager : MonoBehaviour
     public void JoinServer()
     {
         currentMenu = multiplayerLobby;
-        
-        gamemodesMenu.SetActive(false);
         serverListMenu.SetActive(false);
         connectingMenu.SetActive(true);
         Debug.Log($"starting client");
@@ -136,9 +136,9 @@ public class MainMenuUIManager : MonoBehaviour
             
             multiplayerLobby.SetActive(true);
         }
-        else if (currentMenu == gamemodesMenu)
+        else if (currentMenu == selectMenu)
         {
-            gamemodesMenu.SetActive(true);
+            selectMenu.SetActive(true);
         }
         else if (currentMenu == singlePlayerMenu)
         {
@@ -171,7 +171,12 @@ public class MainMenuUIManager : MonoBehaviour
     {
         currentMenu = singlePlayerMenu;
         singlePlayerMenu.SetActive(true);
-        gamemodesMenu.SetActive(false);
+        selectMenu.SetActive(false);
+    }
+
+    public void SelectMenu()
+    {
+        currentMenu = selectMenu;
     }
 
     public void LeaveLobby()
@@ -187,9 +192,11 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void OnServerStart()
     {
+        mainMenuMusic.PlayMenuMusic();
+
         currentMenu = multiplayerLobby;
         startMenu.SetActive(false);
-        gamemodesMenu.SetActive(false);
+        selectMenu.SetActive(false);
         connectingMenu.SetActive(false);
         serverListMenu.SetActive(false);
         multiplayerLobby.SetActive(true);
@@ -204,5 +211,10 @@ public class MainMenuUIManager : MonoBehaviour
     public void RefreshServersUI()
     {
         NetworkDataBase.instance.RefreshServers();
+    }
+
+    public void ButtonSfx()
+    {
+        audioSource.PlayOneShot(buttonClip);
     }
 }
