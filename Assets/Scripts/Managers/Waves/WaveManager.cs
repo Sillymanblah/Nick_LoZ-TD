@@ -154,8 +154,31 @@ public class WaveManager : NetworkBehaviour
     IEnumerator Intermission()
     {
         intermission = true;
+        
         Debug.Log($"Break time");
-        yield return new WaitForSeconds(5.0f);
+
+        yield return new WaitForSeconds(2.0f);
+
+        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+        {
+            var playerCC = player.GetComponent<CharacterController>();
+
+            playerCC.enabled = false;
+            player.transform.position = Grotto.instance.GetSpawnPosition();
+            playerCC.enabled = true;
+        }
+
+        yield return new WaitForSeconds(20.0f);
+
+        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+        {
+            var playerCC = player.GetComponent<CharacterController>();
+
+            playerCC.enabled = false;
+            player.transform.position = NetworkManager.startPositions[0].position;
+            playerCC.enabled = true;
+        }
+
         Debug.Log($"Break time over!");
 
         intermission = false;

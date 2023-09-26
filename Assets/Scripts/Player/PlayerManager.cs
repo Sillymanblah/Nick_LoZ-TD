@@ -45,6 +45,11 @@ public class PlayerManager : NetworkBehaviour
 
         if (isServerOnly) return;
 
+        if (isLocalPlayer)
+        {
+            playerNameTag.SetActive(false);
+        }
+
         if (!CSNetworkManager.instance.isSinglePlayer)
         {
             if (!ingame) return;
@@ -59,7 +64,6 @@ public class PlayerManager : NetworkBehaviour
 
         else if (SceneManager.GetActiveScene().buildIndex != 0)
         {
-            
             ingame = true;
         }
 
