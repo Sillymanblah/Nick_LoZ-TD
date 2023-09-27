@@ -10,20 +10,9 @@ public class TargetingModeUI : MonoBehaviour
     [SerializeField] int targetModeByInt = 0;
     public static TargetingModeUI instance;
 
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
     private void Awake()
     {
         instance = this;
-    }
-    private void Start()
-    {
-
     }
 
     public void LeftButton()

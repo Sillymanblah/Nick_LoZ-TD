@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,8 @@ public class UIUnitStats : MonoBehaviour
 {
     Unit currentUnit;
 
-    [SerializeField] Text levelText;
+    [SerializeField] TextMeshProUGUI unitNameText;
+    [SerializeField] TextMeshProUGUI levelText;
     [SerializeField] TextMeshProUGUI attackText;
     [SerializeField] TextMeshProUGUI rangeText;
     [SerializeField] TextMeshProUGUI cooldownText;
@@ -16,6 +18,7 @@ public class UIUnitStats : MonoBehaviour
     [SerializeField] TextMeshProUGUI sellText;
     [SerializeField] TextMeshProUGUI targetModeText;
     [SerializeField] Transform buttonsParent;
+    [SerializeField] Image unitIcon;
 
 
     public PlayerUnitManager localPlayer;
@@ -63,7 +66,10 @@ public class UIUnitStats : MonoBehaviour
         rangeText.color = Color.white;
         cooldownText.color = Color.white;
         targetModeText.color = Color.white;
+        unitNameText.color = Color.white;
 
+        unitNameText.text = currentUnit.GetUnitName().ToString();
+        unitIcon.sprite = currentUnit.GetUnitSO().icon;
         levelText.text = "Level: " + currentUnit.GetLevel().ToString();
         attackText.text = currentUnit.GetAttack().ToString();
         rangeText.text = currentUnit.GetRange().ToString();
@@ -83,13 +89,15 @@ public class UIUnitStats : MonoBehaviour
     // When the unit is already declared (ex. for changing UI text on selected unit)
     public void SetStats()
     {
-        if (currentUnit.GetLevel() == 5) return;
+        int unitLevel = currentUnit.GetLevel();
+
+        if (unitLevel == 5) return;
 
         attackText.color = Color.white;
         rangeText.color = Color.white;
         cooldownText.color = Color.white;
 
-        levelText.text = "Level: " + currentUnit.GetLevel().ToString();
+        levelText.text = "Level: " + unitLevel.ToString();
         attackText.text = currentUnit.GetAttack().ToString();
         rangeText.text = currentUnit.GetRange().ToString();
         cooldownText.text = currentUnit.GetCooldown().ToString();
@@ -99,17 +107,21 @@ public class UIUnitStats : MonoBehaviour
 
     public void PreviewStats()
     {
-        if (currentUnit.GetLevel() == 5) return;
+        int unitLevel = currentUnit.GetLevel();
 
-        attackText.text = currentUnit.GetUnitSO().CurrentAttack(currentUnit.GetLevel() + 1).ToString();
-        rangeText.text = currentUnit.GetUnitSO().CurrentRange(currentUnit.GetLevel() + 1).ToString();
-        cooldownText.text = currentUnit.GetUnitSO().CurrentCooldown(currentUnit.GetLevel() + 1).ToString();
+        if (unitLevel == 5) return;
+
+        UnitSO thisCurrentUnitSO = currentUnit.GetUnitSO();
+
+        attackText.text = thisCurrentUnitSO.CurrentAttack(unitLevel + 1).ToString();
+        rangeText.text = thisCurrentUnitSO.CurrentRange(unitLevel + 1).ToString();
+        cooldownText.text = thisCurrentUnitSO.CurrentCooldown(unitLevel + 1).ToString();
 
         //If the next stat is greater than or equal to current stat, change text to green, else change to red
         // !TERNARY OPERATOR!
-        attackText.color = currentUnit.GetUnitSO().CurrentAttack(currentUnit.GetLevel() + 1) >= currentUnit.GetAttack() ? Color.green : Color.red;
-        rangeText.color = currentUnit.GetUnitSO().CurrentRange(currentUnit.GetLevel() + 1) >= currentUnit.GetRange() ? Color.green : Color.red;
-        cooldownText.color = currentUnit.GetUnitSO().CurrentCooldown(currentUnit.GetLevel() + 1) >= currentUnit.GetCooldown() ? Color.green : Color.red;
+        attackText.color = thisCurrentUnitSO.CurrentAttack(unitLevel + 1) >= currentUnit.GetAttack() ? Color.green : Color.red;
+        rangeText.color = thisCurrentUnitSO.CurrentRange(unitLevel + 1) >= currentUnit.GetRange() ? Color.green : Color.red;
+        cooldownText.color = thisCurrentUnitSO.CurrentCooldown(unitLevel + 1) >= currentUnit.GetCooldown() ? Color.green : Color.red;
     }
 
     public void SellUnitButton()
@@ -129,7 +141,7 @@ public class UIUnitStats : MonoBehaviour
 
         TargettingMode thisTargetMode = (TargettingMode)targetMode;
 
-        targetModeText.text = thisTargetMode.ToString().ToUpper();
+        targetModeText.text = thisTargetMode.ToString();
     }
 
     public void AOEStats()
