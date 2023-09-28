@@ -16,6 +16,7 @@ public class PlayerStateManager : NetworkBehaviour
     public PlayerCrouchState CrouchState = new PlayerCrouchState();
     public PlayerWalkingState WalkingState = new PlayerWalkingState();
     public PlayerRunningState RunningState = new PlayerRunningState();
+    public PlayerShopState ShopState = new PlayerShopState();
     public PlayerMovement playerMovement;
     public InputManager inputManager;
 

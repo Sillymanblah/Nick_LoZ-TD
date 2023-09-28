@@ -8,6 +8,8 @@ public class PlayerGroundedState : PlayerBaseState
         Debug.Log($"Entered ground state");
         player.controller.height = 2f;
         player.controller.center = Vector3.zero;
+        player.playerMovement.FreezePlayer(false);
+
         
         //player.playerManager.AdjustHeadHeight();
     }

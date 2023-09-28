@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Unity.VisualScripting;
+using UnityEngine.Analytics;
 
 
 public class NetworkDataBase : MonoBehaviour
@@ -67,9 +68,10 @@ public class NetworkDataBase : MonoBehaviour
     {
         while (true)
         {
+            #if UNITY_SERVER
             string API_KEY = "123";
 
-            #if UNITY_SERVER
+            
 
             UnityWebRequest req = new UnityWebRequest();
             API_KEY = "ToJa0okT0YRjwIkDAKhM2r0OWAW0Pfx6";
@@ -146,8 +148,6 @@ public class NetworkDataBase : MonoBehaviour
 
         for (int i = 0; i < numberOfServers; i++)
         {
-            
-
             UnityWebRequest req = new UnityWebRequest();
 
             string      url        = "http://143.198.22.120/gameapi.php?method=getServerStats&params=" + (i + 1);
@@ -158,7 +158,9 @@ public class NetworkDataBase : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning(req.error);
+                Debug.Log(Time.time - timeToReceive);
+                Debug.LogWarning($"Couldn't connect to servers");
+                yield break;
             }
             else
             {

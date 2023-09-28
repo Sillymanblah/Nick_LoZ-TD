@@ -151,6 +151,7 @@ public class WaveManager : NetworkBehaviour
         newBoss.SetEnemyMoneyMultiplier(2);
     }
 
+    [Server]
     IEnumerator Intermission()
     {
         intermission = true;
@@ -159,29 +160,24 @@ public class WaveManager : NetworkBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
-        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-        {
-            var playerCC = player.GetComponent<CharacterController>();
-
-            playerCC.enabled = false;
-            player.transform.position = Grotto.instance.GetSpawnPosition();
-            playerCC.enabled = true;
-        }
+        TeleportPlayer(Grotto.instance.GetSpawnPosition());
 
         yield return new WaitForSeconds(20.0f);
 
+        TeleportPlayer(NetworkManager.startPositions[0].position);
+
+        Debug.Log($"Break time over!");
+        intermission = false;
+    }
+    void TeleportPlayer(Vector3 position) 
+    {
         foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {
             var playerCC = player.GetComponent<CharacterController>();
-
             playerCC.enabled = false;
-            player.transform.position = NetworkManager.startPositions[0].position;
+            playerCC.transform.position = position;
             playerCC.enabled = true;
         }
-
-        Debug.Log($"Break time over!");
-
-        intermission = false;
     }
 
     IEnumerator ActivateSkipWave()
@@ -197,16 +193,18 @@ public class WaveManager : NetworkBehaviour
             yield return null;
         }
 
-        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+        /*foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {
-            RpcToggleSkipWaveButton(player.connectionToClient, true);
-        }
+            RpcToggleSkipWaveButtonAppearance(player.connectionToClient, true);
+        }*/
+
+        RpcToggleSkipWaveButtonAppearance(true);
 
         RpcUpdateSkipWaveCount(playerReadyCount, CSNetworkManager.instance.numPlayers);
     }
 
-    [TargetRpc]
-    void RpcToggleSkipWaveButton(NetworkConnectionToClient conn, bool result)
+    [ClientRpc]
+    void RpcToggleSkipWaveButtonAppearance(bool result)
     {
         UIManager.instance.ToggleSkipButtonLocally(result);
         
@@ -286,10 +284,13 @@ public class WaveManager : NetworkBehaviour
             playersReadyToSkip.Clear();
             playerReadyCount = 0;
 
-            foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+            /*foreach (NetworkIdentity player in CSNetworkManager.instance.players)
             {
-                RpcToggleSkipWaveButton(player.connectionToClient, false);
-            }
+                RpcToggleSkipWaveButtonAppearance(player.connectionToClient, false);
+            }*/
+
+            RpcToggleSkipWaveButtonAppearance(false);
+
 
             StopCoroutine(nameof(ActivateSkipWave));
             StartCoroutine(Intermission());
