@@ -53,12 +53,6 @@ public class MainMenuMusic : MonoBehaviour
     {
         if (!audioSource.isPlaying)
             audioSource.PlayOneShot(currentClip, volume);
-    }  
-
-    public void PlayStartMusic()
-    {
-        audioSource.PlayOneShot(StartMusic, volume);
-        currentClip = StartMusic;
     }
 
     public void PlayMenuMusic()
@@ -68,11 +62,21 @@ public class MainMenuMusic : MonoBehaviour
         currentClip = MenuMusic;
     }
 
+    public void PlayStartMusic()
+    {
+        audioSource.PlayOneShot(StartMusic, volume);
+        
+        currentClip = MenuMusic;
+    }
+
+
     public void ChangeVolume(float value)
     {
         volume = value;
 
         audioSource.volume = volume;
+
+        
 
         volumeValueText.text = string.Format("{0:0}", (value * 100f)) + "%";
 
@@ -82,6 +86,12 @@ public class MainMenuMusic : MonoBehaviour
 
     void SetSliderValue()
     {
+        if (volumeValueText == null)
+        {
+            Debug.LogWarning($"Audio Settings missing");
+            return;
+        }
+
         volume = PlayerPrefs.GetFloat("MusicVolume");
 
         volumeSlider.value = volume;

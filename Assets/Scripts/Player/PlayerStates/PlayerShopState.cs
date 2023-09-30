@@ -9,7 +9,7 @@ public class PlayerShopState : PlayerBaseState
         Debug.Log($"Entered PlayerShopState");
         player.playerMovement.FreezePlayer(true);
         player.playerAnimations.IdleAnimation();
-        player.StartCoroutine(IdleDetection(player));
+        player.StartCoroutine(MovementDetection(player));
     }
 
     public override void UpdateState(PlayerStateManager player)
@@ -17,21 +17,19 @@ public class PlayerShopState : PlayerBaseState
         InputsForState(player);
     }
 
-    IEnumerator IdleDetection(PlayerStateManager player)
+    IEnumerator MovementDetection(PlayerStateManager player)
     {
         yield return new WaitForSeconds(2.0f);
 
         var InputMan = player.inputManager;
 
-        float horizontal = InputMan.AxisMovementValue(InputMan.right, InputMan.left);
-        float vertical = InputMan.AxisMovementValue(InputMan.forward, InputMan.backward);
-
         while (true)
         {
+            float horizontal = InputMan.AxisMovementValue(InputMan.right, InputMan.left);
+            float vertical = InputMan.AxisMovementValue(InputMan.forward, InputMan.backward);
+
             if (new Vector2(horizontal, vertical) != Vector2.zero)
             {
-                Debug.Log($"muthahumpa");
-
                 if (Grotto.instance != null)
                     Grotto.instance.SwitchCamera(Grotto.instance.thirdPovCam);
 
@@ -54,6 +52,5 @@ public class PlayerShopState : PlayerBaseState
 
             player.SwitchState(player.FallingState);
         }
-
     }
 }

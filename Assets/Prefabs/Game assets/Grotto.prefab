@@ -2229,6 +2229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2390232641220790623}
+  - component: {fileID: 4285141379199969653}
   m_Layer: 7
   m_Name: Grotto_wall
   m_TagString: Untagged
@@ -2252,6 +2253,27 @@ Transform:
   - {fileID: 4716849641428334534}
   m_Father: {fileID: 5916305661800205511}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4285141379199969653
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3053474910521398245}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 9.53, y: 0.44650173, z: 8.19}
+  m_Center: {x: 0, y: -0.28, z: 4.17}
 --- !u!1 &3063498426571738841
 GameObject:
   m_ObjectHideFlags: 0
@@ -17596,9 +17618,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5916305661800205511}
   - component: {fileID: 8955711099481281969}
-  - component: {fileID: 7146070147121949920}
   - component: {fileID: 6325395506335032710}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Grotto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17687,27 +17708,6 @@ MonoBehaviour:
   cameras: []
   thirdPovCam: {fileID: 0}
   shopCamera: {fileID: 0}
---- !u!65 &7146070147121949920
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6435960577604687485}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 8.503273, y: 0.45955944, z: 7.053095}
-  m_Center: {x: -0.22510147, y: -0.27022028, z: 4.8865223}
 --- !u!65 &6325395506335032710
 BoxCollider:
   m_ObjectHideFlags: 0

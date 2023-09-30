@@ -15,7 +15,6 @@ public class MainMenuUIManager : MonoBehaviour
 
     AudioSource audioSource;
     [Space]
-    [SerializeField] GameObject startMenu;
     [SerializeField] GameObject selectMenu;
     [SerializeField] GameObject connectingMenu;
     [SerializeField] GameObject multiplayerLobby;
@@ -57,9 +56,9 @@ public class MainMenuUIManager : MonoBehaviour
         singlePlayerMenu.SetActive(false);
         creditsMenu.SetActive(false);
         joinExceptionPanel.SetActive(false);
-        selectMenu.SetActive(false);
+        selectMenu.SetActive(true);
 
-        currentMenu = startMenu;
+        currentMenu = selectMenu;
         instance = this;
 
         
@@ -69,11 +68,7 @@ public class MainMenuUIManager : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-
-        if (currentMenu == startMenu)
-        {
-            mainMenuMusic.PlayStartMusic();
-        }
+        mainMenuMusic.PlayMenuMusic();
 
         foreach (Transform transform in serverListParent)
         {
@@ -94,20 +89,7 @@ public class MainMenuUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // press any menu
-        if(currentMenu == startMenu && Input.anyKeyDown)
-        {
-            ButtonSfx();
-            SelectMenuStuff();
-        }
-    }
 
-    void SelectMenuStuff()
-    {
-        currentMenu = selectMenu;
-        selectMenu.SetActive(true);
-        startMenu.SetActive(false);
-        mainMenuMusic.PlayMenuMusic();
     }
 
     public void GoMultiplayer()
@@ -192,10 +174,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void OnServerStart()
     {
-        mainMenuMusic.PlayMenuMusic();
-
         currentMenu = multiplayerLobby;
-        startMenu.SetActive(false);
         selectMenu.SetActive(false);
         connectingMenu.SetActive(false);
         serverListMenu.SetActive(false);
