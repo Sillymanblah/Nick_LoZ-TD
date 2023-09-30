@@ -32,7 +32,7 @@ public class PlayerNetworkInfo : NetworkBehaviour
 
         if (CSNetworkManager.instance.sceneTesting) return;
 
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (SceneManager.GetActiveScene().buildIndex == 1)
         {
             MainMenuUIManager.instance?.LobbyMenu();
             LobbyManager.instance.player = this;
@@ -72,7 +72,7 @@ public class PlayerNetworkInfo : NetworkBehaviour
 
         name = newName;
 
-        if (SceneManager.GetActiveScene().buildIndex != 0)
+        if (SceneManager.GetActiveScene().buildIndex != 1)
         {
             playerManager.SetUserNameNameTag(name);
         }
@@ -100,7 +100,7 @@ public class PlayerNetworkInfo : NetworkBehaviour
     [Command]
     public void ReadyUpButton()
     {
-        if (SceneManager.GetActiveScene().buildIndex != 0) return;
+        if (SceneManager.GetActiveScene().buildIndex != 1) return;
 
         //if (CSNetworkManager.instance.numPlayers < 2) return; 
 
