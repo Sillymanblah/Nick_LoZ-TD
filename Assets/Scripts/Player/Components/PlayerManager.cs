@@ -35,7 +35,7 @@ public class PlayerManager : NetworkBehaviour
     }
     private void Start()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (SceneManager.GetActiveScene().buildIndex == 1)
         {
             foreach (Transform child in this.gameObject.transform)
             {
@@ -57,12 +57,12 @@ public class PlayerManager : NetworkBehaviour
             if (!isLocalPlayer) return;
         }
 
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (SceneManager.GetActiveScene().buildIndex == 1)
         {
             ingame = false;
         }
 
-        else if (SceneManager.GetActiveScene().buildIndex != 0)
+        else if (SceneManager.GetActiveScene().buildIndex != 1)
         {
             ingame = true;
         }
