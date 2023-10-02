@@ -31,6 +31,8 @@ public class CSNetworkManager : NetworkManager
     [SerializeField] float gameStartTimer;
     public string gameVersion;
 
+    bool cameFromGame;
+
     // NetworkManager.cs source code changes
     // line - 1112 | if statement is a change
 
@@ -53,6 +55,7 @@ public class CSNetworkManager : NetworkManager
         if (!DeployingAsServer) return;
 
         StartCoroutine(nameof(LobbyTimers));
+
         ServerChangeScene("MainMenu");
 
         GetComponent<NetworkDataBase>().StartDatabase();
@@ -71,7 +74,7 @@ public class CSNetworkManager : NetworkManager
 
         foreach (AudioSource audio in FindObjectsOfType<AudioSource>())
         {
-            Destroy(audio.gameObject);
+            Destroy(audio);
         }
     }
 
@@ -85,12 +88,6 @@ public class CSNetworkManager : NetworkManager
 
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            if (!DeployingAsServer)
-            {
-                Debug.Log($"oh brother");
-                LobbyManager.instance.SetUpLobbyScene();
-                return;
-            }
             StartCoroutine(nameof(LobbyTimers));
         }
         else
@@ -104,10 +101,15 @@ public class CSNetworkManager : NetworkManager
             }
         }
 
+        if (!DeployingAsServer) return;
+
         players.Clear();
         playerNames.Clear();
-            
-        Destroy(GameObject.FindObjectOfType<AudioManager>().gameObject);
+
+        foreach (AudioSource audio in FindObjectsOfType<AudioSource>())
+        {
+            Destroy(audio);
+        }
     }
 
     public override void OnServerConnect(NetworkConnectionToClient conn)

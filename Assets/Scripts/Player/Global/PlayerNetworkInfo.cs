@@ -47,6 +47,8 @@ public class PlayerNetworkInfo : NetworkBehaviour
     public void OnClientJoinLobby()
     {
         playerAuth = GameObject.FindObjectOfType<LobbyAuth>();
+        
+        LobbyManager.instance.SetUpLobbyScene();
         playerAuth.SyncData(this);
     }
 

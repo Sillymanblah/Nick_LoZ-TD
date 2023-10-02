@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9173269634202737192}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9173269634202737193
 MonoBehaviour:
@@ -51,11 +51,13 @@ MonoBehaviour:
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
   sendRate: 30
-  offlineScene: Assets/Scenes/MainMenu.unity
+  offlineScene: Assets/Scenes/Main Menu/MainMenu.unity
   onlineScene: 
   transport: {fileID: 9173269634202737196}
-  networkAddress: localhost
+  networkAddress: 143.198.22.120
   maxConnections: 4
+  disconnectInactiveConnections: 0
+  disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 794515074907002375, guid: 66aeec88f1ece2f4fbeb34bcccc82733,
     type: 3}
@@ -73,8 +75,11 @@ MonoBehaviour:
   - {fileID: 7801556227058250581, guid: c13fcafad3f7e50479be4e3116171090, type: 3}
   - {fileID: 8913681948144860196, guid: 0092965130386cc4cb311ebd53bc6e56, type: 3}
   - {fileID: 4589918344677092016, guid: 6a47dd3f0ee5dbd40a3624eb59a7f2c5, type: 3}
+  - {fileID: 8062145506032376919, guid: 823be02c78c495f46bf4d7c8d2185acb, type: 3}
+  - {fileID: 5814153406905477011, guid: 08272ecdd26848e4587245f95c927d11, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
+    bufferLimit: 32
     catchupNegativeThreshold: -1
     catchupPositiveThreshold: 1
     catchupSpeed: 0.019999999552965164
@@ -83,12 +88,17 @@ MonoBehaviour:
     dynamicAdjustment: 1
     dynamicAdjustmentTolerance: 1
     deliveryTimeEmaDuration: 2
+  connectionQualityInterval: 3
   timeInterpolationGui: 0
   players: []
   isSinglePlayer: 0
-  DeployingAsServer: 0
+  DeployingAsServer: 1
   ignorePort: 0
+  noRestrictions: 0
   sceneTesting: 0
+  lobbyKickTimer: 300
+  gameStartTimer: 120
+  gameVersion: 0.1.1
 --- !u!114 &9173269634202737196
 MonoBehaviour:
   m_ObjectHideFlags: 0

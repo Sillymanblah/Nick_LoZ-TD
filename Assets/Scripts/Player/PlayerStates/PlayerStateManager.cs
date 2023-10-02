@@ -7,6 +7,7 @@ using TheNicksin.Inputsystem;
 public class PlayerStateManager : NetworkBehaviour
 {
     public PlayerManager playerManager;
+    public PlayerUnitManager playerUnit;
     public PlayerAnimationManager playerAnimations;
     public CharacterController controller;
     PlayerBaseState currentState;
@@ -32,6 +33,7 @@ public class PlayerStateManager : NetworkBehaviour
         playerAnimations = GetComponent<PlayerAnimationManager>();
         playerMovement = GetComponent<PlayerMovement>();
         inputManager = GetComponent<InputManager>();
+        playerUnit = GetComponent<PlayerUnitManager>();
 
         currentState = FallingState;
 

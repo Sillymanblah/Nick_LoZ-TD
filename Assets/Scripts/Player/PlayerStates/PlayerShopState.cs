@@ -15,6 +15,8 @@ public class PlayerShopState : PlayerBaseState
     public override void UpdateState(PlayerStateManager player)
     {
         InputsForState(player);
+
+        Grotto.instance.ShopItemRayCast(player.connectionToClient, player.playerUnit.money);
     }
 
     IEnumerator MovementDetection(PlayerStateManager player)

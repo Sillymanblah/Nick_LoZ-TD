@@ -51,6 +51,8 @@ public class MainMenuMusic : MonoBehaviour
 
     private void Update()
     {
+        if (audioSource == null) return;
+
         if (!audioSource.isPlaying)
             audioSource.PlayOneShot(currentClip, volume);
     }

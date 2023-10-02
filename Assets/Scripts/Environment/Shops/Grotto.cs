@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
-using Unity.VisualScripting;
+using Mirror;
+using UnityEngine.UIElements;
 
-public class Grotto : MonoBehaviour
+public class Grotto : NetworkBehaviour
 {
     public static Grotto instance;
 
@@ -22,6 +23,13 @@ public class Grotto : MonoBehaviour
     CinemachineVirtualCameraBase currentCamera;
 
     #endregion
+
+    [Header("Raycast Shop Items shit")]
+    [SerializeField] LayerMask itemLayer;
+    [SerializeField] List<IngameShopItemSO> items = new List<IngameShopItemSO>();
+    [SerializeField] List<ShopItem> itemsDisplays = new List<ShopItem>();
+
+    [SerializeField] Transform itemsDisplayParent;
 
     bool switchCams;
 
@@ -43,6 +51,12 @@ public class Grotto : MonoBehaviour
             {
                 cameras[i].Priority = 10;
             }
+        }
+
+        for (int i = 0; i < itemsDisplayParent.childCount; i++)
+        {
+            itemsDisplays.Add(itemsDisplayParent.GetChild(i).GetComponent<ShopItem>());
+            itemsDisplays[i].index = i;
         }
     }
 
@@ -76,11 +90,64 @@ public class Grotto : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             SwitchCamera(shopCamera);
-
             var player = other.GetComponent<PlayerStateManager>();
-            Debug.Log($"AHHHH I HATE PEOPLE");
-
             player.SwitchState(player.ShopState);
         }
     }
+
+    public void ShopItemRayCast(NetworkConnectionToClient conn, int money)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 100, itemLayer.value))
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                var item = hit.collider.GetComponent<ShopItem>();
+
+                if (items[item.index].cost > money) return;
+
+                
+
+                BuyShopItem(item.index, conn);
+            }
+        }
+    }
+
+    [Command(requiresAuthority = false)]
+    void BuyShopItem(int index, NetworkConnectionToClient conn)
+    {
+        var player = conn.identity.GetComponent<PlayerUnitManager>();
+
+        if (items[index].cost > player.money) return;
+
+        player.SetMoney(-items[index].cost);
+
+        var playerCC = player.GetComponent<CharacterController>();
+            playerCC.enabled = false;
+            playerCC.transform.position = NetworkManager.startPositions[0].position;
+            playerCC.enabled = true;
+
+        Debug.Log(conn);
+
+        BoughtItem(conn);
+    }
+
+    [TargetRpc]
+    void BoughtItem(NetworkConnectionToClient thisConnection)
+    {
+        Debug.Log($"you bought this bitch");
+
+        SwitchCamera(startCamera);
+        var player = NetworkClient.localPlayer.GetComponent<PlayerStateManager>();
+        player.SwitchState(player.FallingState);
+    }
+
+    [ClientRpc]
+    public void SetNewItems()
+    {
+
+    }
 }
+

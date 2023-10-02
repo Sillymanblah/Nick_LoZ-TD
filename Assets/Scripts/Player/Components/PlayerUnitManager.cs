@@ -170,11 +170,11 @@ public class PlayerUnitManager : NetworkBehaviour
     [Client]
     public void BuyUnit(int unitIndex)
     {
+        if (unitIndex >= unitsLoadout.Count) return;
+
         Debug.Log($"Before buying unit " + unitsLoadout[unitIndex].name);
 
         placedUnit = true;
-
-        if (unitIndex >= unitsLoadout.Count) return;
 
         if (loadoutCount[unitIndex] >= unitCap)
         {
