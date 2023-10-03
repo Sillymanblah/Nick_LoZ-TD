@@ -31,6 +31,7 @@ public class Grotto : NetworkBehaviour
 
     [SerializeField] Transform itemsDisplayParent;
 
+    List<NetworkIdentity> playersThatGotAnItem = new List<NetworkIdentity>();
     bool switchCams;
 
     // Start is called before the first frame update
@@ -57,6 +58,7 @@ public class Grotto : NetworkBehaviour
         {
             itemsDisplays.Add(itemsDisplayParent.GetChild(i).GetComponent<ShopItem>());
             itemsDisplays[i].index = i;
+            itemsDisplays[i].InitializeItem(items[i]);
         }
     }
 
@@ -108,8 +110,6 @@ public class Grotto : NetworkBehaviour
 
                 if (items[item.index].cost > money) return;
 
-                
-
                 BuyShopItem(item.index, conn);
             }
         }
@@ -118,9 +118,15 @@ public class Grotto : NetworkBehaviour
     [Command(requiresAuthority = false)]
     void BuyShopItem(int index, NetworkConnectionToClient conn)
     {
+        // Server Auth Checks ///////
+        if (!GameManager.instance.intermission) return;
+
+        if (playersThatGotAnItem.Contains(conn.identity)) return;
+
         var player = conn.identity.GetComponent<PlayerUnitManager>();
 
         if (items[index].cost > player.money) return;
+        // Approved ////////////////
 
         player.SetMoney(-items[index].cost);
 
@@ -130,7 +136,7 @@ public class Grotto : NetworkBehaviour
             playerCC.enabled = true;
 
         Debug.Log(conn);
-
+        playersThatGotAnItem.Add(conn.identity);
         BoughtItem(conn);
     }
 
@@ -147,7 +153,16 @@ public class Grotto : NetworkBehaviour
     [ClientRpc]
     public void SetNewItems()
     {
+        for (int i = 0; i < itemsDisplays.Count; i++)
+        {
+            itemsDisplays[i].InitializeItem(items[i]);
+        }
+    }
 
+    [Server]
+    public void ResetShop()
+    {
+        playersThatGotAnItem.Clear();
     }
 }
 

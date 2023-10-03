@@ -12,6 +12,7 @@ public class GameManager : NetworkBehaviour
 
     [SyncVar]
     public bool gameStarted;
+    public bool intermission = false;
 
     [System.Serializable]
     public class UnitDrops

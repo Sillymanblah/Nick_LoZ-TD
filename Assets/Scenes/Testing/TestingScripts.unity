@@ -136,6 +136,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shop Item
       objectReference: {fileID: 0}
+    - target: {fileID: 1419386842741196966, guid: 5f4e900580bc7b74bba1a2038963c7ee,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.573518
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419386842741196966, guid: 5f4e900580bc7b74bba1a2038963c7ee,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.573518
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419386842741196966, guid: 5f4e900580bc7b74bba1a2038963c7ee,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.573518
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419386842741196966, guid: 5f4e900580bc7b74bba1a2038963c7ee,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.57
+      objectReference: {fileID: 0}
     - target: {fileID: 7126780366477416664, guid: 5f4e900580bc7b74bba1a2038963c7ee,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -189,7 +209,7 @@ PrefabInstance:
     - target: {fileID: 8804344412071974186, guid: 5f4e900580bc7b74bba1a2038963c7ee,
         type: 3}
       propertyPath: speed
-      value: 2
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

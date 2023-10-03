@@ -7,7 +7,9 @@ using UnityEngine;
 public class IngameShopItemSO : ScriptableObject
 {
     public GameObject modelPrefab;
+    public new string name; 
     public int cost;
+    public Color color;
 
     [TextArea]
     public string description;

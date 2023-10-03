@@ -13,7 +13,7 @@ public class WaveManager : NetworkBehaviour
     [SerializeField] List<GameObject> bosses = new List<GameObject>();
 
 
-    [SerializeField] bool intermission = false;
+    
 
     [Header("Wave Management")]
 
@@ -77,7 +77,7 @@ public class WaveManager : NetworkBehaviour
                 WaveComplete();
         }
 
-        if (intermission) return;
+        if (GameManager.instance.intermission) return;
 
         
 
@@ -154,22 +154,24 @@ public class WaveManager : NetworkBehaviour
     [Server]
     IEnumerator Intermission()
     {
-        intermission = true;
-        
+        GameManager.instance.intermission = true;
+        Grotto.instance.SetNewItems();
         Debug.Log($"Break time");
 
         yield return new WaitForSeconds(2.0f);
 
-        TeleportPlayer(Grotto.instance.GetSpawnPosition());
+        TeleportAllPlayers(Grotto.instance.GetSpawnPosition());
 
         yield return new WaitForSeconds(20.0f);
 
-        TeleportPlayer(NetworkManager.startPositions[0].position);
+        TeleportAllPlayers(NetworkManager.startPositions[0].position);
 
         Debug.Log($"Break time over!");
-        intermission = false;
+        GameManager.instance.intermission = false;
+        Grotto.instance.ResetShop();
     }
-    void TeleportPlayer(Vector3 position) 
+
+    void TeleportAllPlayers(Vector3 position) 
     {
         foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {
@@ -317,7 +319,7 @@ public class WaveManager : NetworkBehaviour
     void GameComplete()
     {
         Debug.Log($"Game is complete!!!!! :DDD");
-        intermission = true;
+        GameManager.instance.intermission = true;
         StartCoroutine(DelayEndingGame());
     }
 

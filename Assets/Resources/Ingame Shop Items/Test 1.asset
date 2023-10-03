@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Test 1
   m_EditorClassIdentifier: 
   modelPrefab: {fileID: 0}
+  name: Kokiri Sword
   cost: 100
-  description: 
+  color: {r: 0.035300493, g: 1, b: 0, a: 1}
+  description: 10% More Unit Attack
