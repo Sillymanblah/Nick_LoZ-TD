@@ -17,7 +17,7 @@ public class LobbyManager : NetworkBehaviour
     public PlayerNetworkInfo player;
     public int playerReadyCount;
     [SerializeField] [Scene] string playerTest;
-
+    List<PlayerSlotUI> playerSlotUIs = new List<PlayerSlotUI>();
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -68,7 +68,7 @@ public class LobbyManager : NetworkBehaviour
     [ClientRpc]
     public void SetPlayerListUI(List<string> playerNames)
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 1; i < 5; i++)
         {
             PlayerSlotUI playerSlotUI = lobbyParent.GetChild(i).GetComponent<PlayerSlotUI>();
 
@@ -78,13 +78,13 @@ public class LobbyManager : NetworkBehaviour
                 continue;
             }
 
-            if (i + 1 > playerNames.Count)
+            if (i > playerNames.Count)
             {
                 playerSlotUI.AssignPlayer(string.Empty);
                 continue;
             }
 
-            playerSlotUI.AssignPlayer(playerNames[i]);
+            playerSlotUI.AssignPlayer(playerNames[i - 1]);
         }
     }
 

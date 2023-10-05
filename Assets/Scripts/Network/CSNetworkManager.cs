@@ -71,11 +71,6 @@ public class CSNetworkManager : NetworkManager
         }
 
         StartServer();
-
-        foreach (AudioSource audio in FindObjectsOfType<AudioSource>())
-        {
-            Destroy(audio);
-        }
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
@@ -105,11 +100,6 @@ public class CSNetworkManager : NetworkManager
 
         players.Clear();
         playerNames.Clear();
-
-        foreach (AudioSource audio in FindObjectsOfType<AudioSource>())
-        {
-            Destroy(audio);
-        }
     }
 
     public override void OnServerConnect(NetworkConnectionToClient conn)

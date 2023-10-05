@@ -60,6 +60,9 @@ public class MainMenuMusic : MonoBehaviour
     public void PlayMenuMusic()
     {
         audioSource.Stop();
+
+        if (MenuMusic == null) return;
+
         audioSource.PlayOneShot(MenuMusic, volume);
         currentClip = MenuMusic;
     }

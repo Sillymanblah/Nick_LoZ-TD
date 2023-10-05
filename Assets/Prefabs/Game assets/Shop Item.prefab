@@ -137,7 +137,7 @@ Transform:
   m_Children:
   - {fileID: 7354716290959288452}
   - {fileID: 4951371194831249623}
-  - {fileID: 1419386842741196966}
+  - {fileID: 1335841990328575636}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7816692883232365462
@@ -180,7 +180,7 @@ MonoBehaviour:
   descriptionText: {fileID: 8634506979015513124}
   costText: {fileID: 4709081416294079691}
   costUi: {fileID: 1146357413910997110}
-  selectBorderUI: {fileID: 1848277647151217459}
+  selectBorderUI: {fileID: 1512674995175301518}
 --- !u!1 &842160497103130981
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,6 +353,38 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1512674995175301518
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1335841990328575636}
+  m_Layer: 0
+  m_Name: Item Select Border
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1335841990328575636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512674995175301518}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1419386842741196966}
+  m_Father: {fileID: 7126780366477416664}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1848277647151217459
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +396,7 @@ GameObject:
   - component: {fileID: 1419386842741196966}
   - component: {fileID: 1894585684344192125}
   m_Layer: 0
-  m_Name: ItemSelectBorder_1
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -379,11 +411,11 @@ Transform:
   m_GameObject: {fileID: 1848277647151217459}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.72}
+  m_LocalPosition: {x: 0, y: 0, z: 1.53}
   m_LocalScale: {x: 0.5587121, y: 0.5587121, z: 0.5587121}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7126780366477416664}
+  m_Father: {fileID: 1335841990328575636}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1894585684344192125
 SpriteRenderer:
@@ -426,7 +458,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 38dcc646bc5e2484fbe9157cc9e081c9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1074782e792eb6f438184530e1816897, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

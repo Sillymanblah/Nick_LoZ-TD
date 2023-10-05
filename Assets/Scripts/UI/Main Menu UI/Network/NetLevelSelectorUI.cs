@@ -62,7 +62,7 @@ public class NetLevelSelectorUI : NetworkBehaviour
         if (levelNumSelector < 0) levelNumSelector = levels.Count - 1;
 
         currentLevel = levels[levelNumSelector].sceneName;
-        SetLevel();
+        SetLevel(levelNumSelector);
     }
 
     [Command]
@@ -72,24 +72,25 @@ public class NetLevelSelectorUI : NetworkBehaviour
         if (levelNumSelector >= levels.Count) levelNumSelector = 0;
 
         currentLevel = levels[levelNumSelector].sceneName;
-        SetLevel();
+        SetLevel(levelNumSelector);
     }
 
     void UponJoining()
     {
-        
-
         LevelSO selectedLevel = levels[levelNumSelector];
         levelImage.sprite = selectedLevel.levelPicture;
         levelNameText.text = selectedLevel.levelName;
     }
 
     [ClientRpc]
-    void SetLevel()
+    void SetLevel(int levelIndex)
     {
-        LevelSO selectedLevel = levels[levelNumSelector];
+        LevelSO selectedLevel = levels[levelIndex];
         levelImage.sprite = selectedLevel.levelPicture;
         levelNameText.text = selectedLevel.levelName;
+
+        Debug.Log(levelNumSelector);
+        Debug.Log(selectedLevel.levelName);
     }
 
     void ToggleButtons(bool toggle)

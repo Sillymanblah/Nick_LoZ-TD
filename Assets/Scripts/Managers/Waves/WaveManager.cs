@@ -170,16 +170,33 @@ public class WaveManager : NetworkBehaviour
         GameManager.instance.intermission = false;
         Grotto.instance.ResetShop();
     }
-
+    [Server]
     void TeleportAllPlayers(Vector3 position) 
     {
+        NetworkClient.localPlayer.GetComponent<NetworkTransformUnreliable>().RpcTeleport(position);
+
+        //TeleportPlayer(player.connectionToClient, position);
+        
+
         foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {
-            var playerCC = player.GetComponent<CharacterController>();
-            playerCC.enabled = false;
-            playerCC.transform.position = position;
-            playerCC.enabled = true;
         }
+    }
+
+    /*[TargetRpc]
+    void TeleportPlayer(NetworkConnectionToClient conn, Vector3 position)
+    {
+        var playerCC = NetworkClient.localPlayer.GetComponent<CharacterController>();
+
+        playerCC.enabled = false;
+        playerCC.transform.position = position;
+        playerCC.enabled = true;
+    }*/
+
+    [ClientRpc]
+    void TeleportPlayer(Vector3 position)
+    {
+        
     }
 
     IEnumerator ActivateSkipWave()

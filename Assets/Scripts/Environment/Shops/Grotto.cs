@@ -39,6 +39,8 @@ public class Grotto : NetworkBehaviour
     {
         instance = this;
 
+        if (isServerOnly) return;
+
         startCamera = thirdPovCam;
         currentCamera = startCamera;
 
@@ -56,9 +58,8 @@ public class Grotto : NetworkBehaviour
 
         for (int i = 0; i < itemsDisplayParent.childCount; i++)
         {
-            itemsDisplays.Add(itemsDisplayParent.GetChild(i).GetComponent<ShopItem>());
-            itemsDisplays[i].index = i;
-            itemsDisplays[i].InitializeItem(items[i]);
+            itemsDisplays.Add(itemsDisplayParent.GetChild(i).GetComponent<ShopItem>());;
+            itemsDisplays[i].OnStartUp(i, NetworkClient.localPlayer.GetComponent<PlayerStateManager>());
         }
     }
 

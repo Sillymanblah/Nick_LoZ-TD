@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror.Examples.Basic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,12 +9,10 @@ using UnityEngine.UIElements;
 public class ShopItem : MonoBehaviour
 {
     public int index;
-    
 
     public bool mouseOver;
 
-    [Tooltip("Higher is faster | A value of 10 represents 1 second")]
-    [SerializeField] float speed = 10;
+    [SerializeField] float speed;
     Quaternion originalRotation;
     Quaternion lastRotation;
     float rotInterpolation;
@@ -27,11 +26,10 @@ public class ShopItem : MonoBehaviour
     [SerializeField] GameObject costUi;
     [SerializeField] GameObject selectBorderUI;
 
-
+    PlayerStateManager localPlayer;
 
     #endregion
 
-    // Start is called before the first frame update
     void Start()
     {
         originalRotation = transform.GetChild(0).localRotation;
@@ -42,15 +40,17 @@ public class ShopItem : MonoBehaviour
         selectBorderUI.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (mouseOver)
         {
+            selectBorderUI.transform.LookAt(Camera.main.transform);
+
             transform.GetChild(0).RotateAround(transform.position, Vector3.up, speed * Time.deltaTime);
             lastRotation = transform.GetChild(0).localRotation;
             rotInterpolation = 1;
         }
+
         // stop animating
         else
         {
@@ -64,19 +64,19 @@ public class ShopItem : MonoBehaviour
 
     public void InitializeItem(IngameShopItemSO item)
     {
-        
-       // descriptionText.enabled = true;
-
-
         nameText.text = item.name;
         nameText.color = item.color;
 
         costText.text = item.cost.ToString();
 
         descriptionText.text = item.description;
+    }
 
-        
-        //descriptionText.color = item.color;
+    public void OnStartUp(int index, PlayerStateManager player)
+    {
+        this.index = index;
+        localPlayer = player;
+        Debug.Log(localPlayer);
     }
 
     /// <summary>
@@ -84,6 +84,8 @@ public class ShopItem : MonoBehaviour
     /// </summary>
     private void OnMouseOver()
     {
+        if (localPlayer.CurrentState() != localPlayer.ShopState) return;
+
         mouseOver = true;
         descriptionText.enabled = true;
         nameText.enabled = true;
