@@ -33,6 +33,13 @@ public class CSNetworkManager : NetworkManager
 
     bool cameFromGame;
 
+    #region 
+
+    [Header("Scene References")]
+    [SerializeField] [Scene] string mainMenuScene;
+
+    #endregion
+
     // NetworkManager.cs source code changes
     // line - 1112 | if statement is a change
 
@@ -81,8 +88,11 @@ public class CSNetworkManager : NetworkManager
             return;
         }
 
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        
+
+        if (SceneManager.GetActiveScene().path == mainMenuScene)
         {
+            
             StartCoroutine(nameof(LobbyTimers));
         }
         else
@@ -127,7 +137,7 @@ public class CSNetworkManager : NetworkManager
         players.Add(conn.identity);
 
         // For lobby
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        if (SceneManager.GetActiveScene().path == mainMenuScene)
         {
             // if hes the only one in the lobby
             
@@ -194,7 +204,7 @@ public class CSNetworkManager : NetworkManager
         
 
         // for lobby
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        if (SceneManager.GetActiveScene().path == mainMenuScene)
         {
             if (newPlayer.connectionToClient.connectionId == PlayerPrefs.GetInt($"HostNetID{GetPort() - 7776}"))
             {
@@ -263,7 +273,7 @@ public class CSNetworkManager : NetworkManager
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
 
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        if (SceneManager.GetActiveScene().path == mainMenuScene)
         {
             MainMenuUIManager.instance.LeaveLobby();;;;;;;;;;;;;;;;;;
             
@@ -307,7 +317,7 @@ public class CSNetworkManager : NetworkManager
     private bool ShouldRefuseConnection(out string reason, NetworkConnectionToClient conn)
     {
 
-        if (SceneManager.GetActiveScene().buildIndex != 1)
+        if (SceneManager.GetActiveScene().path != mainMenuScene)
         {
             reason = "Game has already started";
             return true;

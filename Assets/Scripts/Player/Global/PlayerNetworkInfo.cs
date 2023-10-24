@@ -38,6 +38,9 @@ public class PlayerNetworkInfo : NetworkBehaviour
             LobbyManager.instance.player = this;
             return;
         }
+        else
+        {
+        }
 
         name = PlayerPrefs.GetString("NewName");
         SetDisplayName(name);
@@ -57,8 +60,6 @@ public class PlayerNetworkInfo : NetworkBehaviour
     {
         if (playerReady == true)
         {
-            
-
             playerReady = !playerReady;
             LobbyManager.instance.PlayersAreReady(false);
         }

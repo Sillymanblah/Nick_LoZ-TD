@@ -6,12 +6,7 @@ public class PlayerGroundedState : PlayerBaseState
     public override void EnterState(PlayerStateManager player)
     {
         Debug.Log($"Entered ground state");
-        player.controller.height = 2f;
-        player.controller.center = Vector3.zero;
         player.playerMovement.FreezePlayer(false);
-
-        
-        //player.playerManager.AdjustHeadHeight();
     }
 
     public override void UpdateState(PlayerStateManager player)
@@ -60,10 +55,5 @@ public class PlayerGroundedState : PlayerBaseState
             player.playerMovement.PlayerJumped();
             player.SwitchState(player.FallingState);
         }
-
-        /*if (Input.GetKey(InputMan.crouch))
-        {
-            player.SwitchState(player.CrouchState);
-        }*/
     }
 }

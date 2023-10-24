@@ -4,6 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using Mirror;
 using UnityEngine.UIElements;
+using Unity.VisualScripting;
 
 public class Grotto : NetworkBehaviour
 {
@@ -14,13 +15,9 @@ public class Grotto : NetworkBehaviour
 
     #region Cameras
 
-    [SerializeField] CinemachineVirtualCameraBase[] cameras;
-
-    public CinemachineFreeLook thirdPovCam;
+    [Header("Cameras")]
     public CinemachineVirtualCamera shopCamera;
 
-    CinemachineVirtualCameraBase startCamera;
-    CinemachineVirtualCameraBase currentCamera;
 
     #endregion
 
@@ -32,6 +29,7 @@ public class Grotto : NetworkBehaviour
     [SerializeField] Transform itemsDisplayParent;
 
     List<NetworkIdentity> playersThatGotAnItem = new List<NetworkIdentity>();
+    [SerializeField] List<NetworkIdentity> playersInsideGrotto = new List<NetworkIdentity>();
     bool switchCams;
 
     // Start is called before the first frame update
@@ -41,60 +39,10 @@ public class Grotto : NetworkBehaviour
 
         if (isServerOnly) return;
 
-        startCamera = thirdPovCam;
-        currentCamera = startCamera;
-
-        for (int i = 0; i < cameras.Length; i++)
-        {
-            if (cameras[i] == currentCamera)
-            {
-                cameras[i].Priority = 20;
-            }
-            else
-            {
-                cameras[i].Priority = 10;
-            }
-        }
-
         for (int i = 0; i < itemsDisplayParent.childCount; i++)
         {
             itemsDisplays.Add(itemsDisplayParent.GetChild(i).GetComponent<ShopItem>());;
             itemsDisplays[i].OnStartUp(i, NetworkClient.localPlayer.GetComponent<PlayerStateManager>());
-        }
-    }
-
-    /// <summary>
-    /// Update is called every frame, if the MonoBehaviour is enabled.
-    /// </summary>
-    private void Update()
-    {
-        
-    }
-
-    public void SwitchCamera(CinemachineVirtualCameraBase newCam)
-    {
-        currentCamera = newCam;
-
-        for (int i = 0; i < cameras.Length; i++)
-        {
-            if (cameras[i] == currentCamera)
-            {
-                cameras[i].Priority = 20;
-            }
-            else
-            {
-                cameras[i].Priority = 10;
-            }
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            SwitchCamera(shopCamera);
-            var player = other.GetComponent<PlayerStateManager>();
-            player.SwitchState(player.ShopState);
         }
     }
 
@@ -103,7 +51,7 @@ public class Grotto : NetworkBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 100, itemLayer.value))
+        if (Physics.Raycast(ray, out hit, 5, itemLayer.value))
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -131,11 +79,6 @@ public class Grotto : NetworkBehaviour
 
         player.SetMoney(-items[index].cost);
 
-        var playerCC = player.GetComponent<CharacterController>();
-            playerCC.enabled = false;
-            playerCC.transform.position = NetworkManager.startPositions[0].position;
-            playerCC.enabled = true;
-
         Debug.Log(conn);
         playersThatGotAnItem.Add(conn.identity);
         BoughtItem(conn);
@@ -146,9 +89,14 @@ public class Grotto : NetworkBehaviour
     {
         Debug.Log($"you bought this bitch");
 
-        SwitchCamera(startCamera);
         var player = NetworkClient.localPlayer.GetComponent<PlayerStateManager>();
         player.SwitchState(player.FallingState);
+
+        var playerCC = NetworkClient.localPlayer.GetComponent<CharacterController>();
+
+        playerCC.enabled = false;
+        playerCC.transform.position = NetworkManager.startPositions[0].position;
+        playerCC.enabled = true;
     }
 
     [ClientRpc]
@@ -164,6 +112,46 @@ public class Grotto : NetworkBehaviour
     public void ResetShop()
     {
         playersThatGotAnItem.Clear();
+    }
+
+    [Server]
+    public bool CheckPlayerFromGrotto(uint networkID)
+    {
+        
+
+        for (int i = 0; i < playersInsideGrotto.Count; i++)
+        {
+            if (networkID == playersInsideGrotto[i].netId)
+                return true;
+            
+            continue;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// OnTriggerEnter is called when the Collider other enters the trigger.
+    /// </summary>
+    /// <param name="other">The other Collider involved in this collision.</param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playersInsideGrotto.Add(other.GetComponent<NetworkIdentity>());
+        }
+    }
+
+    /// <summary>
+    /// OnTriggerExit is called when the Collider other has stopped touching the trigger.
+    /// </summary>
+    /// <param name="other">The other Collider involved in this collision.</param>
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playersInsideGrotto.Remove(other.GetComponent<NetworkIdentity>());
+        }
     }
 }
 

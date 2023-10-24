@@ -30,10 +30,11 @@ public class PlayerShopState : PlayerBaseState
             float horizontal = InputMan.AxisMovementValue(InputMan.right, InputMan.left);
             float vertical = InputMan.AxisMovementValue(InputMan.forward, InputMan.backward);
 
+            // this is for if we move
             if (new Vector2(horizontal, vertical) != Vector2.zero)
             {
                 if (Grotto.instance != null)
-                    Grotto.instance.SwitchCamera(Grotto.instance.thirdPovCam);
+                    player.playerManager.SwitchCamera();
 
                 player.SwitchState(player.GroundedState);
                 yield break;
@@ -50,7 +51,7 @@ public class PlayerShopState : PlayerBaseState
             player.playerMovement.PlayerJumped();
 
             if (Grotto.instance != null)
-                Grotto.instance.SwitchCamera(Grotto.instance.thirdPovCam);
+                player.playerManager.SwitchCamera();
 
             player.SwitchState(player.FallingState);
         }

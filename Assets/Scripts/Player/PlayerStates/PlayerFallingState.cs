@@ -7,6 +7,7 @@ public class PlayerFallingState : PlayerBaseState
     {
         //player.playerMovement.PlayerJumped();
         Debug.Log($"Entered Falling State");
+        player.playerManager.SwitchCamera();
     }
 
     public override void UpdateState(PlayerStateManager player)

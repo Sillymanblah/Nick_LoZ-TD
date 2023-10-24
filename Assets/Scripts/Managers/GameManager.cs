@@ -12,6 +12,7 @@ public class GameManager : NetworkBehaviour
 
     [SyncVar]
     public bool gameStarted;
+    [SyncVar]
     public bool intermission = false;
 
     [System.Serializable]

@@ -5,6 +5,8 @@ using Mirror;
 using Cinemachine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using JetBrains.Annotations;
 
 public class PlayerManager : NetworkBehaviour
 {
@@ -16,8 +18,20 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] GameObject playerNameTag;
     public PlayerMovement playerMovement;
     PlayerUnitManager playerUnitManager;
+    PlayerStateManager playerStateManager;
     CameraControls cameraControls;
     public bool ingame = false;
+
+    #region 
+
+    [Header("Cameras")]
+    [SerializeField] List<CinemachineVirtualCameraBase> cameras = new List<CinemachineVirtualCameraBase>();
+    public CinemachineFreeLook thirdPovCam;
+
+    CinemachineVirtualCameraBase startCamera;
+    CinemachineVirtualCameraBase currentCamera;
+
+    #endregion
     
     public void SetCameraPOV()
     {
@@ -25,6 +39,16 @@ public class PlayerManager : NetworkBehaviour
 
         camBrain.m_LookAt = cameraHead;
         camBrain.m_Follow = body;
+
+        #region Cinemachine switching cameras
+
+        thirdPovCam = camBrain;
+
+        startCamera = thirdPovCam;
+        currentCamera = startCamera;
+        cameras.Add(thirdPovCam);
+
+        #endregion
         
         for (int i = 0; i < 3; i++)
         {
@@ -48,13 +72,18 @@ public class PlayerManager : NetworkBehaviour
         if (isLocalPlayer)
         {
             playerNameTag.SetActive(false);
-        }
 
-        if (!CSNetworkManager.instance.isSinglePlayer)
-        {
-            if (!ingame) return;
-
-            if (!isLocalPlayer) return;
+            for (int i = 0; i < cameras.Count; i++)
+            {
+                if (cameras[i] == currentCamera)
+                {
+                    cameras[i].Priority = 20;
+                }
+                else
+                {
+                    cameras[i].Priority = 10;
+                }
+            }
         }
 
         if (SceneManager.GetActiveScene().buildIndex == 1)
@@ -70,6 +99,7 @@ public class PlayerManager : NetworkBehaviour
         controller = GetComponent<CharacterController>();
         playerMovement = GetComponent<PlayerMovement>();
         cameraControls = GetComponent<CameraControls>();
+        playerStateManager = GetComponent<PlayerStateManager>();
 
         cameraControls.CCStart();
     }
@@ -138,4 +168,61 @@ public class PlayerManager : NetworkBehaviour
     }
 
     #endregion
+
+    /// <summary>
+    /// OnTriggerEnter is called when the Collider other enters the trigger.
+    /// </summary>
+    /// <param name="other">The other Collider involved in this collision.</param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!isLocalPlayer) return;
+
+        if (other.CompareTag("Shop"))
+        {
+            Debug.Log($"bruh");
+            SwitchCamera(Grotto.instance.shopCamera);
+            
+            playerStateManager.SwitchState(playerStateManager.ShopState);
+        }
+    }
+
+    public void SwitchCamera(CinemachineVirtualCameraBase newCam)
+    {
+        currentCamera = newCam;
+
+        if (!cameras.Contains(newCam))
+            cameras.Add(newCam);
+
+        for (int i = 0; i < cameras.Count; i++)
+        {
+            if (cameras[i] == currentCamera)
+            {
+                cameras[i].Priority = 20;
+            }
+            else
+            {
+                cameras[i].Priority = 10;
+            }
+        }
+
+       
+    }
+
+    // For switching back to the third pov camera | aka. main camera
+    public void SwitchCamera()
+    {
+        currentCamera = thirdPovCam;
+
+        for (int i = 0; i < cameras.Count; i++)
+        {
+            if (cameras[i] == currentCamera)
+            {
+                cameras[i].Priority = 20;
+            }
+            else
+            {
+                cameras[i].Priority = 10;
+            }
+        }
+    }
 }

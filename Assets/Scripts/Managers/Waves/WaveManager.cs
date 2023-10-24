@@ -160,11 +160,13 @@ public class WaveManager : NetworkBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
-        TeleportAllPlayers(Grotto.instance.GetSpawnPosition());
+        if (Grotto.instance != null)
+            TeleportAllPlayers(Grotto.instance.GetSpawnPosition());
 
         yield return new WaitForSeconds(20.0f);
-
-        TeleportAllPlayers(NetworkManager.startPositions[0].position);
+        
+        if (Grotto.instance != null)
+            TeleportAllPlayersUnderShop(NetworkManager.startPositions[0].position);
 
         Debug.Log($"Break time over!");
         GameManager.instance.intermission = false;
@@ -173,17 +175,25 @@ public class WaveManager : NetworkBehaviour
     [Server]
     void TeleportAllPlayers(Vector3 position) 
     {
-        NetworkClient.localPlayer.GetComponent<NetworkTransformUnreliable>().RpcTeleport(position);
-
-        //TeleportPlayer(player.connectionToClient, position);
-        
-
         foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {
+            TeleportPlayer(player.connectionToClient, position);
         }
     }
 
-    /*[TargetRpc]
+    [Server]
+    void TeleportAllPlayersUnderShop(Vector3 position) 
+    {
+        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+        {
+            if (Grotto.instance.CheckPlayerFromGrotto(player.netId))
+            {
+                TeleportPlayer(player.connectionToClient, position);
+            }
+        }
+    }
+
+    [TargetRpc]
     void TeleportPlayer(NetworkConnectionToClient conn, Vector3 position)
     {
         var playerCC = NetworkClient.localPlayer.GetComponent<CharacterController>();
@@ -191,12 +201,10 @@ public class WaveManager : NetworkBehaviour
         playerCC.enabled = false;
         playerCC.transform.position = position;
         playerCC.enabled = true;
-    }*/
 
-    [ClientRpc]
-    void TeleportPlayer(Vector3 position)
-    {
-        
+        var playerStateManager = NetworkClient.localPlayer.GetComponent<PlayerStateManager>();
+
+        playerStateManager.SwitchState(playerStateManager.FallingState);
     }
 
     IEnumerator ActivateSkipWave()
