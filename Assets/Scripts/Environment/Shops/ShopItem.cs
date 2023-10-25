@@ -44,7 +44,11 @@ public class ShopItem : MonoBehaviour
     {
         if (mouseOver)
         {
-            selectBorderUI.transform.LookAt(Camera.main.transform);
+            //selectBorderUI.transform.LookAt(selectBorderUI.transform.position + Camera.main.transform.forward);
+            selectBorderUI.transform.LookAt(Camera.main.transform.position);
+
+            var borderSprite = selectBorderUI.transform.GetChild(0);
+            borderSprite.LookAt(borderSprite.position + Camera.main.transform.forward);
 
             transform.GetChild(0).RotateAround(transform.position, Vector3.up, speed * Time.deltaTime);
             lastRotation = transform.GetChild(0).localRotation;
@@ -67,8 +71,13 @@ public class ShopItem : MonoBehaviour
         nameText.text = item.name;
         nameText.color = item.color;
 
-        costText.text = item.cost.ToString();
+        // The prefab, its new position, its new rotation, its parent
+        GameObject newItem = Instantiate(item.modelPrefab, transform.GetChild(0), false);
+        newItem.transform.localPosition = item.newPosition;
+        newItem.transform.localScale = item.newScale;
+        newItem.transform.localRotation = Quaternion.Euler(item.newRotation);
 
+        costText.text = item.cost.ToString();
         descriptionText.text = item.description;
     }
 

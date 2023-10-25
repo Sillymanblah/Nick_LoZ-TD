@@ -108,6 +108,7 @@ public class Grotto : NetworkBehaviour
         }
     }
 
+
     [Server]
     public void ResetShop()
     {
@@ -117,8 +118,6 @@ public class Grotto : NetworkBehaviour
     [Server]
     public bool CheckPlayerFromGrotto(uint networkID)
     {
-        
-
         for (int i = 0; i < playersInsideGrotto.Count; i++)
         {
             if (networkID == playersInsideGrotto[i].netId)
