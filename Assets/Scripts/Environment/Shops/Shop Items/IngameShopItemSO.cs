@@ -23,4 +23,9 @@ public class IngameShopItemSO : UnitSOFinder<IngameShopItemSO>
     {
         Debug.Log($"Ingame Shop Item ");
     }
+
+    public virtual void ItemAbility(Unit unit)
+    {
+        Debug.Log($"Ingame Shop Item ");
+    }
 }

@@ -1413,6 +1413,9 @@ MonoBehaviour:
   cooldown: 2
   attack: 1
   range: 20
+  attackMultiplier: 1
+  rangeMultiplier: 1
+  cooldownMultiplier: 1
   level: 1
   gridCells: 
   isPlaced: 0

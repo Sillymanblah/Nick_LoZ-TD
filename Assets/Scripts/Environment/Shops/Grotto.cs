@@ -5,10 +5,14 @@ using Cinemachine;
 using Mirror;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
+using System.Data.SqlTypes;
 
 public class Grotto : NetworkBehaviour
 {
     public static Grotto instance;
+    public NetworkConnectionToClient localPlayer;
+
+    [SerializeField] float itemCostMultiplier;
 
     [SerializeField] Transform spawnTransform;
     public Vector3 GetSpawnPosition() { return spawnTransform.position; }
@@ -29,7 +33,6 @@ public class Grotto : NetworkBehaviour
     [SerializeField] Transform itemsDisplayParent;
 
     List<NetworkIdentity> playersThatGotAnItem = new List<NetworkIdentity>();
-    [SerializeField] List<NetworkIdentity> playersInsideGrotto = new List<NetworkIdentity>();
     bool switchCams;
 
     // Start is called before the first frame update
@@ -41,7 +44,7 @@ public class Grotto : NetworkBehaviour
 
         for (int i = 0; i < itemsDisplayParent.childCount; i++)
         {
-            itemsDisplays.Add(itemsDisplayParent.GetChild(i).GetComponent<ShopItem>());;
+            //itemsDisplays.Add(itemsDisplayParent.GetChild(i).GetComponent<ShopItem>());
             itemsDisplays[i].OnStartUp(i, NetworkClient.localPlayer.GetComponent<PlayerStateManager>());
         }
     }
@@ -59,13 +62,13 @@ public class Grotto : NetworkBehaviour
 
                 if (items[item.index].cost > money) return;
 
-                BuyShopItem(item.index, conn);
+                CmdBuyShopItem(item.index, conn);
             }
         }
     }
 
     [Command(requiresAuthority = false)]
-    void BuyShopItem(int index, NetworkConnectionToClient conn)
+    void CmdBuyShopItem(int index, NetworkConnectionToClient conn)
     {
         // Server Auth Checks ///////
         if (!GameManager.instance.intermission) return;
@@ -74,12 +77,30 @@ public class Grotto : NetworkBehaviour
 
         var player = conn.identity.GetComponent<PlayerUnitManager>();
 
-        if (items[index].cost > player.money) return;
+        Debug.Log(player);
+        if (itemsDisplays[index].cost > player.money) return;
+
         // Approved ////////////////
 
-        player.SetMoney(-items[index].cost);
+        player.SetMoney(-itemsDisplays[index].cost);
+        
+        var thisPlayer = conn.identity.GetComponent<PlayerUnitManager>();
 
+        if (thisPlayer.unitsPlaced.Count > 0)
+        {
+            foreach (Unit unit in thisPlayer.unitsPlaced)
+            {
+                items[index].ItemAbility(unit);
+            }
+        }
         Debug.Log(conn);
+        playersThatGotAnItem.Add(conn.identity);
+        BoughtItem(conn);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdTeleportBackToSpawn(NetworkConnectionToClient conn)
+    {
         playersThatGotAnItem.Add(conn.identity);
         BoughtItem(conn);
     }
@@ -100,11 +121,11 @@ public class Grotto : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void SetNewItems()
+    public void RpcSetNewItems()
     {
         for (int i = 0; i < itemsDisplays.Count; i++)
         {
-            itemsDisplays[i].InitializeItem(items[i]);
+            itemsDisplays[i].InitializeItem(WaveManager.instance.currentWave - 1, items[i]);
         }
     }
 
@@ -118,39 +139,15 @@ public class Grotto : NetworkBehaviour
     [Server]
     public bool CheckPlayerFromGrotto(uint networkID)
     {
-        for (int i = 0; i < playersInsideGrotto.Count; i++)
+        for (int i = 0; i < playersThatGotAnItem.Count; i++)
         {
-            if (networkID == playersInsideGrotto[i].netId)
-                return true;
-            
+            if (networkID == playersThatGotAnItem[i].netId)
+                return false;
+
             continue;
         }
 
-        return false;
-    }
-
-    /// <summary>
-    /// OnTriggerEnter is called when the Collider other enters the trigger.
-    /// </summary>
-    /// <param name="other">The other Collider involved in this collision.</param>
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playersInsideGrotto.Add(other.GetComponent<NetworkIdentity>());
-        }
-    }
-
-    /// <summary>
-    /// OnTriggerExit is called when the Collider other has stopped touching the trigger.
-    /// </summary>
-    /// <param name="other">The other Collider involved in this collision.</param>
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playersInsideGrotto.Remove(other.GetComponent<NetworkIdentity>());
-        }
+        return true;
     }
 }
 

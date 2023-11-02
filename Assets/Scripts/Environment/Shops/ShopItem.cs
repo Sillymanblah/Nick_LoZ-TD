@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
-using Mirror.Examples.Basic;
+using Mirror;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class ShopItem : MonoBehaviour
 {
     public int index;
 
-    public bool mouseOver;
+    bool mouseOver;
 
+    [Header("Stats")]
+    public int cost;
+
+    [Space]
     [SerializeField] float speed;
     Quaternion originalRotation;
     Quaternion lastRotation;
@@ -66,10 +68,11 @@ public class ShopItem : MonoBehaviour
         }
     }
 
-    public void InitializeItem(IngameShopItemSO item)
+    public void InitializeItem(int waveNumber, IngameShopItemSO item)
     {
         nameText.text = item.name;
         nameText.color = item.color;
+        cost = item.cost * (int)Mathf.Pow(10, waveNumber);
 
         // The prefab, its new position, its new rotation, its parent
         GameObject newItem = Instantiate(item.modelPrefab, transform.GetChild(0), false);
@@ -77,15 +80,17 @@ public class ShopItem : MonoBehaviour
         newItem.transform.localScale = item.newScale;
         newItem.transform.localRotation = Quaternion.Euler(item.newRotation);
 
-        costText.text = item.cost.ToString();
+        costText.text = cost.ToString();
         descriptionText.text = item.description;
     }
 
+
+    // for clients
+    [ClientCallback]
     public void OnStartUp(int index, PlayerStateManager player)
     {
         this.index = index;
         localPlayer = player;
-        Debug.Log(localPlayer);
     }
 
     /// <summary>

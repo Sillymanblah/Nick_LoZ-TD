@@ -81,8 +81,6 @@ public class ClubMoblin : EnemyUnit
                 continue;
             }
 
-            Debug.Log($"working on the algorithm");
-
             if (healthPoints <= 0.1 * maxHealthPoints)
             {
                 StartCoroutine(SmashAbility());

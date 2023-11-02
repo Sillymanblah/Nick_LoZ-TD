@@ -16,12 +16,11 @@ MonoBehaviour:
   modelPrefab: {fileID: 3287078904340854284, guid: 8537a1bcedd34db4588bb280209f6b46,
     type: 3}
   name: Pegasus Boots
-  cost: 200
+  cost: 10
   color: {r: 1, g: 0.7427217, b: 0.5330188, a: 1}
   description: Units get 5% less cooldown
   newPosition: {x: 0.3288624, y: 0.20000002, z: 0.03506684}
   newRotation: {x: 21, y: 218, z: 2}
   newScale: {x: 0.115, y: 0.115, z: 0.115}
-  damageMultiplier: 0
-  rangeMultiplier: 0
-  cooldownMultiplier: 0
+  unitMultiplierType: 2
+  valueMultiplier: 0.05

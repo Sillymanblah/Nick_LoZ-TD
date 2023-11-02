@@ -155,7 +155,7 @@ public class WaveManager : NetworkBehaviour
     IEnumerator Intermission()
     {
         GameManager.instance.intermission = true;
-        Grotto.instance.SetNewItems();
+        Grotto.instance.RpcSetNewItems();
         Debug.Log($"Break time");
 
         yield return new WaitForSeconds(2.0f);
@@ -197,6 +197,7 @@ public class WaveManager : NetworkBehaviour
     void TeleportPlayer(NetworkConnectionToClient conn, Vector3 position)
     {
         var playerCC = NetworkClient.localPlayer.GetComponent<CharacterController>();
+        Grotto.instance.localPlayer = NetworkClient.localPlayer.connectionToClient;
 
         playerCC.enabled = false;
         playerCC.transform.position = position;

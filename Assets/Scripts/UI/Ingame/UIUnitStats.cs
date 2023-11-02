@@ -68,6 +68,7 @@ public class UIUnitStats : MonoBehaviour
         targetModeText.color = Color.white;
         unitNameText.color = Color.white;
 
+        Debug.Log(unit.GetAttack());
         unitNameText.text = currentUnit.GetUnitName().ToString();
         unitIcon.sprite = currentUnit.GetUnitSO().icon;
         levelText.text = "Level: " + currentUnit.GetLevel().ToString();
@@ -113,15 +114,15 @@ public class UIUnitStats : MonoBehaviour
 
         UnitSO thisCurrentUnitSO = currentUnit.GetUnitSO();
 
-        attackText.text = thisCurrentUnitSO.CurrentAttack(unitLevel + 1).ToString();
-        rangeText.text = thisCurrentUnitSO.CurrentRange(unitLevel + 1).ToString();
-        cooldownText.text = thisCurrentUnitSO.CurrentCooldown(unitLevel + 1).ToString();
+        attackText.text = System.Math.Round(thisCurrentUnitSO.CurrentAttack(unitLevel + 1) * currentUnit.attackMultiplier, 1).ToString();
+        rangeText.text = System.Math.Round(thisCurrentUnitSO.CurrentRange(unitLevel + 1) * currentUnit.rangeMultiplier, 1).ToString();
+        cooldownText.text = System.Math.Round(thisCurrentUnitSO.CurrentCooldown(unitLevel + 1) / currentUnit.cooldownMultiplier, 1).ToString();
 
         //If the next stat is greater than or equal to current stat, change text to green, else change to red
         // !TERNARY OPERATOR!
         attackText.color = thisCurrentUnitSO.CurrentAttack(unitLevel + 1) >= currentUnit.GetAttack() ? Color.green : Color.red;
         rangeText.color = thisCurrentUnitSO.CurrentRange(unitLevel + 1) >= currentUnit.GetRange() ? Color.green : Color.red;
-        cooldownText.color = thisCurrentUnitSO.CurrentCooldown(unitLevel + 1) >= currentUnit.GetCooldown() ? Color.green : Color.red;
+        cooldownText.color = thisCurrentUnitSO.CurrentCooldown(unitLevel + 1) <= currentUnit.GetCooldown() ? Color.green : Color.red;
     }
 
     public void SellUnitButton()

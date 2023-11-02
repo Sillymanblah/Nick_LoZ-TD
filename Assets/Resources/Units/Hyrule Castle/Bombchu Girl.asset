@@ -26,26 +26,26 @@ MonoBehaviour:
   DPS1: 0.6
   rangeDPS1: 1
   cost2: 0
-  attack2: 0
-  cooldown2: 0
+  attack2: 1
+  cooldown2: 1
   range2: 0
-  DPS2: NaN
-  rangeDPS2: -2.1474836e+9
+  DPS2: 1
+  rangeDPS2: 0
   cost3: 0
   attack3: 0
-  cooldown3: 0
+  cooldown3: 1
   range3: 0
-  DPS3: NaN
-  rangeDPS3: -2.1474836e+9
+  DPS3: 0
+  rangeDPS3: 0
   cost4: 0
   attack4: 0
-  cooldown4: 0
+  cooldown4: 1
   range4: 0
-  DPS4: NaN
-  rangeDPS4: -2.1474836e+9
+  DPS4: 0
+  rangeDPS4: 0
   cost5: 0
   attack5: 0
-  cooldown5: 0
+  cooldown5: 1
   range5: 0
-  DPS5: NaN
-  rangeDPS5: -2.1474836e+9
+  DPS5: 0
+  rangeDPS5: 0

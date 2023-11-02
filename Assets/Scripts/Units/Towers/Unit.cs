@@ -69,6 +69,17 @@ public class Unit : NetworkBehaviour
     [SyncVar]
     [SerializeField] protected float range;
 
+    #region Stats Multipliers
+    [Space]
+    [SyncVar]
+    [SerializeField] public float attackMultiplier = 1;
+    [SyncVar]
+    [SerializeField] public float rangeMultiplier = 1;
+    [SyncVar]
+    [SerializeField] public float cooldownMultiplier = 1;
+
+    #endregion
+
     [SyncVar]
     [SerializeField] int level = 1;
 
@@ -77,7 +88,7 @@ public class Unit : NetworkBehaviour
 
     #region Get Unit Stats methods
 
-    public string GetUnitName() { return unitName; }
+    public string GetUnitName() { return unitSO.name; }
     public string GetOwnedPlayerName() { return ownedPlayerName; }
     public int GetLevel() { return level; }
     public float GetCooldown() { return cooldown; }
@@ -191,6 +202,18 @@ public class Unit : NetworkBehaviour
         gridCells = cellIndexes;
         this.loadoutIndex = loadoutIndex;
 
+        level = 1;
+        sellCost += unitSO.NextCost(level) / 4;
+        cost = unitSO.NextCost(level + 1);
+
+        unitName = unitSO.name;
+        
+        attack = unitSO.CurrentAttack(level);
+        cooldown = unitSO.CurrentCooldown(level);
+        range = unitSO.CurrentRange(level);
+
+        ownedPlayerName = attachedPlayer.GetComponent<PlayerNetworkInfo>().name;
+
         // This sets the grid cells states for EVERYONE \\
         foreach (int cellIndex in cellIndexes)
         {
@@ -198,22 +221,13 @@ public class Unit : NetworkBehaviour
         }       
         GameManager.instance.SyncGridCellOccupence(true, cellIndexes);
         // -/////////////////////\\\\\\\\\\\\\\\\\\\\\- \\
-
-        level = 1;
-        sellCost += unitSO.NextCost(level) / 4;
-        cost = unitSO.NextCost(level + 1);
-
-        unitName = unitSO.name;
-        ownedPlayerName = attachedPlayer.GetComponent<PlayerNetworkInfo>().name;
-        attack = unitSO.CurrentAttack(level);
-        cooldown = unitSO.CurrentCooldown(level);
-        range = unitSO.CurrentRange(level);
-
+        
         targetMode = TargettingMode.First;
 
         rangeCollider.radius = range / 5;
         rangeVisualSprite.gameObject.SetActive(false);
 
+        attachedPlayer.PlaceUnit(this, loadoutIndex);
         ClientPlacedUnit();
     }
 
@@ -221,6 +235,8 @@ public class Unit : NetworkBehaviour
     void ClientPlacedUnit()
     {
         isPlaced = true;
+        Debug.Log(attack);
+        Debug.Log(unitSO.CurrentAttack(1));
     }
 
     public int CostToUpgrade(int level)
@@ -330,9 +346,9 @@ public class Unit : NetworkBehaviour
         sellCost += unitSO.NextCost(level) / 4;
         cost = unitSO.NextCost(level + 1);
 
-        attack = unitSO.CurrentAttack(level);
-        cooldown = unitSO.CurrentCooldown(level);
-        range = unitSO.CurrentRange(level);
+        attack = (float)System.Math.Round(unitSO.CurrentAttack(level) * attackMultiplier, 1);
+        cooldown = (float)System.Math.Round(unitSO.CurrentCooldown(level) / cooldownMultiplier, 1);
+        range = (float)System.Math.Round(unitSO.CurrentRange(level) * rangeMultiplier, 1);
 
         rangeCollider.radius = range / 5;
         rangeVisualSprite.localScale = new Vector3(1,1) * (rangeCollider.radius * 0.2f);
@@ -345,6 +361,7 @@ public class Unit : NetworkBehaviour
     {
         if (conn.netId != attachedPlayer.netId) return;
 
+        conn.GetComponent<PlayerUnitManager>().ServerSellUnit(this);
         GameManager.instance.SyncGridCellOccupence(false, gridCells);
         attachedPlayer.SetMoney(sellCost);
         attachedPlayer.ChangeLoadoutCount(loadoutIndex, -1);
@@ -355,6 +372,13 @@ public class Unit : NetworkBehaviour
     protected virtual void UpdateLocalClient(Vector3 newScale, bool activeUI)
     {
         rangeVisualSprite.localScale = newScale;
+        StartCoroutine(DelayUpdateUnitStats(activeUI));
+    }
+
+    // For client
+    IEnumerator DelayUpdateUnitStats(bool activeUI)
+    {
+        yield return null;
         UIUnitStats.instance.UpdateUnitStats(this, activeUI);
     }
 
@@ -500,6 +524,15 @@ public class Unit : NetworkBehaviour
         UIUnitStats.instance.UpdateUnitStats(this, false);
     }
 
+    [TargetRpc]
+    void RpcSelectUnit()
+    {
+        if (!isSelected) return;
+
+        SelectUnit();
+        StartCoroutine(DelayUpdateUnitStats(true));
+    }
+
     private void OnMouseOver()
     {
         if (!isClient) return;
@@ -571,4 +604,28 @@ public class Unit : NetworkBehaviour
     }
 
     public void DoNothingMethod() {}
+
+    [Server]
+    public void ApplyStatsMultiplier(UnitMultiplierType type, float value)
+    {
+        switch (type)
+        {
+            case UnitMultiplierType.Attack:
+                attackMultiplier += value;
+                attack = (float)System.Math.Round(attack * attackMultiplier, 1);
+                break;
+
+            case UnitMultiplierType.Cooldown:
+                cooldownMultiplier += value;
+                cooldown = (float)System.Math.Round(cooldown / cooldownMultiplier, 1);
+                break;
+
+            case UnitMultiplierType.Range:
+                rangeMultiplier += value;
+                range = (float)System.Math.Round(range * rangeMultiplier, 1);
+                break;
+        }
+
+        RpcSelectUnit();
+    }
 }

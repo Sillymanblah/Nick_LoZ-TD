@@ -1,7 +1,6 @@
  using System.Collections;
 using System.Collections.Generic;
 using Mirror;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerUnitManager : NetworkBehaviour
@@ -11,6 +10,7 @@ public class PlayerUnitManager : NetworkBehaviour
 
     [Space]
 
+    [SerializeField] public List<Unit> unitsPlaced = new List<Unit>();
     [SerializeField] public List<UnitSO> unitsLoadout = new List<UnitSO>(3);
     [SerializeField] public List<int> loadoutCount = new List<int>(3);
     [SerializeField] Unit selectedUnit;
@@ -78,6 +78,12 @@ public class PlayerUnitManager : NetworkBehaviour
         selectedUnit.SellUnit(this.netIdentity);
         selectedUnit = null;
         UIUnitStats.instance.UpdateUnitStats(null, false);
+    }
+
+    [Server]
+    public void ServerSellUnit(Unit unit)
+    {
+        unitsPlaced.Remove(unit);
     }
 
     public void UpgradeUnit()
@@ -307,16 +313,17 @@ public class PlayerUnitManager : NetworkBehaviour
         NetworkServer.Spawn(newUnit, this.gameObject);
 
         Unit thisUnit = newUnit.GetComponent<Unit>();
+        unitsPlaced.Add(thisUnit);
         thisUnit.PlacedUnit(gridCellIndexes, loadoutIndex);
         loadoutCount[loadoutIndex]++;
 
         Debug.Log($"Placing client " + this.gameObject.name + " unit " + loadoutCount[loadoutIndex]);
 
-        PlaceUnit(thisUnit, loadoutIndex);
+        //PlaceUnit(thisUnit, loadoutIndex);
     }
 
     [TargetRpc]
-    void PlaceUnit(Unit unit, int loadoutIndex)
+    public void PlaceUnit(Unit unit, int loadoutIndex)
     {
         if (selectedUnit != null) selectedUnit.DeSelectUnit();
 
@@ -328,6 +335,12 @@ public class PlayerUnitManager : NetworkBehaviour
         UIManager.instance.SlotUnitCount(loadoutIndex);
 
         selectedUnit = unit;
+        StartCoroutine(DelaySelectingUnit());
+    }
+
+    IEnumerator DelaySelectingUnit()
+    {
+        yield return null;
         selectedUnit.SelectUnit();
     }
 

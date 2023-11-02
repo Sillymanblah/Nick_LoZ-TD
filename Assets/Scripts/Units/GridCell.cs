@@ -7,12 +7,13 @@ public enum GridType
 {
     ground,
     air,
-    disabled
+    disabled,
+    pathway
 }
 public class GridCell : MonoBehaviour
 {
     public bool isOccupied { get; private set;}
-    [SerializeField] GridType gridType;
+    public GridType gridType;
     public int listIndex = 0;
 
     // Start is called before the first frame update
