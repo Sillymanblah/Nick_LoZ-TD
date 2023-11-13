@@ -12,26 +12,48 @@ public class EnemyGridCellLocator : MonoBehaviour
     {
         if (other.CompareTag("GridCell"))
         {
-            var thisCell = other.GetComponent<GridCell>();
+            PathwayGridCell pathwayGridCell = null;
 
-            if (thisCell.gridType == GridType.pathway)
-                pathwayCells.Add(thisCell);
+            if (other.TryGetComponent<PathwayGridCell>(out pathwayGridCell))
+            {
+                pathwayCells.Add(pathwayGridCell);
+            }
+
         }
     }
 
-    /// <summary>
-    /// OnTriggerExit is called when the Collider other has stopped touching the trigger.
-    /// </summary>
-    /// <param name="other">The other Collider involved in this collision.</param>
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("GridCell"))
         {
             var thisCell = other.GetComponent<GridCell>();
 
-            if (thisCell.gridType == GridType.pathway)
+            if (thisCell == pathwayCells.Contains(thisCell))
                 pathwayCells.Remove(thisCell);
         }
     }
 
+    public PathwayGridCell GetPathwayGridCell()
+    {
+        PathwayGridCell pathwayGridCell = null;
+
+        foreach (Collider collider in Physics.OverlapBox(this.transform.position, new Vector3(0.75f, 0.75f, 0.25f)))
+        {
+            if (collider.CompareTag("GridCell"))
+            {
+                if (collider.TryGetComponent<PathwayGridCell>(out pathwayGridCell))
+                    return pathwayGridCell;
+            }
+        }
+        foreach (Collider collider in Physics.OverlapBox(this.transform.position, new Vector3(0.25f, 0.75f, 0.75f)))
+        {
+            if (collider.CompareTag("GridCell"))
+            {
+                if (collider.TryGetComponent<PathwayGridCell>(out pathwayGridCell))
+                    return pathwayGridCell;
+            }
+        }
+
+        return null;
+    }
 }

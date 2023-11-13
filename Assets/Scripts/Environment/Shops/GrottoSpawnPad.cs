@@ -10,7 +10,7 @@ public class GrottoSpawnPad : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        uiText.SetActive(false);
     }
 
     // Update is called once per frame

@@ -21,10 +21,10 @@ MonoBehaviour:
   gridType: 0
   cost1: 1000
   attack1: 30
-  cooldown1: 50
+  cooldown1: 2
   range1: 3
-  DPS1: 0.6
-  rangeDPS1: 1
+  DPS1: 15
+  rangeDPS1: 45
   cost2: 0
   attack2: 1
   cooldown2: 1

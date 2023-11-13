@@ -18,9 +18,9 @@ public class CameraControls : MonoBehaviour
 
     public void SwitchCameraMovementControl()
     {
-        cineCam.m_Orbits[0].m_Height = Mathf.Clamp((cineCam.m_Orbits[0].m_Height - Input.mouseScrollDelta.y), 3, 20 * cameraZoomMultiplier);
+        cineCam.m_Orbits[0].m_Height = Mathf.Clamp((cineCam.m_Orbits[0].m_Height - Input.mouseScrollDelta.y), 2, 20 * cameraZoomMultiplier);
         cineCam.m_Orbits[1].m_Radius = Mathf.Clamp((cineCam.m_Orbits[1].m_Radius - Input.mouseScrollDelta.y), 2, 21 * cameraZoomMultiplier);
-        cineCam.m_Orbits[2].m_Height = Mathf.Clamp((cineCam.m_Orbits[2].m_Height + Input.mouseScrollDelta.y), -15.5f * cameraZoomMultiplier, -0.5f);
+        cineCam.m_Orbits[2].m_Height = Mathf.Clamp((cineCam.m_Orbits[2].m_Height + Input.mouseScrollDelta.y), -20 * cameraZoomMultiplier, -2);
         //cam.m_Orbits[2].m_Radius -= Input.mouseScrollDelta.y / 2;
 
         if (Input.GetMouseButton(1))

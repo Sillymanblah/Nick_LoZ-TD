@@ -150,6 +150,12 @@ public class PlayerUnitManager : NetworkBehaviour
 
                     Debug.Log($"Deselected unit");
                 }
+
+                else
+                {
+                    if (selectedUnit != null)
+                        selectedUnit.DeSelectUnit();
+                }
             }
         }
     }
@@ -296,26 +302,25 @@ public class PlayerUnitManager : NetworkBehaviour
     [Command]
     void CmdNetworkSpawnUnit(Vector3 newGrid, List<int> gridCellIndexes, int loadoutIndex, int unitGridSize)
     {
-
         // Checks
         if (loadoutCount[loadoutIndex] >= unitCap) return;
         if (gridCellIndexes.Count != unitGridSize) return;
         if (money < unitsLoadout[loadoutIndex].NextCost(1)) return;
+
         foreach (int gridCell in gridCellIndexes)
         {
             if (GameManager.instance.GetGridCell(gridCell).CheckAvailability(unitsLoadout[loadoutIndex].gridType) == false) return;
         }
         // End Checks
 
-        SetMoney(-unitsLoadout[loadoutIndex].NextCost(1));
-
         GameObject newUnit = Instantiate(unitsLoadout[loadoutIndex].prefab, newGrid, Quaternion.identity);
+        Unit thisUnit = newUnit.GetComponent<Unit>();
         NetworkServer.Spawn(newUnit, this.gameObject);
 
-        Unit thisUnit = newUnit.GetComponent<Unit>();
         unitsPlaced.Add(thisUnit);
         thisUnit.PlacedUnit(gridCellIndexes, loadoutIndex);
         loadoutCount[loadoutIndex]++;
+        SetMoney(-unitsLoadout[loadoutIndex].NextCost(1));
 
         Debug.Log($"Placing client " + this.gameObject.name + " unit " + loadoutCount[loadoutIndex]);
 

@@ -31,7 +31,7 @@ public class Unit : NetworkBehaviour
     [Space]
 
     public List<EnemyUnit> enemiesInRange = new List<EnemyUnit>();
-    PlayerUnitManager attachedPlayer;
+    protected PlayerUnitManager attachedPlayer;
     [SerializeField] protected SphereCollider rangeCollider;
     [SerializeField] protected Transform rangeVisualSprite;
 
@@ -42,23 +42,23 @@ public class Unit : NetworkBehaviour
     [SerializeField] GameObject missedAttackUIObject;
 
     [Space]
-    [SerializeField] UnitAnimationManager animations;
+    [SerializeField] protected UnitAnimationManager animations;
     [SerializeField] GridDisplayFade gridDisplayFade;
 
     [Space]
 
     [SyncVar]
-    string unitName;
+    protected string unitName;
     [SyncVar]
-    string ownedPlayerName;
+    protected string ownedPlayerName;
 
     [Header("Runtime Stats")]
 
     [SyncVar]
-    [SerializeField] int cost;
+    [SerializeField] protected int cost;
 
     [SyncVar]
-    [SerializeField] int sellCost;
+    [SerializeField] protected int sellCost;
 
     [SyncVar]
     [SerializeField] protected float cooldown;
@@ -81,7 +81,7 @@ public class Unit : NetworkBehaviour
     #endregion
 
     [SyncVar]
-    [SerializeField] int level = 1;
+    [SerializeField] protected int level = 1;
 
     [Space]
     public List<int> gridCells = new List<int>();
@@ -99,19 +99,18 @@ public class Unit : NetworkBehaviour
     public UnitSO GetUnitSO() { return unitSO; }
     public TargettingMode GetTargetMode() { return targetMode; }
 
-    bool attacking = false;
+    protected bool attacking = false;
 
     #endregion
 
-
     public bool isPlaced = false;
     protected bool isSelected = false;
-    int loadoutIndex;
-
+    protected int loadoutIndex;
     
 
     #region Sound Effects
 
+    protected float currentCooldown;
     
     AudioSource audioSource;
     [Space]
@@ -124,6 +123,7 @@ public class Unit : NetworkBehaviour
         audioSource = GetComponent<AudioSource>();
         missedAttackUIObject.SetActive(false);
         hoverStatsObject.SetActive(false);
+        Debug.Log($"bruh");
 
         if (!isClient)
         {
@@ -139,20 +139,12 @@ public class Unit : NetworkBehaviour
             rangeVisualSprite.gameObject.SetActive(false);
         }
 
-        if (!isServer)
-        {
-            return;
-        }
-        
-
         currentCooldown = Time.time + cooldown;
     }
 
     public override void OnStartAuthority()
     {
         base.OnStartAuthority();
-
-        
         range = unitSO.CurrentRange(level);
 
         rangeCollider.radius = range / 5;
@@ -167,24 +159,21 @@ public class Unit : NetworkBehaviour
     protected virtual void Update()
     {
         if (!isPlaced) return;
-
         if (!isServer) return; 
         
-            
         if (attacking)
             animations.AttackingAnim(0.2f);
     
         else
             animations.IdleAnim(0.3f);
             
-        
-
         if (enemiesInRange.Count == 0) return;
         if (enemiesInRange[0] == null) 
         {
             enemiesInRange.RemoveAt(0);
             return;
         }
+
         AttackEnemy();
     }
 
@@ -194,7 +183,7 @@ public class Unit : NetworkBehaviour
     }
 
     [Server]
-    public void PlacedUnit(List<int> cellIndexes, int loadoutIndex)
+    public virtual void PlacedUnit(List<int> cellIndexes, int loadoutIndex)
     {
         isPlaced = true;
         attachedPlayer = netIdentity.connectionToClient.identity.GetComponent<PlayerUnitManager>();
@@ -223,7 +212,6 @@ public class Unit : NetworkBehaviour
         // -/////////////////////\\\\\\\\\\\\\\\\\\\\\- \\
         
         targetMode = TargettingMode.First;
-
         rangeCollider.radius = range / 5;
         rangeVisualSprite.gameObject.SetActive(false);
 
@@ -232,7 +220,7 @@ public class Unit : NetworkBehaviour
     }
 
     [TargetRpc]
-    void ClientPlacedUnit()
+    protected void ClientPlacedUnit()
     {
         isPlaced = true;
         Debug.Log(attack);
@@ -382,10 +370,8 @@ public class Unit : NetworkBehaviour
         UIUnitStats.instance.UpdateUnitStats(this, activeUI);
     }
 
-    protected float currentCooldown;
-
     [Server]
-    void AttackEnemy()
+    protected virtual void AttackEnemy()
     {
         if (isAttacking == false) return;
 
@@ -395,10 +381,8 @@ public class Unit : NetworkBehaviour
             return;   
         }
 
-        if (Time.time < currentCooldown)
-        {
-            return;
-        }
+        if (Time.time < currentCooldown) return;
+        
 
         CurrentTargettingMode();
 
@@ -580,14 +564,14 @@ public class Unit : NetworkBehaviour
         }
     }
 
-    public bool CheckGridCellAvailability()
+    public virtual bool CheckGridCellAvailability()
     {
         if (gridCells.Count == 0) return false;
 
+        if (gridCells.Count != Mathf.Pow(unitGridSize, 2)) return false;
+
         foreach (int cellIndex in gridCells)
         {
-            if (gridCells.Count != Mathf.Pow(unitGridSize, 2)) return false;
-
             if (!GameManager.instance.GetGridCell(cellIndex).CheckAvailability(unitSO.gridType))
             {
                 return false;
