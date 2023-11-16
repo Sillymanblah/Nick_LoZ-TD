@@ -70,7 +70,6 @@ public class EnemyUnit : NetworkBehaviour
     {
         if (!isServer) return;
         
-        
         if (speed > 0)
         {
             if (animManager != null)
@@ -78,13 +77,16 @@ public class EnemyUnit : NetworkBehaviour
                 animManager.WalkingAnim(0.1f);
             }
         }
-
         Physics.IgnoreLayerCollision(9, 3, true);
         Physics.IgnoreLayerCollision(9, 9, true);
         Physics.IgnoreLayerCollision(9, 8, true);
 
-
         GravityControl();
+        WayPointControl();
+    }
+
+    void WayPointControl()
+    {
         Vector3 thisTarget = new Vector3(target.position.x, transform.position.y, target.position.z);
 
         Vector3 direction = thisTarget - transform.position;
@@ -124,7 +126,7 @@ public class EnemyUnit : NetworkBehaviour
 
     void GravityControl()
     {
-        velocity.y += gravity * Time.deltaTime;
+        velocity.y += Mathf.Clamp(gravity * Time.deltaTime, -20, 20);
 
         controller.Move(velocity * Time.deltaTime);
 

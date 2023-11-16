@@ -10,19 +10,23 @@ public class BBAGirlUnit : Unit
     [SerializeField] EnemyGridCellLocator enemyGridCellLocator;
     //PathwayGridCell currentPathwayGridCell;
     [SerializeField] GameObject thisSummonable;
-    Vector3 thisPathwayGridCellPosition;
 
+    PathwayGridCell thisPathwayGridCell;
+    Vector3 thisPathwayGridCellPosition;
+    int thisPathwayWayPoint;
 
     protected override void Update()
     {
         if (!isPlaced) return;
         if (!isServer) return; 
+        //if (!GameManager.instance.gameStarted) return;
         
         if (attacking)
             animations.AttackingAnim(0.2f);
         else
             animations.IdleAnim(0.3f);
 
+        Physics.IgnoreLayerCollision(13, 8);
         AttackEnemy();
     }
 
@@ -38,12 +42,13 @@ public class BBAGirlUnit : Unit
         else return false;
     }
 
-    
-
     [Server]
     public override void PlacedUnit(List<int> cellIndexes, int loadoutIndex)
     {
-        thisPathwayGridCellPosition = enemyGridCellLocator.GetPathwayGridCell().transform.position;
+        thisPathwayGridCell = enemyGridCellLocator.GetPathwayGridCell();
+        thisPathwayGridCellPosition = thisPathwayGridCell.transform.position;
+        thisPathwayWayPoint = thisPathwayGridCell.waypointIndex;
+
         transform.LookAt(new Vector3(thisPathwayGridCellPosition.x, this.transform.position.y, thisPathwayGridCellPosition.z));
 
         isPlaced = true;
@@ -88,8 +93,10 @@ public class BBAGirlUnit : Unit
             return;
         }
 
-        GameObject newSummonable = Instantiate(thisSummonable, thisPathwayGridCellPosition + Vector3.up, Quaternion.identity);
+        GameObject newSummonable = Instantiate(thisSummonable, thisPathwayGridCellPosition + (Vector3.up / 2), Quaternion.identity);
         NetworkServer.Spawn(newSummonable);
+
+        newSummonable.GetComponent<Summonable>().Initialize(thisPathwayWayPoint);
 
         currentCooldown = Time.time + cooldown;
     }

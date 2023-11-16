@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PathwayGridCell : GridCell
 {
+    [Space]
     public int waypointIndex;
 
     private void OnValidate()
