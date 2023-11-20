@@ -23,6 +23,7 @@ public class GrottoSpawnPad : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 Grotto.instance.CmdTeleportBackToSpawn(Grotto.instance.localPlayer);
+                uiText.SetActive(false);
             }
         }
     }

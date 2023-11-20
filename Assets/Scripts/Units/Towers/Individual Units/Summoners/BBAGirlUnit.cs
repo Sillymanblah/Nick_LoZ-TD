@@ -15,6 +15,8 @@ public class BBAGirlUnit : Unit
     Vector3 thisPathwayGridCellPosition;
     int thisPathwayWayPoint;
 
+    protected override void Start() => base.Start();
+
     protected override void Update()
     {
         if (!isPlaced) return;

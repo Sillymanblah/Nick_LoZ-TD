@@ -12,22 +12,25 @@ public class Summonable : NetworkBehaviour
     float gravity = -9.81f;
     [SerializeField] bool isGrounded = false;
     CharacterController controller;
-    [SerializeField] ParticleSystem thisParticleSystem;
+    
     int targetWaypoint;
     float speed = 1;
+    protected bool isDead;
 
     Transform target;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         if (!isServer) return;
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (!isServer) return;
+
+        if (isDead) return;
 
         GravityControl();
         WayPointControl();
@@ -83,7 +86,7 @@ public class Summonable : NetworkBehaviour
     {
         if (targetWaypoint == 0)
         {
-            NetworkServer.Destroy(gameObject);
+            ServerEndPathDestroy();
             return;
         }
 
@@ -97,27 +100,44 @@ public class Summonable : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isServer) return;
+        if (isClient) return;
+
+        if (isDead) return;
+
+        Debug.Log($"bruhdsufhdjsfhajksd");
 
         if (other.CompareTag("Enemy"))
         {
-            MyMainGoalIsToBlowUp();
+            ServerInteraction();
         }
     }
 
-    protected virtual void MyMainGoalIsToBlowUp()
+    [Server]
+    protected virtual void ServerInteraction()
     {
-        Debug.Log($"My main goal is to blow up 🤯");
-        StartCoroutine(ExplosionAndDelay());
+        Debug.Log($"ServerSide Summonable Interaction");
     }
 
-    // this isnt multiplayer logic, only for demonstration purposes
-    // please work on it and make sure THIS IS NOT IT
-    IEnumerator ExplosionAndDelay()
+    [Server]
+    protected virtual void ServerEnemyInteract()
     {
-        thisParticleSystem.Play();
-        transform.GetChild(0).gameObject.SetActive(false);
-        yield return new WaitForSeconds(2.0f);
-        NetworkServer.Destroy(this.gameObject);
+        Debug.Log($"ServerSide Summonable Enemy Interaction");
+    }
+
+    [Client]
+    protected virtual void ClientEnemyInteract()
+    {
+        Debug.Log($"ClientSide Summonable Enemy Interaction");
+    }
+
+    [ClientRpc]
+    protected virtual void ClientRpcEnemyInteract()
+    {
+        Debug.Log($"ClientSide Summonable Enemy Interaction");
+    }
+
+    protected virtual void ServerEndPathDestroy()
+    {
+        Debug.Log($"Destroyed this summonable");
     }
 }

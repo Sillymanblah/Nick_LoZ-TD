@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,6 +11,8 @@ public class LobbyAuth : MonoBehaviour
     [SerializeField] TMP_InputField inputFieldText;
     [SerializeField] List<UnitSO> myUnitInventory = new List<UnitSO>();
     PlayerNetworkInfo player;
+
+    [Scene] string lobbyScene;
 
     // Start is called before the first frame update
     void Start()
