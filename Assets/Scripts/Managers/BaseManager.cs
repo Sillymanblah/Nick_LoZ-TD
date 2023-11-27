@@ -7,9 +7,9 @@ using TMPro;
 
 public class BaseManager : NetworkBehaviour
 {
-    [SyncVar]
+    [SyncVar(hook = nameof(HandleBaseHealthChange))]
     [SerializeField] int maxBaseHealth;
-    [SyncVar]
+    [SyncVar(hook = nameof(HandleBaseHealthChange))]
     [SerializeField] int baseHealth;
     public static BaseManager instance;
     bool deadBase = false;
@@ -57,11 +57,8 @@ public class BaseManager : NetworkBehaviour
             StartCoroutine(DelayEndingGame());
             return;
         }
-            
-        UpdateBaseHPUI();
     }
 
-    [ClientRpc]
     void UpdateBaseHPUI()
     {
         if (baseHealthText == null) return;
@@ -96,5 +93,10 @@ public class BaseManager : NetworkBehaviour
         }
         
         CSNetworkManager.instance.SwitchScenes("MainMenu");
+    }
+
+    void HandleBaseHealthChange(int oldValue, int newValue)
+    {
+        UpdateBaseHPUI();
     }
 }

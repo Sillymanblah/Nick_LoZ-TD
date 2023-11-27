@@ -11,10 +11,12 @@ public class BombchuSummon : Summonable
 
     protected override void Update() => base.Update();
 
+
     [Server]
-    protected override void ServerInteraction()
+    protected override void ServerInteraction(Collider other)
     {
-        base.ServerInteraction();
+        base.ServerInteraction(other);
+        other.GetComponent<EnemyUnit>().DealDamage(thisUnit.GetAttack());
         StartCoroutine(ExplosionAndDelay());
     }
 

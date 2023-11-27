@@ -27,13 +27,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8962342565863275253}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8962342565863275272
 MonoBehaviour:
@@ -68,6 +68,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   gameStarted: 0
+  intermission: 0
+  unitDrops: []
 --- !u!114 &8962342565863275273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +86,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   spawnEnemies: 0
+  endless: 0
   enemies:
   - {fileID: 5977893554625882208, guid: ab070dce6f5cafd4d8da52b2e9f1aa7e, type: 3}
   - {fileID: 2915023377610069180, guid: 5acb3367a8a24b044a8365e15e7561e5, type: 3}
@@ -91,14 +94,15 @@ MonoBehaviour:
   - {fileID: 6958934365885886503, guid: 2fbc8f01d6272f448ac05f60414d7db2, type: 3}
   - {fileID: 5928349616074529524, guid: 5389c4597f4e452428129c37f5615ef1, type: 3}
   - {fileID: 7801556227058250581, guid: c13fcafad3f7e50479be4e3116171090, type: 3}
-  intermission: 0
   waveAmount: 3
   waveSize: 10
   groupSize: 10
   currentWave: 1
   currentGroup: 0
   unitSpawnCount: 0
-  healthMultiplier: 1
+  setHealthMultiplier: 0
+  setGroupMultiplier: 0
+  setMoneyDecrements: 0
   enemiesKilled: 0
   totalEnemiesSpawned: 0
   playerReadyCount: 0

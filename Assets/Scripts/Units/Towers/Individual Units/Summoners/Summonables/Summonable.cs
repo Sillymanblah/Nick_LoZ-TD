@@ -12,6 +12,7 @@ public class Summonable : NetworkBehaviour
     float gravity = -9.81f;
     [SerializeField] bool isGrounded = false;
     CharacterController controller;
+    protected Unit thisUnit;
     
     int targetWaypoint;
     float speed = 1;
@@ -37,8 +38,9 @@ public class Summonable : NetworkBehaviour
     }
 
     [Server]
-    public void Initialize(int waypointIndex)
+    public void Initialize(int waypointIndex, Unit unit)
     {
+        thisUnit = unit;
         targetWaypoint = waypointIndex;
 
         controller = GetComponent<CharacterController>();
@@ -108,12 +110,12 @@ public class Summonable : NetworkBehaviour
 
         if (other.CompareTag("Enemy"))
         {
-            ServerInteraction();
+            ServerInteraction(other);
         }
     }
 
     [Server]
-    protected virtual void ServerInteraction()
+    protected virtual void ServerInteraction(Collider other)
     {
         Debug.Log($"ServerSide Summonable Interaction");
     }

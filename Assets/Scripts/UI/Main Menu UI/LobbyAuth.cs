@@ -12,7 +12,6 @@ public class LobbyAuth : MonoBehaviour
     [SerializeField] List<UnitSO> myUnitInventory = new List<UnitSO>();
     PlayerNetworkInfo player;
 
-    [Scene] string lobbyScene;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +36,7 @@ public class LobbyAuth : MonoBehaviour
     {
         this.player = player;
         player.SetDisplayName(name);
-        UpdateUnitInventory(myUnitInventory);
+        TransmitUnitInventory();
     }
 
     public void SetName(string newName)
@@ -71,10 +70,12 @@ public class LobbyAuth : MonoBehaviour
 
             PlayerPrefs.SetString($"Unit{i}", myUnitInventory[i].uniqueName);
         }
+
         PlayerPrefs.Save();
+    }
 
-        if (player == null) return;
-
+    void TransmitUnitInventory()
+    {
         List<string> transmittedUnitData = new List<string>();
 
         foreach (UnitSO unit in myUnitInventory)
@@ -82,8 +83,6 @@ public class LobbyAuth : MonoBehaviour
             transmittedUnitData.Add(unit.uniqueName);
         }
 
-        
-        
         player.UpdateUnitInventory(transmittedUnitData);
     }
 }

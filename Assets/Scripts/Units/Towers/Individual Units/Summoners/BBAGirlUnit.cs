@@ -98,7 +98,7 @@ public class BBAGirlUnit : Unit
         GameObject newSummonable = Instantiate(thisSummonable, thisPathwayGridCellPosition + (Vector3.up / 2), Quaternion.identity);
         NetworkServer.Spawn(newSummonable);
 
-        newSummonable.GetComponent<Summonable>().Initialize(thisPathwayWayPoint);
+        newSummonable.GetComponent<Summonable>().Initialize(thisPathwayWayPoint, this);
 
         currentCooldown = Time.time + cooldown;
     }

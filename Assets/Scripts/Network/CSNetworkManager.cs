@@ -159,8 +159,7 @@ public class CSNetworkManager : NetworkManager
             // If the key already exists,
             // And if it matches this connection,
             // then make him the host and give privileges
-            // 
-            
+        
             else
             {
                 // THIS IS FOR GOING FROM GAME -> LOBBY client connections
