@@ -17,14 +17,14 @@ MonoBehaviour:
   unitID: 11
   icon: {fileID: 0}
   prefab: {fileID: 3792259216536069562, guid: b4f97b05c5094254ebadae9e393b2bd4, type: 3}
-  chanceToMiss: 5
+  chanceToMiss: 0
   gridType: 0
   cost1: 100
-  attack1: 30
-  cooldown1: 10
+  attack1: 20
+  cooldown1: 5
   range1: 3
-  DPS1: 3
-  rangeDPS1: 9
+  DPS1: 4
+  rangeDPS1: 12
   cost2: 0
   attack2: 1
   cooldown2: 1

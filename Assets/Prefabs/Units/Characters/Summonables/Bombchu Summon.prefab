@@ -138,6 +138,12 @@ MonoBehaviour:
   syncInterval: 0
   isGrounded: 0
   thisParticleSystem: {fileID: 8326970310548193999}
+  collidersLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  splashDamageDivider: 5
+  shockwaveObject: {fileID: 8168976372510906767}
+  bombTimer: 7
 --- !u!114 &3911754321613869200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,6 +307,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4674075810942894, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4674075810942894, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4674075810942894, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 198263872644927810, guid: 64891a0eb28db934898420d80ca07cb3,
         type: 3}
       propertyPath: UVModule.flipU
@@ -368,6 +386,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 199137469787870784, guid: 64891a0eb28db934898420d80ca07cb3,
         type: 3}
+      propertyPath: m_RenderMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 199137469787870784, guid: 64891a0eb28db934898420d80ca07cb3,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -401,6 +424,12 @@ PrefabInstance:
 --- !u!4 &8161064301145671573 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4361801158873524, guid: 64891a0eb28db934898420d80ca07cb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 8164625588025234977}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8168976372510906767 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4674075810942894, guid: 64891a0eb28db934898420d80ca07cb3,
     type: 3}
   m_PrefabInstance: {fileID: 8164625588025234977}
   m_PrefabAsset: {fileID: 0}

@@ -5,12 +5,16 @@ using UnityEngine;
 
 public class UIUnitHoverStats : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI levelText;
-    [SerializeField] TextMeshProUGUI attackText;
-    [SerializeField] TextMeshProUGUI rangeText;
-    [SerializeField] TextMeshProUGUI cooldownText;
+    [Header("Value Text")]
+    [SerializeField] TextMeshProUGUI levelValueText;
+    [SerializeField] TextMeshProUGUI attackValueText;
+    [SerializeField] TextMeshProUGUI rangeValueText;
+    [SerializeField] TextMeshProUGUI cooldownValueText;
     [SerializeField] TextMeshProUGUI unitNameText;
     [SerializeField] TextMeshProUGUI unitPlayerText;
+
+    [Header("Title Text")]
+    [SerializeField] TextMeshProUGUI rangeTitleText;
 
     Unit thisUnit;
 
@@ -22,11 +26,16 @@ public class UIUnitHoverStats : MonoBehaviour
 
     public void UpdateHoverStats()
     {
-        levelText.text = "Lvl: " + thisUnit.GetLevel();
-        attackText.text = thisUnit.GetAttack().ToString();
-        rangeText.text = thisUnit.GetRange().ToString();
-        cooldownText.text = thisUnit.GetCooldown().ToString();
+        levelValueText.text = "Lvl: " + thisUnit.GetLevel();
+        attackValueText.text = thisUnit.GetAttack().ToString();
+        rangeValueText.text = thisUnit.GetRange().ToString();
+        cooldownValueText.text = thisUnit.GetCooldown().ToString();
         unitNameText.text = thisUnit.GetUnitName();
         unitPlayerText.text = thisUnit.GetOwnedPlayerName();
+
+        if (thisUnit.rangeName == string.Empty)
+            rangeTitleText.text = "RANGE";
+        else 
+            rangeTitleText.text = thisUnit.rangeName;
     }
 }

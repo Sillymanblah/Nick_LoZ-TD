@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -37,13 +38,13 @@ public class Unit : NetworkBehaviour
 
     [Header("WorldSpace UI")]
     [SerializeField] UIUnitHoverStats hoverStats;
-    [SerializeField] GameObject hoverStatsObject;
+    [SerializeField] protected GameObject hoverStatsObject;
     [SerializeField] MissedAttackUI missedAttackUI;
-    [SerializeField] GameObject missedAttackUIObject;
+    [SerializeField] protected GameObject missedAttackUIObject;
 
     [Space]
     [SerializeField] protected UnitAnimationManager animations;
-    [SerializeField] GridDisplayFade gridDisplayFade;
+    [SerializeField] protected GridDisplayFade gridDisplayFade;
 
     [Space]
 
@@ -99,6 +100,9 @@ public class Unit : NetworkBehaviour
     public UnitSO GetUnitSO() { return unitSO; }
     public TargettingMode GetTargetMode() { return targetMode; }
 
+    [Header("Change Stat Names")]
+    public string rangeName; 
+
     protected bool attacking = false;
 
     #endregion
@@ -112,7 +116,7 @@ public class Unit : NetworkBehaviour
 
     protected float currentCooldown;
     
-    AudioSource audioSource;
+    protected AudioSource audioSource;
     [Space]
     [SerializeField] AudioClip attackSound;
 
@@ -120,18 +124,30 @@ public class Unit : NetworkBehaviour
 
     protected virtual void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        missedAttackUIObject.SetActive(false);
-        hoverStatsObject.SetActive(false);
-        Debug.Log($"bruh");
+        if (isServer)
+        {
+            currentCooldown = Time.time + cooldown;
+            GameManager.instance.OnGameStart += ServerGameHasStarted;
+        }
 
         if (!isClient)
         {
+            gridDisplayFade.ToggleCellDisplay(true);
             range = unitSO.CurrentRange(level);
             rangeVisualSprite.gameObject.SetActive(true);
+            missedAttackUIObject.SetActive(false);
             rangeCollider.radius = range / 5;
             rangeVisualSprite.localScale = new Vector3(1,1) * (rangeCollider.radius * 0.2f);
             return;
+        }
+        else
+        {
+            audioSource = GetComponent<AudioSource>();
+            missedAttackUIObject.SetActive(false);
+            hoverStatsObject.SetActive(false);
+            gridDisplayFade.isWhite = true;
+
+            GameManager.instance.OnGameStart += ClientGameHasStarted;
         }
 
         if (!isOwned)
@@ -139,7 +155,6 @@ public class Unit : NetworkBehaviour
             rangeVisualSprite.gameObject.SetActive(false);
         }
 
-        currentCooldown = Time.time + cooldown;
     }
 
     public override void OnStartAuthority()
@@ -147,8 +162,8 @@ public class Unit : NetworkBehaviour
         base.OnStartAuthority();
         range = unitSO.CurrentRange(level);
 
-        rangeCollider.radius = range / 5;
-        rangeVisualSprite.localScale = new Vector3(1,1) * (rangeCollider.radius * 0.2f);
+        if (rangeVisualSprite != null)
+            rangeVisualSprite.localScale = new Vector3(1,1) * (rangeCollider.radius * 0.2f);
     }
 
     public override void OnStopServer()
@@ -180,6 +195,18 @@ public class Unit : NetworkBehaviour
     private void FixedUpdate()
     {
         Physics.IgnoreLayerCollision(6, 9);
+    }
+
+    [Client]
+    protected virtual void ClientGameHasStarted(object sender, EventArgs e)
+    {
+        Debug.Log($"Client Unit is now armed");
+    }
+
+    [Server]
+    protected virtual void ServerGameHasStarted(object sender, EventArgs e)
+    {
+        Debug.Log($"Server Unit is now armed");
     }
 
     [Server]
@@ -396,7 +423,7 @@ public class Unit : NetworkBehaviour
             StartCoroutine(AttackingAnimationLength());
             RpcClientUnitActions(enemiesInRange[0].transform.position);
 
-            int rand = Random.Range(0, 100);
+            int rand = UnityEngine.Random.Range(0, 100);
             if (rand < unitSO.chanceToMiss)
             {
                 MissedAttack();
@@ -483,9 +510,16 @@ public class Unit : NetworkBehaviour
     public void ChangeVisualRangeSprite(bool red)
     {
         if (red)
+        {
             rangeVisualSprite.GetComponent<SpriteRenderer>().color = new Color (1, 0, 0, 1f);
+            gridDisplayFade.isWhite = false;
+            
+        }
         else
+        {
             rangeVisualSprite.GetComponent<SpriteRenderer>().color = new Color (1, 1, 1, 1f);
+            gridDisplayFade.isWhite = true;
+        }
     }
     
     public virtual void SelectUnit()

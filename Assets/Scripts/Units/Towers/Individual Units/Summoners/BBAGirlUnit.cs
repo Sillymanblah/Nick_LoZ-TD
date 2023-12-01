@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -15,18 +16,39 @@ public class BBAGirlUnit : Unit
     Vector3 thisPathwayGridCellPosition;
     int thisPathwayWayPoint;
 
-    protected override void Start() => base.Start();
+    protected override void Start()
+    {
+        if (isServer)
+        {
+            GameManager.instance.OnGameStart += ServerGameHasStarted;
+            animations.IdleAnim(0);
+        }
+
+        if (!isClient)
+        {
+            gridDisplayFade.ToggleCellDisplay(true);
+            missedAttackUIObject.SetActive(false);
+            range = unitSO.CurrentRange(level);
+            return;
+        }
+        else
+        {
+            audioSource = GetComponent<AudioSource>();
+            missedAttackUIObject.SetActive(false);
+            hoverStatsObject.SetActive(false);
+            gridDisplayFade.isWhite = true;
+            GameManager.instance.OnGameStart += ClientGameHasStarted;
+            
+        }
+    }
 
     protected override void Update()
     {
         if (!isPlaced) return;
         if (!isServer) return; 
-        //if (!GameManager.instance.gameStarted) return;
+        if (!GameManager.instance.gameStarted) return;
         
-        if (attacking)
-            animations.AttackingAnim(0.2f);
-        else
-            animations.IdleAnim(0.3f);
+
 
         Physics.IgnoreLayerCollision(13, 8);
         AttackEnemy();
@@ -100,6 +122,37 @@ public class BBAGirlUnit : Unit
 
         newSummonable.GetComponent<Summonable>().Initialize(thisPathwayWayPoint, this);
 
+        StartCoroutine(AttackAnimationLogic());
+        currentCooldown = Time.time + cooldown;
+    }
+
+    [Server]
+    IEnumerator AttackAnimationLogic()
+    {
+        // 0.65f is a hard coded value of half the animation, whole anim time is 1.3f seconds from slowing it down by 0.5 (original is 0.65)
+        yield return new WaitForSeconds(cooldown - 0.65f);
+        animations.AttackingAnim(0.1f);
+        
+        StartCoroutine(DelayIdleAnimation());
+        yield break;
+    }
+
+    [Server]
+    IEnumerator DelayIdleAnimation()
+    {
+        yield return new WaitForSeconds(1.3f);
+        animations.IdleAnim(0.1f);
+    }
+
+    protected override void ClientGameHasStarted(object sender, EventArgs e)
+    {
+        base.ClientGameHasStarted(sender, e);
+    }
+
+    protected override void ServerGameHasStarted(object sender, EventArgs e)
+    {
+        base.ServerGameHasStarted(sender, e);
+        StartCoroutine(AttackAnimationLogic());
         currentCooldown = Time.time + cooldown;
     }
 }

@@ -32,6 +32,7 @@ public class LobbyAuth : MonoBehaviour
         
     }
 
+    // network sync it
     public void SyncData(PlayerNetworkInfo player)
     {
         this.player = player;
@@ -72,6 +73,10 @@ public class LobbyAuth : MonoBehaviour
         }
 
         PlayerPrefs.Save();
+
+        // If player was null then that means we arent even connected to a game server
+        if (player != null)
+            TransmitUnitInventory();
     }
 
     void TransmitUnitInventory()

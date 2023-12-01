@@ -315,7 +315,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  speed: 0
 --- !u!1 &1705622674348134211
 GameObject:
   m_ObjectHideFlags: 0
@@ -593,7 +592,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CLDWN
+  m_text: RATE
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9ff229c9f17dda44abfa6a2e15eb2049, type: 2}
   m_sharedMaterial: {fileID: -7202796451408170402, guid: 9ff229c9f17dda44abfa6a2e15eb2049,
@@ -831,7 +830,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &2267479094530746158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -861,12 +860,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f54f83eea62894458431829bda43618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelText: {fileID: 3985279935903993690}
-  attackText: {fileID: 5292020129303199312}
-  rangeText: {fileID: 7100156025042021405}
-  cooldownText: {fileID: 8639725730483058498}
+  levelValueText: {fileID: 3985279935903993690}
+  attackValueText: {fileID: 5292020129303199312}
+  rangeValueText: {fileID: 7100156025042021405}
+  cooldownValueText: {fileID: 8639725730483058498}
   unitNameText: {fileID: 9040966210268040336}
   unitPlayerText: {fileID: 5348464481166209851}
+  rangeTitleText: {fileID: 757126322429857204}
 --- !u!114 &3281860599963997515
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,7 +11,9 @@ public class Summonable : NetworkBehaviour
     Vector3 velocity = Vector3.zero;
     float gravity = -9.81f;
     [SerializeField] bool isGrounded = false;
-    CharacterController controller;
+    protected CharacterController controller;
+
+    [SyncVar]
     protected Unit thisUnit;
     
     int targetWaypoint;
@@ -102,11 +104,8 @@ public class Summonable : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isClient) return;
-
+        if (isClientOnly) return;
         if (isDead) return;
-
-        Debug.Log($"bruhdsufhdjsfhajksd");
 
         if (other.CompareTag("Enemy"))
         {

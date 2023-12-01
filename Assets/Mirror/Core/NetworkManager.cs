@@ -825,7 +825,12 @@ namespace Mirror
         // the change and ready again to participate in the new scene.
         public virtual void ServerChangeScene(string newSceneName)
         {
-            if (SceneManager.GetActiveScene().name == newSceneName) return;
+            if (SceneManager.GetActiveScene().name == newSceneName)
+            {
+                Debug.Log(SceneManager.GetActiveScene().name + " | " + newSceneName);
+                Debug.Log($"is server chanign scene being fucked again?");
+                return;
+            } 
 
             if (string.IsNullOrWhiteSpace(newSceneName))
             {
@@ -1089,7 +1094,7 @@ namespace Mirror
         {
             // debug message is very important. if we ever break anything then
             // it's very obvious to notice.
-            //Debug.Log("Finished loading scene in client-only mode.");
+            Debug.Log("Finished loading scene in client-only mode.");
 
             if (clientReadyConnection != null)
             {
@@ -1335,6 +1340,13 @@ namespace Mirror
             // This needs to run for host client too. NetworkServer.active is checked there
             if (NetworkClient.isConnected)
             {
+                if (SceneManager.GetActiveScene().name == msg.sceneName)
+                {
+                    Debug.Log(SceneManager.GetActiveScene().name + " | " + msg.sceneName);
+                    Debug.Log($"is server chanign scene being fucked again?");
+                    return;
+                } 
+
                 ClientChangeScene(msg.sceneName, msg.sceneOperation, msg.customHandling);
             }
         }

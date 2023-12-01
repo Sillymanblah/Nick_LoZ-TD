@@ -41,7 +41,7 @@ public class CSNetworkManager : NetworkManager
     #endregion
 
     // NetworkManager.cs source code changes
-    // line - 1112 | if statement is a change
+    // lines 1343 - 1348 | if statement is an addition to prevent client loading same scene upon connecting to server
 
     public override void Start()
     {
@@ -309,6 +309,7 @@ public class CSNetworkManager : NetworkManager
     [Server]
     public void SwitchScenes(string sceneName)
     {
+        Debug.Log($"is this the culprit?");
         ServerChangeScene(sceneName);
         players.Clear();
     }

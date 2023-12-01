@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -7,6 +8,7 @@ public class GameManager : NetworkBehaviour
 {
     List<GridCell> totalGridCells = new List<GridCell>();
     public static GameManager instance;
+    public event EventHandler OnGameStart;
 
     int playerReadyCount;
 
@@ -124,16 +126,29 @@ public class GameManager : NetworkBehaviour
         WaveManager.instance.SetHealthWithPlayerCount(CSNetworkManager.instance.players.Count);
         BaseManager.instance.SetBaseHP(CSNetworkManager.instance.players.Count);
         playerReadyCount = 0;
+        
+        RpcAllReady();
+        OnGameStart?.Invoke(this, EventArgs.Empty);
 
-        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+        /*foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {
             AllReady(player.connectionToClient);
-        }
+        }*/
     }
+
+
 
     [TargetRpc]
     void AllReady(NetworkConnectionToClient conn)
     {
+        
+    }
+
+    [ClientRpc]
+    void RpcAllReady()
+    {
+        OnGameStart?.Invoke(this, EventArgs.Empty);
+
         UIManager.instance.DisableReadyButtonLocally();
     }
 
@@ -146,7 +161,7 @@ public class GameManager : NetworkBehaviour
             totalChance += unit.dropChance;
         }
 
-        float randomValue = Random.value * totalChance;
+        float randomValue = UnityEngine.Random.value * totalChance;
 
         foreach (UnitDrops unit in unitDrops)
         {

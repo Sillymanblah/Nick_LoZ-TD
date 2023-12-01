@@ -16,7 +16,6 @@ public class SplashWeapon : MonoBehaviour
 
         foreach (Collider collider in Physics.OverlapSphere(this.transform.position, thisUnit.splashRange, collidersLayer))
         {
-            Debug.Log(collider.gameObject.name);
             enemyUnitsInRange.Add(collider.GetComponent<EnemyUnit>());
         }
 

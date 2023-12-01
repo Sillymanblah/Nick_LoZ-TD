@@ -11,6 +11,7 @@ public class GridDisplayFade : MonoBehaviour
     List<SpriteRenderer> spriteRenderers = new List<SpriteRenderer>();
     Transform cellParent;
     static float cycleFactor = 5f;
+    public bool isWhite = true;
 
     IEnumerator StartFade()
     {
@@ -23,7 +24,10 @@ public class GridDisplayFade : MonoBehaviour
         {
             foreach (SpriteRenderer child in spriteRenderers)
             {
-                child.color = new Color(1,1,1, Mathf.Abs(Mathf.Sin(Time.time * cycleFactor) / 3) + 0.2f);
+                if (isWhite)
+                    child.color = new Color(1,1,1, Mathf.Abs(Mathf.Sin(Time.time * cycleFactor) / 3) + 0.2f);
+                else
+                    child.color = new Color(1,0,0, Mathf.Abs(Mathf.Sin(Time.time * cycleFactor) / 3) + 0.2f);
             }
             yield return null;
         }

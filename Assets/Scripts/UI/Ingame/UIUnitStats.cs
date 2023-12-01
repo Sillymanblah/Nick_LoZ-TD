@@ -9,13 +9,21 @@ public class UIUnitStats : MonoBehaviour
 {
     Unit currentUnit;
 
+    [Header("Stats Name Text")]
     [SerializeField] TextMeshProUGUI unitNameText;
+    [SerializeField] TextMeshProUGUI rangeNameText;
+
+    #region Value Text
+
+    [Header("Values Text")]
     [SerializeField] TextMeshProUGUI levelText;
     [SerializeField] TextMeshProUGUI attackText;
     [SerializeField] TextMeshProUGUI rangeText;
     [SerializeField] TextMeshProUGUI cooldownText;
     [SerializeField] TextMeshProUGUI upgradeText;
     [SerializeField] TextMeshProUGUI sellText;
+
+    #endregion
     [SerializeField] TextMeshProUGUI targetModeText;
     [SerializeField] Transform buttonsParent;
     [SerializeField] Image unitIcon;
@@ -75,6 +83,11 @@ public class UIUnitStats : MonoBehaviour
         attackText.text = currentUnit.GetAttack().ToString();
         rangeText.text = currentUnit.GetRange().ToString();
         cooldownText.text = currentUnit.GetCooldown().ToString();
+
+        if (unit.rangeName == string.Empty)
+            rangeNameText.text = "RANGE";
+        else
+            rangeNameText.text = unit.rangeName;
 
         if (currentUnit.GetLevel() == 5)
             upgradeText.text = "MAX";
