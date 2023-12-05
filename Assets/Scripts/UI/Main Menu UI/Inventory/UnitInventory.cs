@@ -13,13 +13,6 @@ public class UnitInventory : MonoBehaviour
 
     int nextFreeIndex = 0;
 
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
-    private void Awake()
-    {
-        
-    }
     void Start()
     {
         LoadInventoryData();
@@ -51,8 +44,27 @@ public class UnitInventory : MonoBehaviour
         foreach (UnitSO unit in totalAchievedUnits)
         {
             units.Add(unit);
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            string nextUnitName = PlayerPrefs.GetString($"UnitEquipped{i}");
+        
+            if (nextUnitName != string.Empty)
+            {
+                if (units.Contains(UnitSO.Get(nextUnitName)))
+                {
+                    units.Remove(UnitSO.Get(nextUnitName));
+                }
+            } else break;
+        }
+
+        foreach (UnitSO unit in units)
+        {
             SetUnitsOnStart(unit);
         }
+
+        this.transform.parent.gameObject.SetActive(false);
     }
 
     void SetUnitsOnStart(UnitSO unit)

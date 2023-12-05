@@ -4,14 +4,22 @@ using System.Configuration;
 using Mirror;
 using TMPro;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
-public class MissedAttackUI : MonoBehaviour
+public class HoveringUIText : MonoBehaviour
 {
     [SerializeField] AnimationCurve animationCurve;
     float speed;
+    [SerializeField] TextMeshProUGUI thisUIText;
 
-    public void StartAnimation()
+    private void Awake()
     {
+        thisUIText = GetComponent<TextMeshProUGUI>();
+        
+    }
+    public void StartAnimation(string message)
+    {
+        thisUIText.text = message;
         StopCoroutine(nameof(AnimatingUI));
         StartCoroutine(nameof(AnimatingUI));
     }

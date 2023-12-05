@@ -120,42 +120,48 @@ public class PlayerUnitManager : NetworkBehaviour
             {
                 currentGridTransform = hit.transform;
             }
+        }
 
-            if (placedUnit == false) return;
-
+        if (placedUnit == false) return;
+        
             // get unit
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (hit.collider == null)
             {
-                if (hit.collider.gameObject.layer == 6)
-                {
-                    if (selectedUnit != null) selectedUnit.DeSelectUnit();
-                    selectedUnit = hit.collider.GetComponent<Unit>();
+                if (selectedUnit != null)
+                    selectedUnit.DeSelectUnit();
 
-                    Debug.Log($"Selected unit " + selectedUnit.name);
+                return;
+            }
 
-                    if (selectedUnit.isOwned)
-                        selectedUnit.SelectUnit();
+            if (hit.collider.gameObject.layer == 6)
+            {
+                if (selectedUnit != null) selectedUnit.DeSelectUnit();
+                selectedUnit = hit.collider.GetComponent<Unit>();
+
+                Debug.Log($"Selected unit " + selectedUnit.name);
+
+                if (selectedUnit.isOwned)
+                    selectedUnit.SelectUnit();
 
 
-                    else if (!selectedUnit.isOwned) selectedUnit = null;
-                }
-                else if (hit.collider.gameObject.layer != 6)
-                {
-                    if (UIManager.instance.MouseOnUI) return;
+                else if (!selectedUnit.isOwned) selectedUnit = null;
 
-                    if (selectedUnit != null)
-                        selectedUnit.DeSelectUnit();
+                return;
+            }
+            else if (hit.collider.gameObject.layer != 6)
+            {
+                if (UIManager.instance.MouseOnUI) return;
 
-                    selectedUnit = null;
+                if (selectedUnit != null)
+                    selectedUnit.DeSelectUnit();
 
-                    Debug.Log($"Deselected unit");
-                }
+                selectedUnit = null;
 
-                else
-                {
-                    if (selectedUnit != null)
-                        selectedUnit.DeSelectUnit();
-                }
+                Debug.Log($"Deselected unit");
+
+                return;
             }
         }
     }

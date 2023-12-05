@@ -1157,6 +1157,7 @@ MonoBehaviour:
   cooldownMultiplier: 1
   level: 1
   gridCells: 
+  rangeName: 
   isPlaced: 0
   attackSound: {fileID: 8300000, guid: 753b9615398ddc04e8a846bac04adbe7, type: 3}
 --- !u!114 &8712560564869825278
@@ -1437,6 +1438,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8062145506032376915}
     m_Modifications:
+    - target: {fileID: 2083057464740110546, guid: 69433ed0a8f52e746940ef3e31f2c48c,
+        type: 3}
+      propertyPath: thisUIText
+      value: 
+      objectReference: {fileID: 7408922506507537211}
     - target: {fileID: 5760537487506334709, guid: 69433ed0a8f52e746940ef3e31f2c48c,
         type: 3}
       propertyPath: m_Name
@@ -1589,6 +1595,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1314802571681479937}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7408922506507537211 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8425911899561883194, guid: 69433ed0a8f52e746940ef3e31f2c48c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1314802571681479937}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381790437912149002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8241775272512005981
 PrefabInstance:
   m_ObjectHideFlags: 0

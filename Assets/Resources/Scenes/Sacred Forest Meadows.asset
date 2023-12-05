@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: Assets/Scenes/Sacred Forest Meadow.unity
   levelName: Sacred Forest Meadows
-  levelPicture: {fileID: 21300000, guid: 84e88cbd6a2021f4ab5f7ea2f2dcd0df, type: 3}
+  levelPicture: {fileID: 21300000, guid: c32a17a49ec77114cb281f0fece80b38, type: 3}
   levelID: 1

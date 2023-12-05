@@ -57,7 +57,6 @@ public class CSNetworkManager : NetworkManager
         
 
         SceneManager.sceneLoaded += OnSceneLoaded;
-        NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
 
         if (!DeployingAsServer) return;
 
@@ -114,15 +113,6 @@ public class CSNetworkManager : NetworkManager
 
     public override void OnServerConnect(NetworkConnectionToClient conn)
     {
-        if (!isSinglePlayer && !sceneTesting)
-        {
-            if (ShouldRefuseConnection(out string reason, conn))
-            {
-                conn.Send(new ConnectionRefusedMessage(reason));
-                Debug.Log(reason);
-                return;
-            }
-        }
         base.OnServerConnect(conn);
     }
 
@@ -200,7 +190,6 @@ public class CSNetworkManager : NetworkManager
         playerNames.Remove(newPlayer.name);
         players.Remove(conn.identity);
         LobbyManager.instance.RpcUpdatePlayerCount(LobbyManager.instance.playerReadyCount, numPlayers);
-        
 
         // for lobby
         if (SceneManager.GetActiveScene().path == mainMenuScene)
@@ -253,6 +242,9 @@ public class CSNetworkManager : NetworkManager
             players.Clear();
             playerNames.Clear();
         }
+
+        if (GameManager.instance.gameStarted == false)
+            GameManager.instance.PlayerLeft();
     }
 
     public override void OnStartServer()
@@ -312,38 +304,6 @@ public class CSNetworkManager : NetworkManager
         Debug.Log($"is this the culprit?");
         ServerChangeScene(sceneName);
         players.Clear();
-    }
-
-    private bool ShouldRefuseConnection(out string reason, NetworkConnectionToClient conn)
-    {
-
-        if (SceneManager.GetActiveScene().path != mainMenuScene)
-        {
-            reason = "Game has already started";
-            return true;
-        }
-
-        else if (numPlayers >= 4)
-        {
-            reason = "Server is full";
-            return true;
-        }
-
-        reason = "Good to go";
-        return false;
-    }
-
-    private void OnConnectionRefused(ConnectionRefusedMessage message)
-    {
-        Debug.Log("Connection refused: " + message.reason);
-        MainMenuUIManager.instance.FailedToJoinLobby(message.reason);
-
-
-        NetworkClient.Disconnect();
-        NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
-
-        // Display the refusal reason to the player
-        //refusalReasonText.text = "Connection refused: " + message.reason;
     }
 
     public int IngameStatus()

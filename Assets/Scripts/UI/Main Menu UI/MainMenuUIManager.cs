@@ -52,7 +52,7 @@ public class MainMenuUIManager : MonoBehaviour
         connectingMenu.SetActive(false);
         multiplayerLobby.SetActive(false);
         settingsMenu.SetActive(false);
-        inventoryMenu.SetActive(false);
+        //inventoryMenu.SetActive(false);
         singlePlayerMenu.SetActive(false);
         creditsMenu.SetActive(false);
         joinExceptionPanel.SetActive(false);

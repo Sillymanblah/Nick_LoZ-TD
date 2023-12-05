@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class UnitHotBarInventory : MonoBehaviour
 {
+
+    // PlayerPref names:
+    // - UnitEquipped0
+    // - UnitEquipped1
+    // - UnitEquipped2
+
+
     [SerializeField] List<UnitSO> units = new List<UnitSO>();
     List<UnitHotBarSlot> slots= new List<UnitHotBarSlot>();
 
@@ -12,6 +19,19 @@ public class UnitHotBarInventory : MonoBehaviour
 
     [SerializeField] UnitInventory unitInventory;
     [SerializeField] LobbyAuth lobbyAuth;
+
+    private void Awake()
+    {
+        // We are going to go ahead and create the variables upon first ever launch of game
+        if (!PlayerPrefs.HasKey("UnitEquipped0"))
+        {
+            PlayerPrefs.SetString("UnitEquipped0", "Deku Baba (ground)");
+            PlayerPrefs.SetString("UnitEquipped1", "Deku Baba (flying)");
+            PlayerPrefs.SetString("UnitEquipped2", string.Empty);
+
+            
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +43,15 @@ public class UnitHotBarInventory : MonoBehaviour
             // Gets the child (0) which holds all the inv slot children
             slots.Add(transform.GetChild(0).GetChild(i).GetComponent<UnitHotBarSlot>());
             slots[i].AssignSlot(i, this);
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            string nextUnitNamee = PlayerPrefs.GetString($"UnitEquipped{i}");
+
+            if (nextUnitNamee != string.Empty)
+                AddUnit(UnitSO.Get(PlayerPrefs.GetString($"UnitEquipped{i}")));
+            else break;
         }
     }
 
@@ -42,7 +71,13 @@ public class UnitHotBarInventory : MonoBehaviour
         units.Add(unit);
         slots[nextFreeIndex].EquipUnit(unit);
 
-        
+        PlayerPrefs.SetString($"UnitEquipped{nextFreeIndex}", unit.uniqueName);
+        PlayerPrefs.Save();
+
+        for (int i = 0; i < 3; i++)
+        {
+            Debug.Log(PlayerPrefs.GetString($"UnitEquipped{i}"));
+        }
 
         lobbyAuth.UpdateUnitInventory(units);
 
@@ -54,6 +89,7 @@ public class UnitHotBarInventory : MonoBehaviour
         unitInventory.AddUnit(unit);
 
         slots[slotIndex].ThisShitSucks();
+        PlayerPrefs.SetString($"UnitEquipped{slotIndex}", string.Empty);
 
         units.Remove(unit);
         OrganizeUnitSlots();
@@ -68,9 +104,24 @@ public class UnitHotBarInventory : MonoBehaviour
         {
             slots[i].ResetSlot();
 
-            if (i >= units.Count) continue;
+
+            // if i, the loop index, was outside of the amount of units in the list, that meant that i is currently on a slot that doesnt contain a unit and UP
+            if (i >= units.Count) 
+            {
+                PlayerPrefs.SetString($"UnitEquipped{i}", string.Empty);
+
+                continue;
+            }
+
+            PlayerPrefs.SetString($"UnitEquipped{i}", units[i].uniqueName);
 
             slots[i].EquipUnit(units[i]); 
         }
+
+        for (int i = 0; i < 3; i++)
+        {
+            Debug.Log(PlayerPrefs.GetString($"UnitEquipped{i}"));
+        }
+        PlayerPrefs.Save();
     }
 }

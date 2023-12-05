@@ -16,11 +16,19 @@ public class BBAGirlUnit : Unit
     Vector3 thisPathwayGridCellPosition;
     int thisPathwayWayPoint;
 
+    [Space]
+    [SerializeField] GameObject bombchuPrefab;
+    [SerializeField] Transform hands;
+
     protected override void Start()
     {
         if (isServer)
         {
-            GameManager.instance.OnGameStart += ServerGameHasStarted;
+            if (!GameManager.instance.gameStarted)
+                GameManager.instance.OnGameStart += ServerGameHasStarted;
+            else 
+                currentCooldown = Time.time + cooldown;
+
             animations.IdleAnim(0);
         }
 
@@ -37,8 +45,12 @@ public class BBAGirlUnit : Unit
             missedAttackUIObject.SetActive(false);
             hoverStatsObject.SetActive(false);
             gridDisplayFade.isWhite = true;
-            GameManager.instance.OnGameStart += ClientGameHasStarted;
-            
+
+            if (GameManager.instance.gameStarted)
+                StartCoroutine(nameof(DelayBombchuInHand));
+            else
+                GameManager.instance.OnGameStart += ClientGameHasStarted;
+
         }
     }
 
@@ -47,7 +59,6 @@ public class BBAGirlUnit : Unit
         if (!isPlaced) return;
         if (!isServer) return; 
         if (!GameManager.instance.gameStarted) return;
-        
 
 
         Physics.IgnoreLayerCollision(13, 8);
@@ -144,9 +155,26 @@ public class BBAGirlUnit : Unit
         animations.IdleAnim(0.1f);
     }
 
+    [Client]
+    IEnumerator DelayBombchuInHand()
+    {
+        int delay = 2;
+        yield return new WaitForSeconds(cooldown - delay);
+
+        GameObject newBombchu = Instantiate(bombchuPrefab, hands.position, Quaternion.identity, hands);
+        newBombchu.transform.localRotation = Quaternion.Euler(new Vector3(-21f, -249, 133.9f));
+        newBombchu.transform.localScale = new Vector3(.6f, .6f, .6f);
+
+        yield return new WaitForSeconds(delay);
+        Destroy(newBombchu);
+        StartCoroutine(nameof(DelayBombchuInHand));
+        yield break;
+    }
+
     protected override void ClientGameHasStarted(object sender, EventArgs e)
     {
         base.ClientGameHasStarted(sender, e);
+        StartCoroutine(nameof(DelayBombchuInHand));
     }
 
     protected override void ServerGameHasStarted(object sender, EventArgs e)

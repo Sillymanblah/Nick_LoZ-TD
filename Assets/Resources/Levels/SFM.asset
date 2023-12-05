@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5110e5f826c0bb34b9905f8aa978943b, type: 3}
+  m_Name: SFM
+  m_EditorClassIdentifier: 
+  levelName: Sacred Forest Meadows
+  sceneName: 
+  levelID: 1
+  unitDrops:
+  - unit: {fileID: 11400000, guid: 32ff02de205499342b26d8322ee68599, type: 2}
+    dropChance: 80
+  - unit: {fileID: 11400000, guid: 2d2f889c4c7ac0645b0fd45f16b30439, type: 2}
+    dropChance: 50
+  - unit: {fileID: 11400000, guid: 4dd255a0ad7c7884aaf1aeb1e1e21bff, type: 2}
+    dropChance: 25
+  - unit: {fileID: 11400000, guid: ce9597cbc799d0447b4c43a59bff19ed, type: 2}
+    dropChance: 10
+  - unit: {fileID: 11400000, guid: 56622b27acd4c374c905db587e350881, type: 2}
+    dropChance: 5
+  - unit: {fileID: 11400000, guid: bebc0ad8b06c2774db5c023a33e6cd07, type: 2}
+    dropChance: 1

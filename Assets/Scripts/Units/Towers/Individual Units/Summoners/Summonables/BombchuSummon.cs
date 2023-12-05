@@ -16,9 +16,15 @@ public class BombchuSummon : Summonable
     float splashRange;
     [SerializeField] int bombTimer;
 
+    [Header("Sound Clips")]
+    [SerializeField] AudioClip explosionAudio;
+    AudioSource audioSource;
+
     protected override void Start()
     {
         base.Start();
+
+        audioSource = GetComponent<AudioSource>();
 
         if (isClientOnly) return;
 
@@ -27,13 +33,13 @@ public class BombchuSummon : Summonable
 
     protected override void Update() => base.Update();
 
-
     [Server]
     protected override void ServerInteraction(Collider other)
     {
         base.ServerInteraction(other);
         var firstEnemy = other.GetComponent<EnemyUnit>();
         firstEnemy.DealDamage(thisUnit.GetAttack());
+        firstEnemy.DamageUIText(thisUnit.GetAttack());
         controller.enabled = false;
 
         float splashDamage = thisUnit.GetAttack() / splashDamageDivider;
@@ -58,7 +64,7 @@ public class BombchuSummon : Summonable
         base.ClientRpcEnemyInteract();
         shockwaveObject.localScale = Vector3.one * (0.34f * thisUnit.GetRange());
         thisParticleSystem.Play();
-        // play sound effect
+        audioSource.PlayOneShot(explosionAudio);
         transform.GetChild(0).gameObject.SetActive(false);
     }
 
@@ -77,6 +83,7 @@ public class BombchuSummon : Summonable
         NetworkServer.Destroy(this.gameObject);
     }
 
+    [Server]
     void SplashAttack(float splashDamage, EnemyUnit firstEnemy)
     {
         List<EnemyUnit> enemyUnitsInRange = new List<EnemyUnit>();
@@ -101,15 +108,14 @@ public class BombchuSummon : Summonable
             {
                 if (enemyUnitsInRange[i] == firstEnemy) continue;
             }
-            
 
             enemyUnitsInRange[i].DealDamage(splashDamage);
+            enemyUnitsInRange[i].DamageUIText(splashDamage);
 
             if (enemyUnitsInRange[i] == null) 
             {
                 enemyUnitsInRange.RemoveAt(i);
-            }
-            
+            } 
         }
     }
 
@@ -130,14 +136,5 @@ public class BombchuSummon : Summonable
 
             yield return null;
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-
-        if (thisUnit == null) return;
-
-        Gizmos.DrawWireSphere(this.transform.position, thisUnit.GetRange());
     }
 }

@@ -52,6 +52,17 @@ public class BaseManager : NetworkBehaviour
             if (deadBase) return;
 
             deadBase = true;
+
+            var newUnitReward = GameManager.instance.gameLevelSO.GetRandomUnitReward(WaveManager.instance.currentWave, false);
+
+            if (newUnitReward != null)
+            {
+                foreach (NetworkIdentity player in CSNetworkManager.instance.players)
+                {
+                    player.GetComponent<PlayerUnitManager>().SetUnitReward(newUnitReward.uniqueName);
+                }
+            }
+
             HPTEXTGAMEOVER();
             Announcement("YOU LOSE DUM BOY!!!!");
             StartCoroutine(DelayEndingGame());

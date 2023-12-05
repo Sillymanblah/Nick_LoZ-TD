@@ -16,14 +16,14 @@ public class HealthBar : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        healthSlider = transform.GetChild(1).GetComponent<Slider>();
+        healthSlider = transform.GetChild(1).GetChild(1).GetComponent<Slider>();
         enemy = transform.parent.GetComponent<EnemyUnit>();
         cam = Camera.main.transform;
     }
     // Start is called before the first frame update
     void Start()
     {
-        gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
     }
     
 
@@ -34,6 +34,7 @@ public class HealthBar : MonoBehaviour
 
     public void UpdateBarValue(int healthValue)
     {
+        Debug.Log($"BITCH WTF");
         healthSlider.value = healthValue;
         hpText.text = FormatNumber((int)healthSlider.value) + "/" +  FormatNumber((int)healthSlider.maxValue);
     }

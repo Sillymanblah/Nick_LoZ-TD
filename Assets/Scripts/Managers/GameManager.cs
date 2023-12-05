@@ -16,15 +16,8 @@ public class GameManager : NetworkBehaviour
     public bool gameStarted;
     [SyncVar]
     public bool intermission = false;
-
-    [System.Serializable]
-    public class UnitDrops
-    {
-        public UnitSO unit;
-        public int dropChance;
-    }
-
-    [SerializeField] List<UnitDrops> unitDrops = new List<UnitDrops>();
+    public GameLevelSO gameLevelSO;
+    
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -74,15 +67,11 @@ public class GameManager : NetworkBehaviour
             totalGridCells[index].SetOccupence(busy);
         }
 
-
-        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-        {
-            RPCSyncGridCellOccupence(player.connectionToClient, busy, indexes);
-        }
+        RPCSyncGridCellOccupence(busy, indexes);
     }
 
-    [TargetRpc]
-    void RPCSyncGridCellOccupence(NetworkConnectionToClient sender, bool busy, List<int> indexes)
+    [ClientRpc]
+    void RPCSyncGridCellOccupence(bool busy, List<int> indexes)
     {
         foreach (int index in indexes)
         {
@@ -94,6 +83,16 @@ public class GameManager : NetworkBehaviour
     public void UpdatePlayerCount()
     {
         RpcUpdatePlayerCount(playerReadyCount, CSNetworkManager.instance.numPlayers);
+    }
+
+    [Server]
+    public void PlayerLeft()
+    {
+        playerReadyCount--;
+        RpcUpdatePlayerCount(playerReadyCount, CSNetworkManager.instance.numPlayers);
+
+        if (playerReadyCount == CSNetworkManager.instance.numPlayers)
+            StartGame();
     }
 
     [ClientRpc]
@@ -128,7 +127,10 @@ public class GameManager : NetworkBehaviour
         playerReadyCount = 0;
         
         RpcAllReady();
-        OnGameStart?.Invoke(this, EventArgs.Empty);
+
+        if (!isServerOnly)
+            OnGameStart?.Invoke(this, EventArgs.Empty);
+
 
         /*foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {
@@ -152,26 +154,5 @@ public class GameManager : NetworkBehaviour
         UIManager.instance.DisableReadyButtonLocally();
     }
 
-    public UnitSO GetRandomUnitReward()
-    {
-        float totalChance = 0;
-
-        foreach (UnitDrops unit in unitDrops)
-        {
-            totalChance += unit.dropChance;
-        }
-
-        float randomValue = UnityEngine.Random.value * totalChance;
-
-        foreach (UnitDrops unit in unitDrops)
-        {
-            if (randomValue <= unit.dropChance)
-            {
-                return unit.unit;
-            }
-            randomValue -= unit.dropChance;
-        }
-
-        return unitDrops[0].unit;
-    }
+    
 }

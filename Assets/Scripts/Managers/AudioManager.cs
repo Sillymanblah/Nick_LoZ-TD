@@ -52,7 +52,7 @@ public class AudioManager : MonoBehaviour
     void Update()
     {
         if (!audioSource.isPlaying)
-            audioSource.PlayOneShot(currentClip, volume);
+            audioSource.PlayOneShot(currentClip, 1);
 
     }
 

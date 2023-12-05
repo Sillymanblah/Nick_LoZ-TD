@@ -31,6 +31,8 @@ public class SplashWeapon : MonoBehaviour
             if (enemyUnitsInRange[i] == firstEnemy) continue;
 
             enemyUnitsInRange[i].DealDamage(splashDamage);
+            enemyUnitsInRange[i].DamageUIText(splashDamage);
+
 
             if (enemyUnitsInRange[i] == null) 
             {

@@ -39,7 +39,7 @@ public class Unit : NetworkBehaviour
     [Header("WorldSpace UI")]
     [SerializeField] UIUnitHoverStats hoverStats;
     [SerializeField] protected GameObject hoverStatsObject;
-    [SerializeField] MissedAttackUI missedAttackUI;
+    [SerializeField] HoveringUIText missedAttackUI;
     [SerializeField] protected GameObject missedAttackUIObject;
 
     [Space]
@@ -445,7 +445,7 @@ public class Unit : NetworkBehaviour
     {
         Debug.Log($"missed attack");
         missedAttackUIObject.SetActive(true);
-        missedAttackUI.StartAnimation();
+        missedAttackUI.StartAnimation("MISSED");
     }
 
 
@@ -574,7 +574,7 @@ public class Unit : NetworkBehaviour
     }
 
     [Server]
-    public IEnumerator StunnedEffect(float seconds)
+    public virtual IEnumerator StunnedEffect(float seconds)
     {
         isAttacking = false;
         RpcStunEffects(true);

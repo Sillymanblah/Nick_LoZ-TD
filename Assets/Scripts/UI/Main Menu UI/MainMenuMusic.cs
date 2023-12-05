@@ -54,7 +54,7 @@ public class MainMenuMusic : MonoBehaviour
         if (audioSource == null) return;
 
         if (!audioSource.isPlaying)
-            audioSource.PlayOneShot(currentClip, volume);
+            audioSource.PlayOneShot(currentClip, 1);
     }
 
     public void PlayMenuMusic()
@@ -63,13 +63,13 @@ public class MainMenuMusic : MonoBehaviour
 
         if (MenuMusic == null) return;
 
-        audioSource.PlayOneShot(MenuMusic, volume);
+        audioSource.PlayOneShot(MenuMusic, 1);
         currentClip = MenuMusic;
     }
 
     public void PlayStartMusic()
     {
-        audioSource.PlayOneShot(StartMusic, volume);
+        audioSource.PlayOneShot(StartMusic, 1);
         
         currentClip = MenuMusic;
     }

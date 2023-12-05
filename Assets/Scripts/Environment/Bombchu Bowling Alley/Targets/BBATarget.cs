@@ -5,6 +5,8 @@ public class BBATarget : MonoBehaviour
 {
     [SerializeField] AudioClip explosion;
     [SerializeField] AudioSource audioSource;
+    [SerializeField] GameObject particlesObject;
+    [SerializeField] Transform particlesParent;
 
     [SerializeField] bool isIndependent;
 
@@ -15,9 +17,14 @@ public class BBATarget : MonoBehaviour
 
     IEnumerator TakeDownDelay()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 7; i++)
         {
             audioSource.PlayOneShot(explosion, 1f);
+            
+            Vector3 var = RandomVector3(new Vector3 (-0.54f,0.13f,-0.23f), new Vector3(0.54f,0.13f,0.5f));
+            GameObject newObject = Instantiate(particlesObject, particlesParent);
+            newObject.transform.localPosition = var;
+
             yield return new WaitForSeconds(0.2f);
         }
 
@@ -33,4 +40,11 @@ public class BBATarget : MonoBehaviour
             yield return null;
         }
     }
+
+    Vector3 RandomVector3(Vector3 min, Vector3 max)
+    {
+        return new Vector3(UnityEngine.Random.Range(min.x, max.x), UnityEngine.Random.Range(min.y, max.y), UnityEngine.Random.Range(min.z, max.z));
+    }
 }
+
+

@@ -41,6 +41,10 @@ public class EnemyUnit : NetworkBehaviour
     [SerializeField] HealthBar thisHealthBar;
     [SerializeField] GameObject hpBar;
 
+    [Space]
+    [SerializeField] HoveringUIText missedAttackUI;
+    [SerializeField] protected GameObject missedAttackUIObject;
+
     // Start is called before the first frame update
 
     /// <summary>
@@ -54,6 +58,7 @@ public class EnemyUnit : NetworkBehaviour
     {
         target = WayPointsManager.instance.points[1];
         var lookAtWaypoint = new Vector3(target.position.x, transform.position.y, target.position.z);
+        missedAttackUIObject.SetActive(false);
 
         transform.LookAt(lookAtWaypoint, Vector3.up);
 
@@ -200,4 +205,11 @@ public class EnemyUnit : NetworkBehaviour
     {
         hpBar.SetActive(active);
     }
+
+    [ClientRpc]
+    public void DamageUIText(float number)
+    {
+        missedAttackUIObject.SetActive(true);
+        missedAttackUI.StartAnimation(number.ToString());
+    } 
 }

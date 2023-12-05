@@ -155,6 +155,13 @@ public class WaveManager : NetworkBehaviour
     IEnumerator Intermission()
     {
         GameManager.instance.intermission = true;
+
+        if (Grotto.instance == null)
+        {
+            yield return new WaitForSeconds(5.0f);
+            goto End;
+        }
+
         Grotto.instance.RpcSetNewItems();
         Debug.Log($"Break time");
 
@@ -168,9 +175,11 @@ public class WaveManager : NetworkBehaviour
         if (Grotto.instance != null)
             TeleportAllPlayersUnderShop(NetworkManager.startPositions[0].position);
 
+        Grotto.instance.ResetShop();
+    End:
         Debug.Log($"Break time over!");
         GameManager.instance.intermission = false;
-        Grotto.instance.ResetShop();
+        
     }
     [Server]
     void TeleportAllPlayers(Vector3 position) 
@@ -275,16 +284,12 @@ public class WaveManager : NetworkBehaviour
             enemiesKilled = enemiesKilled - totalEnemiesSpawned;
             
             SkipWaveComplete();
-
-            foreach (NetworkIdentity newplayer in CSNetworkManager.instance.players)
-            {
-                RemoveSkipWaveButton(newplayer.connectionToClient);
-            }
+            RemoveSkipWaveButton();
         }
     }
 
-    [TargetRpc]
-    void RemoveSkipWaveButton(NetworkConnectionToClient conn)
+    [ClientRpc]
+    void RemoveSkipWaveButton()
     {
         UIManager.instance.ToggleSkipButtonLocally(false);
     }
@@ -372,7 +377,7 @@ public class WaveManager : NetworkBehaviour
     {
         foreach (NetworkIdentity player in CSNetworkManager.instance.players)
         {
-            player.GetComponent<PlayerUnitManager>().SetUnitReward(GameManager.instance.GetRandomUnitReward().uniqueName);
+            player.GetComponent<PlayerUnitManager>().SetUnitReward(GameManager.instance.gameLevelSO.GetRandomUnitReward(currentWave, true).uniqueName);
         }
 
         yield return new WaitForSeconds(2.0f);
