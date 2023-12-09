@@ -11,8 +11,13 @@ public class PlayerAnimationEvents : MonoBehaviour
         player = transform.parent.GetComponent<PlayerAnimationManager>();
     }
 
-    public void StopEmoting()
+    public void PlayFootStep()
     {
-        player.StopEmoting();
+        player.PlayFootStep();
+    }
+
+    public void PlayJumpSound()
+    {
+        player.PlayJumpSound();
     }
 }

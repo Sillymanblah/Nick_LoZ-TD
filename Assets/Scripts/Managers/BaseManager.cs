@@ -8,13 +8,15 @@ using System;
 
 public class BaseManager : NetworkBehaviour
 {
-    [SyncVar(hook = nameof(HandleBaseHealthChange))]
+    
     [SerializeField] int maxBaseHealth;
     [SyncVar(hook = nameof(HandleBaseHealthChange))]
     [SerializeField] int baseHealth;
     public static BaseManager instance;
     public bool deadBase = false;
     [SerializeField] TextMeshProUGUI baseHealthText;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip baseGettingHit;
 
     public event EventHandler<GameManagerEventArgs> OnBaseDead;
 
@@ -65,6 +67,8 @@ public class BaseManager : NetworkBehaviour
             WaveManager.instance.EnemyKilled();
 
             OnBaseDead?.Invoke(this, new GameManagerEventArgs { isDead = deadBase });
+            if (isServerOnly)
+                RpcBaseDeadEvent();
 
             HPTEXTGAMEOVER();
             StartCoroutine(DelayEndingGame());
@@ -76,10 +80,20 @@ public class BaseManager : NetworkBehaviour
         }
     }
 
-    [Server]
+    [ClientRpc]
+    void RpcBaseDeadEvent()
+    {
+        OnBaseDead?.Invoke(this, new GameManagerEventArgs { isDead = true });
+    }
+
+    [ClientCallback]
     void UpdateBaseHPUI()
     {
+        if (baseGettingHit != null)
+            audioSource.PlayOneShot(baseGettingHit, PlayerPrefs.GetFloat("SoundFXVol"));
+
         if (baseHealthText == null) return;
+        if (baseHealth <= 0) return;
 
         baseHealthText.text = baseHealth + "/" + maxBaseHealth;
     }
@@ -91,12 +105,14 @@ public class BaseManager : NetworkBehaviour
 
         if (baseHealthText == null) return;
 
+        
+
         baseHealthText.text = "GAME OVER";
     }
 
     IEnumerator DelayEndingGame()
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(7.4f);
 
         if (CSNetworkManager.instance.isSinglePlayer)
         {
@@ -111,5 +127,6 @@ public class BaseManager : NetworkBehaviour
     void HandleBaseHealthChange(int oldValue, int newValue)
     {
         UpdateBaseHPUI();
+        Debug.Log($"bruhther");
     }
 }

@@ -11,9 +11,6 @@ public class AudioManager : MonoBehaviour
     #region music
     [SerializeField] AudioClip currentClip;
     [SerializeField] AudioClip gameOver;
-    [SerializeField] AudioClip baseTakingDamage;
-
-
 
     #endregion
     [SerializeField] AudioSource audioSource;
@@ -33,6 +30,7 @@ public class AudioManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        BaseManager.instance.OnBaseDead += BaseDeadMusic;
 
         if (resetKeys)
             PlayerPrefs.DeleteKey("MusicVolume");
@@ -79,5 +77,11 @@ public class AudioManager : MonoBehaviour
 
         volumeSlider.value = volume;
         volumeValueText.text = string.Format("{0:0}", (volume * 100f)) + "%";
+    }
+
+    void BaseDeadMusic(object sender, GameManagerEventArgs e)
+    {
+        audioSource.Stop();
+        audioSource.PlayOneShot(gameOver, 1);
     }
 }

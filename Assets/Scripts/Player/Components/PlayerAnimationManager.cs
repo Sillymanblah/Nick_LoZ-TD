@@ -24,6 +24,13 @@ public class PlayerAnimationManager : NetworkBehaviour
     int PLAYER_CROUCHWALK = Animator.StringToHash("Crouch Walking");
 
     #endregion
+
+    [Space]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip footstep;
+    [SerializeField] AudioClip jumpSound;
+
+
     bool emoting = false;
     //bool walking = false;
 
@@ -131,5 +138,15 @@ public class PlayerAnimationManager : NetworkBehaviour
         if (isLocalPlayer) return;
 
         playerAnim.CrossFadeInFixedTime(newState, transitionTime);
+    }
+
+    public void PlayFootStep()
+    {
+        audioSource.PlayOneShot(footstep, PlayerPrefs.GetFloat("SoundFXVol"));
+    }
+
+    public void PlayJumpSound()
+    {
+        audioSource.PlayOneShot(jumpSound, PlayerPrefs.GetFloat("SoundFXVol"));
     }
 }

@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Google.Protobuf.WellKnownTypes;
+using UnityEngine.SceneManagement;
+using Mirror;
 
 public class CameraControls : MonoBehaviour
 {
     Transform cam;
     [SerializeField] private CinemachineFreeLook cineCam;
     [SerializeField] [Range(0.5f, 5)] float cameraZoomMultiplier = 1;
+    [Scene] [SerializeField] string mainMenuScene; 
 
     public void CCStart()
     {
+        Debug.Log($"aBHRUISHJFKDHJKHJKSADHJKAHSDJKASHJKDHSAKJ");
+
         UISettings.Singleton.onMouseSensValueChanged += ChangeMouseSensitivity;
         
         cineCam = FindObjectOfType<CinemachineFreeLook>();

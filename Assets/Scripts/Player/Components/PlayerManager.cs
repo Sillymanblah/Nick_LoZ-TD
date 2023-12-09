@@ -93,6 +93,11 @@ public class PlayerManager : NetworkBehaviour
             }
         }
 
+        controller = GetComponent<CharacterController>();
+        playerMovement = GetComponent<PlayerMovement>();
+        cameraControls = GetComponent<CameraControls>();
+        playerStateManager = GetComponent<PlayerStateManager>();
+        
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
             ingame = false;
@@ -101,14 +106,11 @@ public class PlayerManager : NetworkBehaviour
         else if (SceneManager.GetActiveScene().buildIndex != 1)
         {
             ingame = true;
+            
+            cameraControls.CCStart();
         }
 
-        controller = GetComponent<CharacterController>();
-        playerMovement = GetComponent<PlayerMovement>();
-        cameraControls = GetComponent<CameraControls>();
-        playerStateManager = GetComponent<PlayerStateManager>();
 
-        cameraControls.CCStart();
     }
 
     private void Update()
