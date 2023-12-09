@@ -1348,13 +1348,6 @@ MonoBehaviour:
   totalAchievedUnits:
   - {fileID: 11400000, guid: fcee6991790b0df41ad4b2cd4a078f00, type: 2}
   - {fileID: 11400000, guid: 9f1ffb21a0e9a0b4c873e49e808f3a4b, type: 2}
-  - {fileID: 11400000, guid: 9459048cf67ba2742aabddf0d42727e6, type: 2}
-  - {fileID: 11400000, guid: 56622b27acd4c374c905db587e350881, type: 2}
-  - {fileID: 11400000, guid: 32ff02de205499342b26d8322ee68599, type: 2}
-  - {fileID: 11400000, guid: 2d2f889c4c7ac0645b0fd45f16b30439, type: 2}
-  - {fileID: 11400000, guid: ce9597cbc799d0447b4c43a59bff19ed, type: 2}
-  - {fileID: 11400000, guid: 4dd255a0ad7c7884aaf1aeb1e1e21bff, type: 2}
-  - {fileID: 11400000, guid: bebc0ad8b06c2774db5c023a33e6cd07, type: 2}
   units: []
   unitHotBarInventory: {fileID: 438712468}
 --- !u!1 &159928937

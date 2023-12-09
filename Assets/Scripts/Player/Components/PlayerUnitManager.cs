@@ -444,7 +444,6 @@ public class PlayerUnitManager : NetworkBehaviour
             UnitSO newUnit = UnitSO.Get(PlayerPrefs.GetString($"Unit{i}"));
 
             unitsLoadout.Add(newUnit);
-            Debug.Log(PlayerPrefs.GetString($"Unit{i}"));
         }
 
         List<string> theseUnits = new List<string>();

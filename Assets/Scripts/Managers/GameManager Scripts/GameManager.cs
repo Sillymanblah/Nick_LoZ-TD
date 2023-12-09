@@ -6,6 +6,15 @@ using UnityEngine;
 
 public class GameManager : NetworkBehaviour
 {
+    [System.Serializable]
+    public class UnitDrops
+    {
+        public UnitSO unit;
+        public int dropChance;
+    }
+
+    public List<UnitDrops> unitDrops = new List<UnitDrops>();
+
     List<GridCell> totalGridCells = new List<GridCell>();
     public static GameManager instance;
     public event EventHandler OnGameStart;
@@ -34,18 +43,16 @@ public class GameManager : NetworkBehaviour
     /// </summary>
     private void Start()
     {
-        if (!isServer)
+        if (isServer)
         {
-            BaseManager.instance.OnBaseDead += GiveUnitAward;
-            WaveManager.instance.OnGameWon += GiveUnitAward;
+            BaseManager.instance.OnBaseDead += GameHasEnded;
+            WaveManager.instance.OnGameWon += GameHasEnded;
         }
     }
 
     public override void OnStartServer()
     {
         if (isClientOnly) return;
-
-
 
         Transform gridCellParent = GameObject.Find("GridCells").transform;
 
@@ -170,8 +177,15 @@ public class GameManager : NetworkBehaviour
     }
 
     [Server]
-    public virtual void GiveUnitAward(object sender, EventArgs e)
+    // 2nd parameter - 
+    public virtual void GameHasEnded(object sender, GameManagerEventArgs e)
     {
+        Debug.Log($"Gamemanager, game has ended");
+    }
+
+    protected virtual UnitSO GiveUnitAward()
+    {
+        return null;
         // BBA
         /*var newUnitReward = gameLevelSO.GetRandomUnitReward(WaveManager.instance.currentWave, false);
 
@@ -184,9 +198,11 @@ public class GameManager : NetworkBehaviour
         }
 
         // SFM
-        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-        {
-            player.GetComponent<PlayerUnitManager>().SetUnitReward(GameManager.instance.gameLevelSO.GetRandomUnitReward(currentWave, true).uniqueName);
-        } */
+         */
     }
+}
+
+public class GameManagerEventArgs : EventArgs
+{
+    public bool isDead;
 }

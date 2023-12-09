@@ -57,12 +57,18 @@ public class WaveManager : NetworkBehaviour
     [SerializeField] int playerReadyCount;
     [SerializeField] List<NetworkIdentity> playersReadyToSkip = new List<NetworkIdentity>();
 
-    public event EventHandler OnGameWon;
+    public event EventHandler<GameManagerEventArgs> OnGameWon;
 
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        instance = this;
+    }
     // Start is called before the first frame update
     void Start()
     {
-        instance = this;
         moneyMultiplier = 1;
     }
 
@@ -70,6 +76,8 @@ public class WaveManager : NetworkBehaviour
     void Update()
     {
         if (!isServer) return;
+
+        if (BaseManager.instance.deadBase) return;
 
         if (spawnEnemies == false) return;
 
@@ -378,7 +386,7 @@ public class WaveManager : NetworkBehaviour
     IEnumerator DelayEndingGame()
     {
         
-        OnGameWon?.Invoke(this, EventArgs.Empty);
+        OnGameWon?.Invoke(this, new GameManagerEventArgs { isDead = false });
 
         yield return new WaitForSeconds(2.0f);
 

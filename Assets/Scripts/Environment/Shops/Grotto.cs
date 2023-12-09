@@ -6,6 +6,9 @@ using Mirror;
 using UnityEngine.UIElements;
 using Unity.VisualScripting;
 using System.Data.SqlTypes;
+using System.Linq;
+using System;
+using JetBrains.Annotations;
 
 public class Grotto : NetworkBehaviour
 {
@@ -39,6 +42,8 @@ public class Grotto : NetworkBehaviour
     void Start()
     {
         instance = this;
+
+        
 
         if (isServerOnly) return;
 
@@ -108,9 +113,36 @@ public class Grotto : NetworkBehaviour
     [TargetRpc]
     void BoughtItem(NetworkConnectionToClient thisConnection, int cost)
     {
-        Debug.Log($"you bought this bitch");
+        if (PlayerPrefs.HasKey("Grotto Payments"))
+        {
+            int grottoBalance = PlayerPrefs.GetInt("Grotto Payments");
+
+            if (grottoBalance < 10000 && grottoBalance + cost >= 10000)
+            {
+                PlayerPrefs.SetInt("Grotto Payments", grottoBalance + cost);
+                PlayerData data = SaveData.LoadInventory();
+                List<string> unitsData = data.unitNamesInventory;
+
+                if (!unitsData.Contains("Business Scrub"))
+                {
+                    Debug.Log($"yayyyy business scrub!!!");
+                    UIManager.instance.UISetUnitReward(UnitSO.Get("Business Scrub"));
+                    unitsData.Add("Business Scrub");
+                    SaveData.SaveInventory(unitsData);
+                }
+
+                
+                
+            } else PlayerPrefs.SetInt("Grotto Payments", grottoBalance + cost);
+
+        }
+        else PlayerPrefs.SetInt("Grotto Payments", cost);
+
+        PlayerPrefs.Save();
 
         
+
+        Debug.Log($"you bought this bitch");
 
         var player = NetworkClient.localPlayer.GetComponent<PlayerStateManager>();
         player.SwitchState(player.FallingState);

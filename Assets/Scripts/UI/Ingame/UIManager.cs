@@ -37,7 +37,6 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private void Awake()
     {
         instance = this;
-
     }
     // Start is called before the first frame update
     void Start()
@@ -164,5 +163,14 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         rewardUnitPanel.SetActive(true);
         rewardUnitName.text = unit.name;
         rewardUnitSprite.sprite = unit.icon;
+
+        StartCoroutine(AnimationUIUnitReward());
+    }
+
+    IEnumerator AnimationUIUnitReward()
+    {
+        yield return new WaitForSeconds(2.0f);
+        
+        rewardUnitPanel.SetActive(false);
     }
 }

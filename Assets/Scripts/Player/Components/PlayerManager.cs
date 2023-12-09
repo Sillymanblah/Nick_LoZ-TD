@@ -27,8 +27,7 @@ public class PlayerManager : NetworkBehaviour
 
     [SyncVar(hook = nameof(HandleColorTunicChange))]
     [SerializeField] int tunicColorIndex;
-    [SerializeField] SkinnedMeshRenderer skinnedMeshRenderer;
-
+    [SerializeField] List<SkinnedMeshRenderer> skinnedMeshRenderers = new List<SkinnedMeshRenderer>();
 
     #region 
 
@@ -247,12 +246,17 @@ public class PlayerManager : NetworkBehaviour
     public void SetTunicColor(int num)
     {
         tunicColorIndex = num;
+        Debug.Log($"AHHHHHHHH");
     }
 
     void HandleColorTunicChange(int oldValue, int newValue)
     {
         tunicColorIndex = newValue;
 
-        skinnedMeshRenderer.material = tunicColors[tunicColorIndex];
+        Debug.Log($"changing player tunic");
+        foreach (SkinnedMeshRenderer renderer in skinnedMeshRenderers)
+        {
+            renderer.material = tunicColors[tunicColorIndex];
+        }
     }
 }

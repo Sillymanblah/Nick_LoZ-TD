@@ -116,7 +116,7 @@ public class EnemyUnit : NetworkBehaviour
         if (wayPointsCheck)
         {
             BaseManager.instance.ChangeHealth(-maxHealthPoints);
-            WaveManager.instance.EnemyKilled();
+            
             NetworkServer.Destroy(gameObject);
             return;
         }

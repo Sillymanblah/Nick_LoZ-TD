@@ -178,8 +178,10 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 0bc33fad8319e7945a01de812214ae01, type: 2}
   - {fileID: 2100000, guid: 0af5b958a6db592409546caa7b533f71, type: 2}
   - {fileID: 2100000, guid: 3eb4f66a98a688448be97840d824620e, type: 2}
-  tunicColorIndex: 0
-  skinnedMeshRenderer: {fileID: 2675442154289913737}
+  tunicColorIndex: 1
+  skinnedMeshRenderers:
+  - {fileID: 2675442154289913737}
+  - {fileID: 6825073376089214480}
   cameras: []
   thirdPovCam: {fileID: 0}
   UsernameText: {fileID: 3786559491249896579}
@@ -823,6 +825,12 @@ SkinnedMeshRenderer:
 --- !u!4 &2879370762548524804 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8309094475294512874, guid: 9110a68ab8dc0d246af82c0d90487a3f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6105263804030820846}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &6825073376089214480 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 724456142826680318, guid: 9110a68ab8dc0d246af82c0d90487a3f,
     type: 3}
   m_PrefabInstance: {fileID: 6105263804030820846}
   m_PrefabAsset: {fileID: 0}

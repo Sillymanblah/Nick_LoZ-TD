@@ -5,15 +5,15 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerData
 {
-    public string[] unitNamesInventory;
+    public List<string> unitNamesInventory = new List<string>();
 
-    public PlayerData(UnitInventory unitInventory)
+    public PlayerData(List<string> unitInventory)
     {
-        unitNamesInventory = new string[unitInventory.totalAchievedUnits.Count];
+        unitNamesInventory = new List<string>();
 
-        for (int i = 0; i < unitInventory.totalAchievedUnits.Count; i++)
+        for (int i = 0; i < unitInventory.Count; i++)
         {
-            unitNamesInventory[i] = unitInventory.totalAchievedUnits[i].uniqueName;
+            unitNamesInventory.Add(unitInventory[i]);
         }
     }
 }

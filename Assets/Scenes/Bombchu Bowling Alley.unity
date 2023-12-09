@@ -12712,11 +12712,41 @@ PrefabInstance:
       propertyPath: maxBaseHealth
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8962342565863275255, guid: 5a5509f7b3856ea45a2f520f167df568, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8962342565863275253, guid: 5a5509f7b3856ea45a2f520f167df568,
+        type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 1120506994}
   m_SourcePrefab: {fileID: 100100000, guid: 5a5509f7b3856ea45a2f520f167df568, type: 3}
+--- !u!1 &1120506993 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8962342565863275253, guid: 5a5509f7b3856ea45a2f520f167df568,
+    type: 3}
+  m_PrefabInstance: {fileID: 1120506992}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1120506994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1120506993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac5901531fcde845b0c90b52d25640e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  unitDrops: []
+  gameStarted: 0
+  intermission: 0
+  waveCountReward: 2
 --- !u!1 &1121198366
 GameObject:
   m_ObjectHideFlags: 0

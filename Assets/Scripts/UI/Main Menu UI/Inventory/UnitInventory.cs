@@ -32,8 +32,6 @@ public class UnitInventory : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        SaveData.SaveInventory(this);
-
         for (int i = 0; i < transform.GetChild(0).childCount; i++)
         { 
             // Gets the child (0) which holds all the inv slot children
@@ -41,10 +39,16 @@ public class UnitInventory : MonoBehaviour
             slots[i].AssignSlot(i, this);
         }
 
+        List<string> totalAchievedUnitsNames = new List<string>();
+
         foreach (UnitSO unit in totalAchievedUnits)
         {
             units.Add(unit);
+            totalAchievedUnitsNames.Add(unit.uniqueName);
         }
+
+        SaveData.SaveInventory(totalAchievedUnitsNames);
+
 
         for (int i = 0; i < 3; i++)
         {

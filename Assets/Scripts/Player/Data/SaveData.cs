@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -5,10 +6,10 @@ using UnityEngine;
 
 public static class SaveData
 {
-    public static void SaveInventory(UnitInventory inventory)
+    public static void SaveInventory(List<string> inventory)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + @"/player.loz";
+        string path = Application.persistentDataPath + @"/playerdata.loz";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         PlayerData data = new PlayerData(inventory);
@@ -19,7 +20,7 @@ public static class SaveData
 
     public static PlayerData LoadInventory()
     {
-        string path = Application.persistentDataPath + @"/player.loz";
+        string path = Application.persistentDataPath + @"/playerdata.loz";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

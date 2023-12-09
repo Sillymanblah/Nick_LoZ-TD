@@ -50,7 +50,9 @@ public class UnitHotBarInventory : MonoBehaviour
             string nextUnitNamee = PlayerPrefs.GetString($"UnitEquipped{i}");
 
             if (nextUnitNamee != string.Empty)
+            {
                 AddUnit(UnitSO.Get(PlayerPrefs.GetString($"UnitEquipped{i}")));
+            }
             else break;
         }
     }
@@ -73,11 +75,6 @@ public class UnitHotBarInventory : MonoBehaviour
 
         PlayerPrefs.SetString($"UnitEquipped{nextFreeIndex}", unit.uniqueName);
         PlayerPrefs.Save();
-
-        for (int i = 0; i < 3; i++)
-        {
-            Debug.Log(PlayerPrefs.GetString($"UnitEquipped{i}"));
-        }
 
         lobbyAuth.UpdateUnitInventory(units);
 
