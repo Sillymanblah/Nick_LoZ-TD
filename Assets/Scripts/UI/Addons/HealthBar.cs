@@ -34,7 +34,6 @@ public class HealthBar : MonoBehaviour
 
     public void UpdateBarValue(int healthValue)
     {
-        Debug.Log($"BITCH WTF");
         healthSlider.value = healthValue;
         hpText.text = FormatNumber((int)healthSlider.value) + "/" +  FormatNumber((int)healthSlider.maxValue);
     }

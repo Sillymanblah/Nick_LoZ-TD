@@ -10,6 +10,7 @@ using Unity.VisualScripting;
 
 public class LobbyManager : NetworkBehaviour
 {
+    List<NetworkIdentity> playersReady = new List<NetworkIdentity>();
     public static LobbyManager instance;
     [SerializeField] Transform lobbyParent;
     [SerializeField] TextMeshProUGUI readyButtonText;
@@ -101,7 +102,7 @@ public class LobbyManager : NetworkBehaviour
     }
 
     [Server]
-    public void PlayersAreReady(bool ready)
+    public void PlayersAreReady(NetworkIdentity conn)
     {
         if (!CSNetworkManager.instance.noRestrictions)
         {
@@ -112,8 +113,24 @@ public class LobbyManager : NetworkBehaviour
             }
         }
 
-        if (ready == true) playerReadyCount++;
-        else playerReadyCount--;
+        if (playersReady.Count > 0)
+        {
+            if (!playersReady.Contains(conn))
+            {
+                playerReadyCount++;
+                playersReady.Add(conn);
+            }
+            else
+            {
+                playerReadyCount--;
+                playersReady.Remove(conn);
+            }
+        }
+        else
+        {
+            playerReadyCount++;
+            playersReady.Add(conn);
+        }
 
         RpcUpdatePlayerCount(playerReadyCount, CSNetworkManager.instance.players.Count);
 
@@ -123,6 +140,15 @@ public class LobbyManager : NetworkBehaviour
             ToggleReadyButton(false);
             CSNetworkManager.instance.SwitchScenes(NetLevelSelectorUI.instance.currentLevel);
         }
+    }
+
+    [Server]
+    public void PlayerLeft(NetworkIdentity conn)
+    {
+        playerReadyCount = 0;
+        playersReady.Clear();
+
+        RpcUpdatePlayerCount(playerReadyCount, CSNetworkManager.instance.players.Count);
     }
 
     [Command(requiresAuthority = false)]

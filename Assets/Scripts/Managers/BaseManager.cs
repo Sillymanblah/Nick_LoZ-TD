@@ -4,6 +4,7 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class BaseManager : NetworkBehaviour
 {
@@ -14,6 +15,9 @@ public class BaseManager : NetworkBehaviour
     public static BaseManager instance;
     bool deadBase = false;
     [SerializeField] TextMeshProUGUI baseHealthText;
+
+    public event EventHandler OnBaseDead;
+
 
     // Start is called before the first frame update
     void Start()
@@ -53,23 +57,15 @@ public class BaseManager : NetworkBehaviour
 
             deadBase = true;
 
-            var newUnitReward = GameManager.instance.gameLevelSO.GetRandomUnitReward(WaveManager.instance.currentWave, false);
-
-            if (newUnitReward != null)
-            {
-                foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-                {
-                    player.GetComponent<PlayerUnitManager>().SetUnitReward(newUnitReward.uniqueName);
-                }
-            }
+            OnBaseDead?.Invoke(this, EventArgs.Empty);
 
             HPTEXTGAMEOVER();
-            Announcement("YOU LOSE DUM BOY!!!!");
             StartCoroutine(DelayEndingGame());
             return;
         }
     }
 
+    [Server]
     void UpdateBaseHPUI()
     {
         if (baseHealthText == null) return;
@@ -80,16 +76,11 @@ public class BaseManager : NetworkBehaviour
     [ClientRpc]
     void HPTEXTGAMEOVER()
     {
+        Debug.Log($"YOU DEAD DUMB BOY!!!");
+
         if (baseHealthText == null) return;
 
-        baseHealthText.text = "GAME OVER U VERY DUMB";
-    }
-
-    [ClientRpc]
-    void Announcement(string message)
-    {
-        Debug.Log(message);
-
+        baseHealthText.text = "GAME OVER";
     }
 
     IEnumerator DelayEndingGame()

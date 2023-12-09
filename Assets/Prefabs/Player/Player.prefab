@@ -148,7 +148,6 @@ MonoBehaviour:
   unitCap: 5
   currentGridTransform: {fileID: 0}
   playerManager: {fileID: 8470535574437190434}
-  playerReady: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 584
@@ -174,6 +173,13 @@ MonoBehaviour:
   playerNameTag: {fileID: 1591710528533428225}
   playerMovement: {fileID: 0}
   ingame: 0
+  tunicColors:
+  - {fileID: 2100000, guid: cfdf45edd01cb7e4a90d41cd31cb855a, type: 2}
+  - {fileID: 2100000, guid: 0bc33fad8319e7945a01de812214ae01, type: 2}
+  - {fileID: 2100000, guid: 0af5b958a6db592409546caa7b533f71, type: 2}
+  - {fileID: 2100000, guid: 3eb4f66a98a688448be97840d824620e, type: 2}
+  tunicColorIndex: 0
+  skinnedMeshRenderer: {fileID: 2675442154289913737}
   cameras: []
   thirdPovCam: {fileID: 0}
   UsernameText: {fileID: 3786559491249896579}
@@ -693,10 +699,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 794515074907002371}
     m_Modifications:
+    - target: {fileID: 1236844681569518548, guid: 9110a68ab8dc0d246af82c0d90487a3f,
+        type: 3}
+      propertyPath: m_Name
+      value: 'Tunic '
+      objectReference: {fileID: 0}
+    - target: {fileID: 2714365108191314837, guid: 9110a68ab8dc0d246af82c0d90487a3f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.24
+      objectReference: {fileID: 0}
     - target: {fileID: 2909910099171570118, guid: 9110a68ab8dc0d246af82c0d90487a3f,
         type: 3}
       propertyPath: m_Name
       value: Link
+      objectReference: {fileID: 0}
+    - target: {fileID: 5246690603583125336, guid: 9110a68ab8dc0d246af82c0d90487a3f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.9643686
+      objectReference: {fileID: 0}
+    - target: {fileID: 6914785921092321234, guid: 9110a68ab8dc0d246af82c0d90487a3f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 6914785921092321234, guid: 9110a68ab8dc0d246af82c0d90487a3f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8186230635606638183, guid: 9110a68ab8dc0d246af82c0d90487a3f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cfdf45edd01cb7e4a90d41cd31cb855a, type: 2}
+    - target: {fileID: 8298456423688131547, guid: 9110a68ab8dc0d246af82c0d90487a3f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.4950142
       objectReference: {fileID: 0}
     - target: {fileID: 8309094475294512874, guid: 9110a68ab8dc0d246af82c0d90487a3f,
         type: 3}
@@ -765,10 +806,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7301295980731357231, guid: 9110a68ab8dc0d246af82c0d90487a3f, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5887162131001656580, guid: 9110a68ab8dc0d246af82c0d90487a3f, type: 3}
+    - {fileID: 4347312427870740599, guid: 9110a68ab8dc0d246af82c0d90487a3f, type: 3}
+    - {fileID: 4509176092033433277, guid: 9110a68ab8dc0d246af82c0d90487a3f, type: 3}
+    - {fileID: 5560141480014337930, guid: 9110a68ab8dc0d246af82c0d90487a3f, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9110a68ab8dc0d246af82c0d90487a3f, type: 3}
+--- !u!137 &2675442154289913737 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8186230635606638183, guid: 9110a68ab8dc0d246af82c0d90487a3f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6105263804030820846}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2879370762548524804 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8309094475294512874, guid: 9110a68ab8dc0d246af82c0d90487a3f,

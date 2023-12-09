@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class WaveManager : NetworkBehaviour
 {
@@ -11,8 +13,6 @@ public class WaveManager : NetworkBehaviour
 
     [SerializeField] List<GameObject> enemies = new List<GameObject>();
     [SerializeField] List<GameObject> bosses = new List<GameObject>();
-
-
     
 
     [Header("Wave Management")]
@@ -57,6 +57,8 @@ public class WaveManager : NetworkBehaviour
     [SerializeField] int playerReadyCount;
     [SerializeField] List<NetworkIdentity> playersReadyToSkip = new List<NetworkIdentity>();
 
+    public event EventHandler OnGameWon;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -94,7 +96,7 @@ public class WaveManager : NetworkBehaviour
     [Server]
     IEnumerator SpawnUnits()
     {
-        int randomEnemy = Random.Range(0, enemies.Count);
+        int randomEnemy = UnityEngine.Random.Range(0, enemies.Count);
 
         while (unitSpawnCount < groupSize)
         {
@@ -254,7 +256,7 @@ public class WaveManager : NetworkBehaviour
     }
 
     [Server]
-    public void PlayersAreReady(bool result, NetworkIdentity player)
+    public void PlayersAreReady(NetworkIdentity player)
     {
         if (playersReadyToSkip.Count > 0)
         {
@@ -375,10 +377,8 @@ public class WaveManager : NetworkBehaviour
 
     IEnumerator DelayEndingGame()
     {
-        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-        {
-            player.GetComponent<PlayerUnitManager>().SetUnitReward(GameManager.instance.gameLevelSO.GetRandomUnitReward(currentWave, true).uniqueName);
-        }
+        
+        OnGameWon?.Invoke(this, EventArgs.Empty);
 
         yield return new WaitForSeconds(2.0f);
 

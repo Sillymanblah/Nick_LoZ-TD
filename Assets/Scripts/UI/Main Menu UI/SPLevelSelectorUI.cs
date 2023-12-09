@@ -8,7 +8,7 @@ public class SPLevelSelectorUI : MonoBehaviour
 {
     [SerializeField] List<LevelSO> levels = new List<LevelSO>();
     int levelNumSelector = 0;
-    public static NetLevelSelectorUI instance;
+    public static SPLevelSelectorUI instance;
 
     [SerializeField] Image levelImage;
     [SerializeField] TextMeshProUGUI levelNameText;
@@ -18,6 +18,7 @@ public class SPLevelSelectorUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         levelNumSelector = 0;
         currentLevel = levels[levelNumSelector].sceneName;
         SetLevel();
@@ -54,6 +55,6 @@ public class SPLevelSelectorUI : MonoBehaviour
 
         networkManager.StartHost();
         networkManager.isSinglePlayer = true;
-        networkManager.SwitchScenes(currentLevel);
+        //networkManager.SwitchScenes(currentLevel);
     }
 }

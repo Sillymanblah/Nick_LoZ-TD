@@ -1141,6 +1141,7 @@ MonoBehaviour:
   enemiesInRange: []
   rangeCollider: {fileID: 4722581248642459090}
   rangeVisualSprite: {fileID: 8944294773855511237}
+  skinnedMeshRenderer: {fileID: 4350215369388686473}
   hoverStats: {fileID: 2689982029454147377}
   hoverStatsObject: {fileID: 6123709648502174255}
   missedAttackUI: {fileID: 1069495249213545939}
@@ -3914,6 +3915,12 @@ PrefabInstance:
       addedObject: {fileID: 4056406011811183308}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a5dc551eda634143ba693745d776a2e, type: 3}
+--- !u!137 &4350215369388686473 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3584941006741152812, guid: 6a5dc551eda634143ba693745d776a2e,
+    type: 3}
+  m_PrefabInstance: {fileID: 8241775272512005981}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5987849108945562485 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2412161367050800168, guid: 6a5dc551eda634143ba693745d776a2e,

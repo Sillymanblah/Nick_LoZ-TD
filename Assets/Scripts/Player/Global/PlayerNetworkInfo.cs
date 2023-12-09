@@ -9,7 +9,6 @@ public class PlayerNetworkInfo : NetworkBehaviour
 {
     [SyncVar]
     public new string name;
-    bool playerReady = false;
     LobbyAuth playerAuth;
     PlayerManager playerManager;
     PlayerUnitManager playerUnitManager;
@@ -58,11 +57,7 @@ public class PlayerNetworkInfo : NetworkBehaviour
     [Server]
     public void OnClientLeaveLobby(NetworkConnectionToClient conn)
     {
-        if (playerReady == true)
-        {
-            playerReady = !playerReady;
-            LobbyManager.instance.PlayersAreReady(false);
-        }
+        LobbyManager.instance.PlayerLeft(netIdentity);
     }
 
     [Command]
@@ -107,8 +102,7 @@ public class PlayerNetworkInfo : NetworkBehaviour
 
         //if (CSNetworkManager.instance.numPlayers < 2) return; 
 
-        playerReady = !playerReady;
-        LobbyManager.instance.PlayersAreReady(playerReady);
+        LobbyManager.instance.PlayersAreReady(netIdentity);
     }
 
     [Command]

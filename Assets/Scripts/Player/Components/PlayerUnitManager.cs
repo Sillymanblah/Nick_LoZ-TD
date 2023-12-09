@@ -23,7 +23,6 @@ public class PlayerUnitManager : NetworkBehaviour
 
     bool placedUnit = true;
 
-    public bool playerReady = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -379,14 +378,13 @@ public class PlayerUnitManager : NetworkBehaviour
     [Command]
     public void ReadyUp()
     {
-        playerReady = !playerReady;
-        GameManager.instance.PlayersAreReady(playerReady);
+        GameManager.instance.PlayersAreReady(netIdentity);
     }
 
     [Command]
     public void SkipWaveReady()
     {
-        WaveManager.instance.PlayersAreReady(playerReady, this.netIdentity);
+        WaveManager.instance.PlayersAreReady(this.netIdentity);
     }
 
     EnemyUnit currentEnemy;

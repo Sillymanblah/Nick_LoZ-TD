@@ -41,7 +41,6 @@ Transform:
   - {fileID: 268042018701855999}
   - {fileID: 2807620672053726668}
   - {fileID: 1149079697720784628}
-  - {fileID: 8206113555907089240}
   - {fileID: 5980509611106226873}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -86,10 +85,12 @@ MonoBehaviour:
   projectile: {fileID: 1364479158189863035, guid: dfbd580564c1f8e4d85065e36554230d,
     type: 3}
   projectileOutput: {fileID: 8206113555907089240}
+  projectileSpeed: 3
   unitGridSize: 1
   enemiesInRange: []
   rangeCollider: {fileID: 4472418445380619240}
   rangeVisualSprite: {fileID: 268042018701855999}
+  skinnedMeshRenderer: {fileID: 6107380915192994591}
   hoverStats: {fileID: 5566793144199681515}
   hoverStatsObject: {fileID: 4390532184722430197}
   missedAttackUI: {fileID: 7404508202819204873}
@@ -320,11 +321,11 @@ Transform:
   m_GameObject: {fileID: 1568326059630489385}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.043, y: 0.574, z: 0.295}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.19469313, y: 2.6215656, z: 1.3356854}
+  m_LocalScale: {x: 4.527747, y: 4.527747, z: 4.527747}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1187469130094244457}
+  m_Father: {fileID: 5759321329794712896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1955355517685292889
 GameObject:
@@ -791,12 +792,22 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: b2860590ba602944e94a7ed7dc025405, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8206113555907089240}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2860590ba602944e94a7ed7dc025405, type: 3}
 --- !u!4 &5759321329794712896 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b2860590ba602944e94a7ed7dc025405,
+    type: 3}
+  m_PrefabInstance: {fileID: 5217280810696303275}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &6107380915192994591 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7158955578560611916, guid: b2860590ba602944e94a7ed7dc025405,
     type: 3}
   m_PrefabInstance: {fileID: 5217280810696303275}
   m_PrefabAsset: {fileID: 0}

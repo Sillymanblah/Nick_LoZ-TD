@@ -25,6 +25,7 @@ public class Unit : NetworkBehaviour
     [SerializeField] TargettingMode targetMode;
     [SerializeField] GameObject projectile;
     [SerializeField] Transform projectileOutput;
+    [SerializeField] int projectileSpeed;
 
     [Tooltip("Value ^ 2")]
     public int unitGridSize;
@@ -35,6 +36,7 @@ public class Unit : NetworkBehaviour
     protected PlayerUnitManager attachedPlayer;
     [SerializeField] protected SphereCollider rangeCollider;
     [SerializeField] protected Transform rangeVisualSprite;
+    [SerializeField] SkinnedMeshRenderer skinnedMeshRenderer;
 
     [Header("WorldSpace UI")]
     [SerializeField] UIUnitHoverStats hoverStats;
@@ -469,7 +471,8 @@ public class Unit : NetworkBehaviour
         Quaternion lookOnLook = Quaternion.LookRotation(lookEnemyRot - modelUnitRot);
         transform.GetChild(0).rotation = lookOnLook;
 
-        StartCoroutine(UnitShootProjectile(firstEnemyPos));
+        if (projectile != null)
+            StartCoroutine(UnitShootProjectile(firstEnemyPos));
     }
 
     IEnumerator UnitLookAtEnemyAnimation(Vector3 firstEnemyPos)
@@ -491,16 +494,15 @@ public class Unit : NetworkBehaviour
 
     IEnumerator UnitShootProjectile(Vector3 firstEnemyPos)
     {
-        if (projectile == null) yield break;
-
-        Transform newProjectile = Instantiate(projectile, projectileOutput.position, Quaternion.identity).transform;
+        Transform newProjectile = Instantiate(projectile).transform;
+        newProjectile.localPosition = projectileOutput.position;
         Vector3 newEnemyPos = new Vector3(firstEnemyPos.x, firstEnemyPos.y + 0.5f, firstEnemyPos.z);
         //                  destination  -  origin
         Vector3 direction = newEnemyPos - newProjectile.position;
 
         while (Vector3.Distance(newEnemyPos, newProjectile.position) > 0.2f)
         {
-            newProjectile.Translate(direction * (.1f * .4f));
+            newProjectile.Translate(direction * projectileSpeed * Time.deltaTime);
             yield return null;
         }
 
@@ -590,10 +592,19 @@ public class Unit : NetworkBehaviour
     {
         if (stunned)
         {
+            //#00FFFF
+            foreach (Material material in skinnedMeshRenderer.materials)
+            {
+                material.color = new Color(0, 1, 1, 1);
+            }
             animations.PauseAnimation(true);
         }
         else
         {
+            foreach (Material material in skinnedMeshRenderer.materials)
+            {
+                material.color = new Color(1, 1, 1, 1);
+            }
             animations.PauseAnimation(false);
         }
     }

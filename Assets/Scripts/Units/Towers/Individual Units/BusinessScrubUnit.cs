@@ -30,7 +30,7 @@ public class BusinessScrubUnit : Unit
 
     float ReturnMoneyMultiplier()
     {
-        return 1f + ((float)GetLevel() / 10);
+        return 1f + ((float)GetLevel() / 5);
     }
 
     // Inverting the LookRotation because the armature of the model is backwards so itll look backwards

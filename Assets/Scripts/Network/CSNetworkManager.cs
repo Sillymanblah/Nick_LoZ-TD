@@ -15,7 +15,6 @@ public class CSNetworkManager : NetworkManager
     
 
     [Space]
-
     public bool isSinglePlayer;
 
     [Space]
@@ -171,7 +170,9 @@ public class CSNetworkManager : NetworkManager
 
         GameManager.instance.UpdatePlayerCount();
 
-        conn.identity.GetComponent<PlayerManager>().OnStartGame(conn);
+        PlayerManager clientPlayerManager = conn.identity.GetComponent<PlayerManager>();
+        clientPlayerManager.OnStartGame(conn);
+        clientPlayerManager.SetTunicColor(players.Count - 1);
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)

@@ -59,6 +59,19 @@ public class CSNetworkAuthenticator : NetworkAuthenticator
     /// <param name="msg">The message payload</param>
     public void OnAuthRequestMessage(NetworkConnectionToClient conn, AuthRequestMessage msg)
     {
+        if (CSNetworkManager.instance.isSinglePlayer)
+        {
+            AuthResponseMessage authResponseMessage = new AuthResponseMessage
+            {
+                message = "Success"
+            };
+            
+            conn.Send(authResponseMessage);
+            ServerAccept(conn);
+            CSNetworkManager.instance.SwitchScenes(SPLevelSelectorUI.instance.currentLevel);
+            return;
+        }
+
         Debug.Log($"Authentication Request: {msg.accessToken} {msg.version}");
 
         if (connectionsPendingDisconnect.Contains(conn)) return;

@@ -22,6 +22,14 @@ public class PlayerManager : NetworkBehaviour
     CameraControls cameraControls;
     public bool ingame = false;
 
+    [Header("Tunic Colors")]
+    [SerializeField] List<Material> tunicColors = new List<Material>();
+
+    [SyncVar(hook = nameof(HandleColorTunicChange))]
+    [SerializeField] int tunicColorIndex;
+    [SerializeField] SkinnedMeshRenderer skinnedMeshRenderer;
+
+
     #region 
 
     [Header("Cameras")]
@@ -114,6 +122,15 @@ public class PlayerManager : NetworkBehaviour
         Physics.IgnoreLayerCollision(8, 3, true);
         Physics.IgnoreLayerCollision(8, 6, true);
         Physics.IgnoreLayerCollision(8, 9, true);
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        if (!isLocalPlayer) return;
+
+        //SetTunicColor();
     }
 
     public void DisconnectClient()
@@ -224,5 +241,18 @@ public class PlayerManager : NetworkBehaviour
                 cameras[i].Priority = 10;
             }
         }
+    }
+
+    [Server]
+    public void SetTunicColor(int num)
+    {
+        tunicColorIndex = num;
+    }
+
+    void HandleColorTunicChange(int oldValue, int newValue)
+    {
+        tunicColorIndex = newValue;
+
+        skinnedMeshRenderer.material = tunicColors[tunicColorIndex];
     }
 }

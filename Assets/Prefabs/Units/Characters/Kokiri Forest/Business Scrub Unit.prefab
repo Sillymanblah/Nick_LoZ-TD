@@ -1641,6 +1641,7 @@ MonoBehaviour:
   enemiesInRange: []
   rangeCollider: {fileID: 8824972896228003798}
   rangeVisualSprite: {fileID: 5175168398649559233}
+  skinnedMeshRenderer: {fileID: 3903916670718825089}
   hoverStats: {fileID: 7392870233711322154}
   hoverStatsObject: {fileID: 1673005153096755508}
   missedAttackUI: {fileID: 5556281314945468104}

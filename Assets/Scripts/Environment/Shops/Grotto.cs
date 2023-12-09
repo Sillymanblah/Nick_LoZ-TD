@@ -95,20 +95,22 @@ public class Grotto : NetworkBehaviour
         }
         Debug.Log(conn);
         playersThatGotAnItem.Add(conn.identity);
-        BoughtItem(conn);
+        BoughtItem(conn, itemsDisplays[index].cost);
     }
 
     [Command(requiresAuthority = false)]
     public void CmdTeleportBackToSpawn(NetworkConnectionToClient conn)
     {
         playersThatGotAnItem.Add(conn.identity);
-        BoughtItem(conn);
+        BoughtItem(conn, 0);
     }
 
     [TargetRpc]
-    void BoughtItem(NetworkConnectionToClient thisConnection)
+    void BoughtItem(NetworkConnectionToClient thisConnection, int cost)
     {
         Debug.Log($"you bought this bitch");
+
+        
 
         var player = NetworkClient.localPlayer.GetComponent<PlayerStateManager>();
         player.SwitchState(player.FallingState);
