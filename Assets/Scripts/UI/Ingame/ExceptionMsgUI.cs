@@ -29,7 +29,7 @@ public class ExceptionMsgUI : MonoBehaviour
     {
         StopCoroutine("StartExceptionAnimation");
         exceptionText.text = message;
-        audioSource.PlayOneShot(errorSound, .5f);
+        audioSource.PlayOneShot(errorSound, PlayerPrefs.GetFloat("SoundFXVol") / 2);
         StartCoroutine("StartExceptionAnimation");
     }
 

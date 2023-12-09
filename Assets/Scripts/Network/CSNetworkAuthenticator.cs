@@ -76,6 +76,7 @@ public class CSNetworkAuthenticator : NetworkAuthenticator
 
         if (connectionsPendingDisconnect.Contains(conn)) return;
 
+        // this checks if we are in a game (not in the main menu scene)
         if (SceneManager.GetActiveScene().path != mainMenuScene)
         {
             ServerAccessDenied(conn, "Game has already started");

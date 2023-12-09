@@ -266,7 +266,7 @@ public class PlayerUnitManager : NetworkBehaviour
             else
                 newUnit.ChangeVisualRangeSprite(false);
 
-            if (Input.GetKeyDown(KeyCode.Mouse1))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 Debug.Log($"Client placed unit " + thisUnit.name);
 

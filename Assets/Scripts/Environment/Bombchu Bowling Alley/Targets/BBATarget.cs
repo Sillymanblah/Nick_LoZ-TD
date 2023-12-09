@@ -19,7 +19,7 @@ public class BBATarget : MonoBehaviour
     {
         for (int i = 0; i < 7; i++)
         {
-            audioSource.PlayOneShot(explosion, 1f);
+            audioSource.PlayOneShot(explosion, PlayerPrefs.GetFloat("SoundFXVol"));
             
             Vector3 var = RandomVector3(new Vector3 (-0.54f,0.13f,-0.23f), new Vector3(0.54f,0.13f,0.5f));
             GameObject newObject = Instantiate(particlesObject, particlesParent);

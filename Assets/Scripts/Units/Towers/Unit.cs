@@ -629,7 +629,7 @@ public class Unit : NetworkBehaviour
 
     public void PlayAttackSoundClip()
     {
-        audioSource.PlayOneShot(attackSound, 1);
+        audioSource.PlayOneShot(attackSound, PlayerPrefs.GetFloat("SoundFXVol"));
     }
 
     public void DoNothingMethod() {}

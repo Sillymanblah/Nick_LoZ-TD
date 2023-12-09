@@ -10,6 +10,11 @@ public class AudioManager : MonoBehaviour
 {
     #region music
     [SerializeField] AudioClip currentClip;
+    [SerializeField] AudioClip gameOver;
+    [SerializeField] AudioClip baseTakingDamage;
+
+
+
     #endregion
     [SerializeField] AudioSource audioSource;
     [SerializeField] Slider volumeSlider;

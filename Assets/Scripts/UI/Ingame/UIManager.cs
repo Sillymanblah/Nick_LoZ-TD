@@ -31,8 +31,11 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] TextMeshProUGUI rewardUnitName;
     [SerializeField] Image rewardUnitSprite;
 
-
     #endregion
+
+    [Header("Sounds")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip menuAudioClip;
 
     private void Awake()
     {
@@ -46,6 +49,8 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             if (slot.name == "SlotNums") { break; }
             slot.transform.GetChild(1).GetComponent<Text>().text = string.Empty;
         }
+
+        
 
         skipWaveButton.SetActive(false);
 
@@ -172,5 +177,10 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         yield return new WaitForSeconds(2.0f);
         
         rewardUnitPanel.SetActive(false);
+    }
+
+    public void PlaySoundFX()
+    {
+        audioSource.PlayOneShot(menuAudioClip, PlayerPrefs.GetFloat("SoundFXVol"));
     }
 }

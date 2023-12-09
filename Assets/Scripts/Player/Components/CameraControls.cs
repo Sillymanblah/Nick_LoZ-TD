@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using Google.Protobuf.WellKnownTypes;
 
 public class CameraControls : MonoBehaviour
 {
@@ -11,9 +12,13 @@ public class CameraControls : MonoBehaviour
 
     public void CCStart()
     {
+        UISettings.Singleton.onMouseSensValueChanged += ChangeMouseSensitivity;
+        
+        cineCam = FindObjectOfType<CinemachineFreeLook>();
+        MouseSensOnStart();
+
         cam = Camera.main.transform;
 
-        cineCam = FindObjectOfType<CinemachineFreeLook>();
     }
 
     public void SwitchCameraMovementControl()
@@ -42,5 +47,19 @@ public class CameraControls : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+    }
+
+    void MouseSensOnStart()
+    {
+        float value = PlayerPrefs.GetFloat("Mouse Sensitivity");
+
+        cineCam.m_YAxis.m_MaxSpeed = value * 10f;
+        cineCam.m_XAxis.m_MaxSpeed = value * 1500f;
+    }
+
+    void ChangeMouseSensitivity(object sender, MouseSenSettings e)
+    {
+        cineCam.m_YAxis.m_MaxSpeed = e.sensValue * 10f;
+        cineCam.m_XAxis.m_MaxSpeed = e.sensValue * 1500f;
     }
 }

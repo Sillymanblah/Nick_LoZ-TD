@@ -64,7 +64,7 @@ public class BombchuSummon : Summonable
         base.ClientRpcEnemyInteract();
         shockwaveObject.localScale = Vector3.one * (0.34f * thisUnit.GetRange());
         thisParticleSystem.Play();
-        audioSource.PlayOneShot(explosionAudio);
+        audioSource.PlayOneShot(explosionAudio, PlayerPrefs.GetFloat("SoundFXVol"));
         transform.GetChild(0).gameObject.SetActive(false);
     }
 

@@ -42,6 +42,7 @@ public class MainMenuUIManager : MonoBehaviour
     [Header("Class References")]
     [SerializeField] MainMenuMusic mainMenuMusic;
 
+
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -69,6 +70,10 @@ public class MainMenuUIManager : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         mainMenuMusic.PlayMenuMusic();
+
+        
+
+        
 
         foreach (Transform transform in serverListParent)
         {
@@ -194,6 +199,8 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void ButtonSfx()
     {
-        audioSource.PlayOneShot(buttonClip);
+        audioSource.PlayOneShot(buttonClip, PlayerPrefs.GetFloat("SoundFXVol"));
     }
+
+    
 }
