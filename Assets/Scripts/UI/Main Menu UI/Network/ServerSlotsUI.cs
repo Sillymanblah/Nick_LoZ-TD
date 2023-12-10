@@ -35,18 +35,6 @@ public class ServerSlotsUI : MonoBehaviour
         {
             connectButton.interactable = false;
             ingameBooleanStatusText.text = "VersionFail";
-            return;
-        }
-
-        if (serverStats.InGame == 1)
-        {
-            ingameBooleanStatusText.text = "In game: Yes";
-            connectButton.interactable = false;
-        }
-        else
-        {
-            ingameBooleanStatusText.text = "In game: No";
-
             if (serverStats.Uptime > 0)
             {
                 onlineStatusText.text = "Online";
@@ -58,14 +46,33 @@ public class ServerSlotsUI : MonoBehaviour
                 connectButton.interactable = false;
 
             }
+            
+        }
+
+        if (serverStats.InGame == 1)
+        {
+            ingameBooleanStatusText.text = "In game: Yes";
+            connectButton.interactable = false;
+        }
+        else
+        {
+            ingameBooleanStatusText.text = "In game: No"; 
+        }
+
+        if (serverStats.Uptime > 0)
+        {
+            onlineStatusText.text = "Online";
+            connectButton.interactable = true;
+        }
+        else
+        {
+            onlineStatusText.text = "Offline";
+            connectButton.interactable = false;
+
         }
 
         serverNameText.text = "Server " + serverStats.ServerID;
         playerCountText.text = serverStats.PlayersOnline + "/4";
-        
-
-        
-        
         Port = (ushort)serverStats.Port;
     }
 

@@ -104,17 +104,25 @@ public class LobbyManager : NetworkBehaviour
     [Server]
     public void PlayersAreReady(NetworkIdentity conn)
     {
+        Debug.Log(conn.gameObject.name + " sent a command to playersareready method");
+
+
         if (!CSNetworkManager.instance.noRestrictions)
         {
-            if (CSNetworkManager.instance.players.Count < 2)
+            if (CSNetworkManager.instance.numPlayers < 2)
             {
                 Debug.LogWarning($"Cannot start with less than 2 people");
                 return;
             }
         }
 
+        Debug.Log(conn.gameObject.name + " is trying to ready");
+
         if (playersReady.Count > 0)
         {
+            Debug.Log("ready count is not 0!");
+
+
             if (!playersReady.Contains(conn))
             {
                 playerReadyCount++;
@@ -128,6 +136,8 @@ public class LobbyManager : NetworkBehaviour
         }
         else
         {
+            Debug.Log(conn.gameObject.name + " is first man that readied");
+
             playerReadyCount++;
             playersReady.Add(conn);
         }

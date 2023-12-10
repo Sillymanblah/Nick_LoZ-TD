@@ -14,6 +14,8 @@ public class PlayerNetworkInfo : NetworkBehaviour
     PlayerUnitManager playerUnitManager;
     public bool playerIsHost;
 
+    [Scene] [SerializeField] string mainMenuPath;
+
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
@@ -31,7 +33,7 @@ public class PlayerNetworkInfo : NetworkBehaviour
 
         if (CSNetworkManager.instance.sceneTesting) return;
 
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        if (SceneManager.GetActiveScene().path == mainMenuPath)
         {
             MainMenuUIManager.instance?.LobbyMenu();
             LobbyManager.instance.player = this;
@@ -70,7 +72,7 @@ public class PlayerNetworkInfo : NetworkBehaviour
 
         name = newName;
 
-        if (SceneManager.GetActiveScene().buildIndex != 1)
+        if (SceneManager.GetActiveScene().path != mainMenuPath)
         {
             playerManager.SetUserNameNameTag(name);
         }
@@ -98,7 +100,7 @@ public class PlayerNetworkInfo : NetworkBehaviour
     [Command]
     public void ReadyUpButton()
     {
-        if (SceneManager.GetActiveScene().buildIndex != 1) return;
+        if (SceneManager.GetActiveScene().path != mainMenuPath) return;
 
         //if (CSNetworkManager.instance.numPlayers < 2) return; 
 

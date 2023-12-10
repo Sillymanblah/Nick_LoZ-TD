@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isGrounded = Physics.CheckBox(groundCheck.position, new Vector3(0.25f, 0f, 0.25f), Quaternion.identity, groundMask);   
+        isGrounded = Physics.CheckBox(groundCheck.position, new Vector3(0.15f, 0f, 0.15f), Quaternion.identity, groundMask);   
     }
     public void MovePlayer(PlayerBaseState player)
     {

@@ -27,13 +27,22 @@ public class AudioManager : MonoBehaviour
 
     #endregion
     
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        BaseManager.instance.OnBaseDead += BaseDeadMusic;
+        if (CSNetworkManager.instance.DeployingAsServer) return;
 
-        if (resetKeys)
-            PlayerPrefs.DeleteKey("MusicVolume");
+        
+
+        Debug.Log($"after basemanager in audiomanager");
 
         if (!PlayerPrefs.HasKey("MusicVolume"))
         {
@@ -45,15 +54,31 @@ public class AudioManager : MonoBehaviour
         else
         {
             volume = PlayerPrefs.GetFloat("MusicVolume");
+            
             audioSource.volume = volume;
         }
 
         SetSliderValue();
+        StartCoroutine(SubscribeToBase());
     }
+
+    // for some weird fucking reason, audiomanager START function is being called BEFORE the awak function IN THE BASE MANAGER
+    // and script execution order WILL NOT FIX IT
+    // this only happens upon builds
+    IEnumerator SubscribeToBase()
+    {
+        yield return null;
+        BaseManager.instance.OnBaseDead += BaseDeadMusic;
+    }
+
+    
+    
 
     // Update is called once per frame
     void Update()
     {
+        if (CSNetworkManager.instance.DeployingAsServer) return;
+
         if (!audioSource.isPlaying)
             audioSource.PlayOneShot(currentClip, 1);
 
@@ -61,9 +86,11 @@ public class AudioManager : MonoBehaviour
 
     public void ChangeVolume(float value)
     {
+        Debug.Log($"brother on audiomanager bruh");
+
         volume = value;
 
-        audioSource.volume = volume;
+        audioSource.volume = value;
 
         volumeValueText.text = string.Format("{0:0}", (value * 100f)) + "%";
 
@@ -73,9 +100,13 @@ public class AudioManager : MonoBehaviour
 
     void SetSliderValue()
     {
+        
+
         volume = PlayerPrefs.GetFloat("MusicVolume");
+        Debug.Log(volume);
 
         volumeSlider.value = volume;
+        Debug.Log(volumeSlider.value);
         volumeValueText.text = string.Format("{0:0}", (volume * 100f)) + "%";
     }
 

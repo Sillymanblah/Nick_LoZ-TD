@@ -155,6 +155,8 @@ public class Unit : NetworkBehaviour
         if (!isOwned)
         {
             rangeVisualSprite.gameObject.SetActive(false);
+            gridDisplayFade.ToggleCellDisplay(false);
+
         }
 
     }
@@ -566,10 +568,15 @@ public class Unit : NetworkBehaviour
 
     private void OnMouseExit()
     {
+
         if (!isSelected)
         {
             if (isPlaced)
+            {
                 gridDisplayFade.ToggleCellDisplay(false);
+            }
+
+            if (!isOwned) gridDisplayFade.ToggleCellDisplay(false);
         }
 
         hoverStatsObject.SetActive(false);

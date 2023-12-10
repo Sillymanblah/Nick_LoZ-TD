@@ -11,7 +11,7 @@ public class BombchuEnemy : EnemyUnit
 
         if (wayPointsCheck == 1)
         {
-            BaseManager.instance.ChangeHealth(-maxHealthPoints);
+            BaseManager.instance.ChangeHealth(-9999);
             WaveManager.instance.EnemyKilled();
             NetworkServer.Destroy(gameObject);
             return;

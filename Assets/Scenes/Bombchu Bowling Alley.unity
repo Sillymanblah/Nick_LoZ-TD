@@ -12858,7 +12858,7 @@ MonoBehaviour:
   unitDrops: []
   gameStarted: 0
   intermission: 0
-  waveCountReward: 2
+  waveCountReward: 25
 --- !u!1 &1121198366
 GameObject:
   m_ObjectHideFlags: 0

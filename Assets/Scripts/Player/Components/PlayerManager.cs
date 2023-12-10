@@ -21,6 +21,8 @@ public class PlayerManager : NetworkBehaviour
     PlayerStateManager playerStateManager;
     CameraControls cameraControls;
     public bool ingame = false;
+    [Space]
+    [Scene] [SerializeField] string mainMenuScene;
 
     [Header("Tunic Colors")]
     [SerializeField] List<Material> tunicColors = new List<Material>();
@@ -66,7 +68,7 @@ public class PlayerManager : NetworkBehaviour
     }
     private void Start()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        if (SceneManager.GetActiveScene().path == mainMenuScene)
         {
             foreach (Transform child in this.gameObject.transform)
             {
@@ -97,13 +99,13 @@ public class PlayerManager : NetworkBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         cameraControls = GetComponent<CameraControls>();
         playerStateManager = GetComponent<PlayerStateManager>();
-        
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+
+        if (SceneManager.GetActiveScene().path == mainMenuScene)
         {
             ingame = false;
         }
 
-        else if (SceneManager.GetActiveScene().buildIndex != 1)
+        else if (SceneManager.GetActiveScene().path != mainMenuScene)
         {
             ingame = true;
             
@@ -131,7 +133,7 @@ public class PlayerManager : NetworkBehaviour
 
         if (!isLocalPlayer) return;
 
-        //SetTunicColor();
+        HandleColorTunicChange(tunicColorIndex, tunicColorIndex);
     }
 
     public void DisconnectClient()
@@ -253,12 +255,20 @@ public class PlayerManager : NetworkBehaviour
 
     void HandleColorTunicChange(int oldValue, int newValue)
     {
+        Debug.Log(newValue);
+
+        if (isServerOnly) return;
+
         tunicColorIndex = newValue;
 
         Debug.Log($"changing player tunic");
         foreach (SkinnedMeshRenderer renderer in skinnedMeshRenderers)
         {
-            renderer.material = tunicColors[tunicColorIndex];
+            Debug.Log(tunicColors[newValue].name);
+
+            renderer.material = tunicColors[newValue];
+            
+            Debug.Log(renderer.material.name);
         }
     }
 }

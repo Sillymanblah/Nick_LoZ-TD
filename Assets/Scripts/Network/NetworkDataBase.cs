@@ -86,7 +86,7 @@ public class NetworkDataBase : MonoBehaviour
                 req.SetRequestHeader("X-API-KEY", API_KEY);
                 req.url                = url;
                 req.SendWebRequest();
-                Debug.Log("Server is sending data to the database");
+                //Debug.Log("Server is sending data to the database");
             }
             catch (Exception ex)
             {
@@ -97,8 +97,6 @@ public class NetworkDataBase : MonoBehaviour
             
 
             #endif
-
-            Debug.Log($"bruh");
 
             yield return new WaitForSeconds(5);
         }

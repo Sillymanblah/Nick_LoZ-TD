@@ -35,7 +35,7 @@ public class CSNetworkManager : NetworkManager
     #region 
 
     [Header("Scene References")]
-    [SerializeField] [Scene] string mainMenuScene;
+    [SerializeField] [Scene] public string mainMenuScene;
 
     #endregion
 
@@ -128,6 +128,8 @@ public class CSNetworkManager : NetworkManager
         // For lobby
         if (SceneManager.GetActiveScene().path == mainMenuScene)
         {
+            Debug.Log($"Player is in lobby");
+
             // if hes the only one in the lobby
             
             newPlayer.OnClientJoinLobby();
@@ -169,6 +171,8 @@ public class CSNetworkManager : NetworkManager
         // For ingame and after lobby
 
         GameManager.instance.UpdatePlayerCount();
+
+        Debug.Log($"Server before setting tunic color");
 
         PlayerManager clientPlayerManager = conn.identity.GetComponent<PlayerManager>();
         clientPlayerManager.OnStartGame(conn);
@@ -345,6 +349,8 @@ public class CSNetworkManager : NetworkManager
 
     IEnumerator GameTimers()
     {
+        yield return GameManager.instance == null;
+
         float thisTime = 0;
 
         while (true)

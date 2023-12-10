@@ -8,7 +8,7 @@ using System;
 
 public class BaseManager : NetworkBehaviour
 {
-    
+    [SyncVar]   
     [SerializeField] int maxBaseHealth;
     [SyncVar(hook = nameof(HandleBaseHealthChange))]
     [SerializeField] int baseHealth;
@@ -63,6 +63,7 @@ public class BaseManager : NetworkBehaviour
             baseHealth = 0;
             if (deadBase) return;
 
+
             deadBase = true;
             WaveManager.instance.EnemyKilled();
 
@@ -83,13 +84,14 @@ public class BaseManager : NetworkBehaviour
     [ClientRpc]
     void RpcBaseDeadEvent()
     {
+        Debug.Log($"the server did send it I SWEAR!!!");
         OnBaseDead?.Invoke(this, new GameManagerEventArgs { isDead = true });
     }
 
     [ClientCallback]
     void UpdateBaseHPUI()
     {
-        if (baseGettingHit != null)
+        if (baseGettingHit != null && baseHealth != maxBaseHealth)
             audioSource.PlayOneShot(baseGettingHit, PlayerPrefs.GetFloat("SoundFXVol"));
 
         if (baseHealthText == null) return;
@@ -112,7 +114,7 @@ public class BaseManager : NetworkBehaviour
 
     IEnumerator DelayEndingGame()
     {
-        yield return new WaitForSeconds(7.4f);
+        yield return new WaitForSeconds(7.2f);
 
         if (CSNetworkManager.instance.isSinglePlayer)
         {
@@ -127,6 +129,5 @@ public class BaseManager : NetworkBehaviour
     void HandleBaseHealthChange(int oldValue, int newValue)
     {
         UpdateBaseHPUI();
-        Debug.Log($"bruhther");
     }
 }
