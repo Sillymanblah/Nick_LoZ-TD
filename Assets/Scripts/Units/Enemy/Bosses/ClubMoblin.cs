@@ -118,6 +118,7 @@ public class ClubMoblin : EnemyUnit
             if (unitsInRange[i] == null)
             {
                 unitsInRange.RemoveAt(i);
+                i--;
                 continue;
             }
 

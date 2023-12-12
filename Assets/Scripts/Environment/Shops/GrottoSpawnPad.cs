@@ -24,6 +24,7 @@ public class GrottoSpawnPad : MonoBehaviour
             {
                 Grotto.instance.CmdTeleportBackToSpawn(Grotto.instance.localPlayer);
                 uiText.SetActive(false);
+                isNearPad = false;
             }
         }
     }

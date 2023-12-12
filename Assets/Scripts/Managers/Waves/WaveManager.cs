@@ -373,7 +373,7 @@ public class WaveManager : NetworkBehaviour
     [Server]
     public void SetHealthWithPlayerCount(int playerCount)
     {
-        playerMultiplier = playerCount * 0.75f;
+        playerMultiplier = playerCount;
 
         if (playerCount == 1)
         {

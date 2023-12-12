@@ -15,37 +15,37 @@ MonoBehaviour:
   uniqueName: Bombchu Girl
   name: Bombchu Girl
   unitID: 11
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3a359ff8cb4ee9c428666e916ae6a97b, type: 3}
   prefab: {fileID: 3792259216536069562, guid: b4f97b05c5094254ebadae9e393b2bd4, type: 3}
   chanceToMiss: 0
   gridType: 0
-  cost1: 100
-  attack1: 20
-  cooldown1: 5
+  cost1: 1000
+  attack1: 30
+  cooldown1: 20
   range1: 3
-  DPS1: 4
-  rangeDPS1: 12
-  cost2: 0
-  attack2: 1
-  cooldown2: 1
-  range2: 0
-  DPS2: 1
-  rangeDPS2: 0
-  cost3: 0
-  attack3: 0
-  cooldown3: 1
-  range3: 0
-  DPS3: 0
-  rangeDPS3: 0
-  cost4: 0
-  attack4: 0
-  cooldown4: 1
-  range4: 0
-  DPS4: 0
-  rangeDPS4: 0
-  cost5: 0
-  attack5: 0
-  cooldown5: 1
-  range5: 0
-  DPS5: 0
-  rangeDPS5: 0
+  DPS1: 1.5
+  rangeDPS1: 4
+  cost2: 1800
+  attack2: 40
+  cooldown2: 20
+  range2: 4
+  DPS2: 2
+  rangeDPS2: 8
+  cost3: 2500
+  attack3: 40
+  cooldown3: 15
+  range3: 5
+  DPS3: 2.6666667
+  rangeDPS3: 13
+  cost4: 3500
+  attack4: 50
+  cooldown4: 15
+  range4: 6
+  DPS4: 3.3333333
+  rangeDPS4: 20
+  cost5: 5000
+  attack5: 50
+  cooldown5: 10
+  range5: 6
+  DPS5: 5
+  rangeDPS5: 30

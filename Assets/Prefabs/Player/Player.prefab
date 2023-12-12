@@ -139,7 +139,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  money: 450
+  money: 500
   unitsPlaced: []
   unitsLoadout:
   - {fileID: 0}

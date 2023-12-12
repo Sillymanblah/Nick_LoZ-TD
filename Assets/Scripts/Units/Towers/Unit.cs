@@ -576,7 +576,7 @@ public class Unit : NetworkBehaviour
                 gridDisplayFade.ToggleCellDisplay(false);
             }
 
-            if (!isOwned) gridDisplayFade.ToggleCellDisplay(false);
+            if (!isOwned && isClient) gridDisplayFade.ToggleCellDisplay(false);
         }
 
         hoverStatsObject.SetActive(false);
@@ -597,9 +597,11 @@ public class Unit : NetworkBehaviour
     [ClientRpc]
     void RpcStunEffects(bool stunned)
     {
+        Debug.Log($"stunning this unit");
+
         if (stunned)
         {
-            //#00FFFF
+            Debug.Log($"stunning this unit OFFICIALLY!");
             foreach (Material material in skinnedMeshRenderer.materials)
             {
                 material.color = new Color(0, 1, 1, 1);

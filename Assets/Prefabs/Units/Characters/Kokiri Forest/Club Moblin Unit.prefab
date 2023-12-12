@@ -2329,6 +2329,7 @@ MonoBehaviour:
   targetMode: 0
   projectile: {fileID: 0}
   projectileOutput: {fileID: 0}
+  projectileSpeed: 0
   unitGridSize: 3
   enemiesInRange: []
   rangeCollider: {fileID: 9141042499088358934}
@@ -2354,7 +2355,7 @@ MonoBehaviour:
   isPlaced: 0
   attackSound: {fileID: 8300000, guid: 8fb03c47627ef504aa8404f79bddec02, type: 3}
   splashRange: 4
-  splashDamageDivider: 4
+  splashDamageDivider: 6
   splashWeapon: {fileID: 8045066485245681206}
 --- !u!114 &5168795964685465914
 MonoBehaviour:
@@ -2467,9 +2468,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 10
+  MaxDistance: 30
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0

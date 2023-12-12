@@ -67,8 +67,12 @@ public class AudioManager : MonoBehaviour
     // this only happens upon builds
     IEnumerator SubscribeToBase()
     {
-        yield return null;
+        while (BaseManager.instance == null)
+        {
+            yield return null;
+        }
         BaseManager.instance.OnBaseDead += BaseDeadMusic;
+        Debug.Log($"basemanager subscribed");
     }
 
     
@@ -112,6 +116,7 @@ public class AudioManager : MonoBehaviour
 
     void BaseDeadMusic(object sender, GameManagerEventArgs e)
     {
+        Debug.Log($"basedeadmusic");
         audioSource.Stop();
         audioSource.PlayOneShot(gameOver, 1);
     }

@@ -69,7 +69,7 @@ public class MainMenuMusic : MonoBehaviour
 
     public void PlayStartMusic()
     {
-        audioSource.PlayOneShot(StartMusic, 1);
+        audioSource.PlayOneShot(StartMusic, PlayerPrefs.GetFloat("MusicVolume"));
         
         currentClip = MenuMusic;
     }
