@@ -14,14 +14,19 @@ public class CSNetworkManager : NetworkManager
     KcpTransport thisTransport;
     
 
-    [Space]
+    [Header("Client Variables")]
     public bool isSinglePlayer;
 
     [Space]
 
+    [Header("Server Variables")]
     public bool DeployingAsServer;
     public bool ignorePort;
+
+    [Header("Client/Server Variables")]
     public bool noRestrictions;
+
+    [Space]
     [SerializeField] public bool sceneTesting;
 
     [Space]
@@ -56,6 +61,8 @@ public class CSNetworkManager : NetworkManager
         
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+        NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
+
 
         if (!DeployingAsServer) return;
 
@@ -265,9 +272,18 @@ public class CSNetworkManager : NetworkManager
         //LobbyManager.instance.LobbyScene();
     }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        Debug.Log($"OnStart Client");
+
+        NetworkClient.RegisterHandler<ConnectionRefusedMessage>(OnConnectionRefused);
+    }
+
     public override void OnStopClient()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        NetworkClient.UnregisterHandler<ConnectionRefusedMessage>();
 
         if (SceneManager.GetActiveScene().path == mainMenuScene)
         {
@@ -345,6 +361,12 @@ public class CSNetworkManager : NetworkManager
             }
             yield return null;
         }
+    }
+
+    void OnConnectionRefused(ConnectionRefusedMessage msg)
+    {
+        MainMenuUIManager.instance.FailedToJoinLobby(msg.reason);
+        NetworkClient.Disconnect();
     }
 
     IEnumerator GameTimers()

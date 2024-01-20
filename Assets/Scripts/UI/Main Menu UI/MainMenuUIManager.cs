@@ -138,6 +138,7 @@ public class MainMenuUIManager : MonoBehaviour
         connectingMenu.SetActive(false);
         serverListMenu.SetActive(true);
         multiplayerLobby.SetActive(false);
+        inventoryMenu.SetActive(false);
         currentMenu = serverListMenu;
         SetExceptionMessage(reason);
     }

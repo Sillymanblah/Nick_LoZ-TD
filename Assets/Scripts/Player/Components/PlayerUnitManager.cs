@@ -93,8 +93,8 @@ public class PlayerUnitManager : NetworkBehaviour
         {
             if (money < selectedUnit.CostToUpgrade(selectedUnit.GetLevel() + 1))
             {
-                ExceptionMsgUI.instance.UIExceptionMessage("You don't have enough money");
-                Debug.Log($"You don't have enough money to upgrade");
+                ExceptionMsgUI.instance.UIExceptionMessage("You don't have enough rupees");
+                Debug.Log($"You don't have enough rupees to upgrade");
                 return;
             }
 

@@ -8,6 +8,7 @@ public class UnitInventory : MonoBehaviour
     [SerializeField] public List<UnitSO> totalAchievedUnits = new List<UnitSO>();
     [SerializeField] List<UnitSO> units = new List<UnitSO>();
     List<UnitInventorySlot> slots= new List<UnitInventorySlot>();
+    [SerializeField] Transform slotsParent;
 
     [SerializeField] UnitHotBarInventory unitHotBarInventory;
 
@@ -32,12 +33,7 @@ public class UnitInventory : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        for (int i = 0; i < transform.GetChild(0).childCount; i++)
-        { 
-            // Gets the child (0) which holds all the inv slot children
-            slots.Add(transform.GetChild(0).GetChild(i).GetComponent<UnitInventorySlot>());
-            slots[i].AssignSlot(i, this);
-        }
+        
 
         List<string> totalAchievedUnitsNames = new List<string>();
 
@@ -61,6 +57,26 @@ public class UnitInventory : MonoBehaviour
                     units.Remove(UnitSO.Get(nextUnitName));
                 }
             } else break;
+        }
+
+        int uiSlotCounter = 0;
+
+        if (units.Count > 12)
+        {
+            uiSlotCounter = Mathf.CeilToInt(units.Count / 3) * 3;
+            uiSlotCounter -= 12;
+
+            for (int i = 0; i < uiSlotCounter; i++) 
+            {
+                Instantiate(slotsParent.GetChild(0).gameObject, slotsParent);
+            }
+        }
+
+        for (int i = 0; i < slotsParent.childCount; i++)
+        { 
+            // Gets the child (0) which holds all the inv slot children
+            slots.Add(slotsParent.GetChild(i).GetComponent<UnitInventorySlot>());
+            slots[i].AssignSlot(i, this);
         }
 
         foreach (UnitSO unit in units)

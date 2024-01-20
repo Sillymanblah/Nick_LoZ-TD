@@ -166,31 +166,41 @@ public class WaveManager : NetworkBehaviour
     {
         GameManager.instance.intermission = true;
 
-        if (Grotto.instance == null)
+        if (Grotto.instance == null) // Used for BBA map because it doesnt contain a grotto
         {
             yield return new WaitForSeconds(5.0f);
             goto End;
         }
 
-        Grotto.instance.RpcSetNewItems();
+        Grotto.instance.RpcSetNewItems(); 
         Debug.Log($"Break time");
 
         yield return new WaitForSeconds(2.0f);
-
-        if (Grotto.instance != null)
-            TeleportAllPlayers(Grotto.instance.GetSpawnPosition());
-
-        yield return new WaitForSeconds(20.0f);
         
-        if (Grotto.instance != null)
-            TeleportAllPlayersUnderShop(NetworkManager.startPositions[0].position);
+        TeleportAllPlayers(Grotto.instance.GetSpawnPosition());
+
+        yield return new WaitForSeconds(GameManager.instance.intermissionTimer);
+        
+        if (GameManager.instance.intermission == false) yield break; // Checks to see if the intermission was stopped early as a result of everyone already doing stuff in the grotto
+
+        TeleportAllPlayersUnderShop(NetworkManager.startPositions[0].position);
 
         Grotto.instance.ResetShop();
+
     End:
         Debug.Log($"Break time over!");
         GameManager.instance.intermission = false;
         
     }
+
+    [Server]
+    public void EndIntermission()
+    {
+        if (GameManager.instance.intermission == false) return;
+
+        GameManager.instance.intermission = false;
+    }
+
     [Server]
     void TeleportAllPlayers(Vector3 position) 
     {

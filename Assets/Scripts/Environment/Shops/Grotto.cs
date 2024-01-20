@@ -35,15 +35,13 @@ public class Grotto : NetworkBehaviour
 
     [SerializeField] Transform itemsDisplayParent;
 
-    List<NetworkIdentity> playersThatGotAnItem = new List<NetworkIdentity>();
+    List<NetworkIdentity> playersDoneList = new List<NetworkIdentity>();
     bool switchCams;
 
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
-
-        
 
         if (isServerOnly) return;
 
@@ -76,37 +74,54 @@ public class Grotto : NetworkBehaviour
     void CmdBuyShopItem(int index, NetworkConnectionToClient conn)
     {
         // Server Auth Checks ///////
-        if (!GameManager.instance.intermission) return;
+        if (GameManager.instance.intermission == false) return;
 
-        if (playersThatGotAnItem.Contains(conn.identity)) return;
+        if (CheckPlayerFromGrotto(conn.identity.netId) == false) return; // Prevents from hitting the button multiple times under the same client
 
         var player = conn.identity.GetComponent<PlayerUnitManager>();
 
         Debug.Log(player);
-        if (itemsDisplays[index].cost > player.money) return;
+        if (itemsDisplays[index].cost > player.money) return; // If the player cant afford the item cost
 
-        // Approved ////////////////
+        ////////////// Approved ////////////////
 
+        Debug.Log(index);
+        Debug.Log(itemsDisplays[index].cost);
+
+        itemsDisplays[index].ServerInitializeItem(WaveManager.instance.currentWave - 1, items[index]);
         player.SetMoney(-itemsDisplays[index].cost);
-        
-        var thisPlayer = conn.identity.GetComponent<PlayerUnitManager>();
 
-        if (thisPlayer.unitsPlaced.Count > 0)
+        if (player.unitsPlaced.Count > 0)
         {
-            foreach (Unit unit in thisPlayer.unitsPlaced)
+            foreach (Unit unit in player.unitsPlaced)
             {
                 items[index].ItemAbility(unit);
+                Debug.Log(items[index]);
             }
         }
+
         Debug.Log(conn);
-        playersThatGotAnItem.Add(conn.identity);
+        playersDoneList.Add(conn.identity);
+
+        if (playersDoneList.Count >= CSNetworkManager.instance.players.Count)
+        {
+            WaveManager.instance.EndIntermission();
+        }
+
         BoughtItem(conn, itemsDisplays[index].cost);
     }
 
     [Command(requiresAuthority = false)]
     public void CmdTeleportBackToSpawn(NetworkConnectionToClient conn)
     {
-        playersThatGotAnItem.Add(conn.identity);
+        playersDoneList.Add(conn.identity);
+
+        if (playersDoneList.Count >= CSNetworkManager.instance.players.Count)
+        {
+            ResetShop();
+            WaveManager.instance.EndIntermission();
+        }
+
         BoughtItem(conn, 0);
     }
 
@@ -154,12 +169,14 @@ public class Grotto : NetworkBehaviour
         playerCC.enabled = true;
     }
 
+
+
     [ClientRpc]
     public void RpcSetNewItems()
     {
         for (int i = 0; i < itemsDisplays.Count; i++)
         {
-            itemsDisplays[i].InitializeItem(WaveManager.instance.currentWave - 1, items[i]);
+            itemsDisplays[i].InitializeItem(WaveManager.instance.currentWave, items[i]);
         }
     }
 
@@ -167,15 +184,17 @@ public class Grotto : NetworkBehaviour
     [Server]
     public void ResetShop()
     {
-        playersThatGotAnItem.Clear();
+        playersDoneList.Clear();
     }
 
     [Server]
     public bool CheckPlayerFromGrotto(uint networkID)
     {
-        for (int i = 0; i < playersThatGotAnItem.Count; i++)
+        if (playersDoneList.Count <= 0) return true;
+
+        for (int i = 0; i < playersDoneList.Count; i++)
         {
-            if (networkID == playersThatGotAnItem[i].netId)
+            if (networkID == playersDoneList[i].netId)
                 return false;
 
             continue;

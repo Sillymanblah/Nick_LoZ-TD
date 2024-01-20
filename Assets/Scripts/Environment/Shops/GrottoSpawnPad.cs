@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
 public class GrottoSpawnPad : MonoBehaviour
@@ -37,6 +38,9 @@ public class GrottoSpawnPad : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            var theLocalPlayer = other.GetComponent<NetworkIdentity>().isLocalPlayer;
+            if (theLocalPlayer == false) return;
+
             isNearPad = true;
             uiText.SetActive(true);
         }
@@ -50,6 +54,9 @@ public class GrottoSpawnPad : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            var theLocalPlayer = other.GetComponent<NetworkIdentity>().isLocalPlayer;
+            if (theLocalPlayer == false) return;
+
             isNearPad = false;
             uiText.SetActive(false);
 

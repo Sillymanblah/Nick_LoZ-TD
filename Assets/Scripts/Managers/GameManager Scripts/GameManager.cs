@@ -22,6 +22,9 @@ public class GameManager : NetworkBehaviour
 
     [SyncVar]
     public bool gameStarted;
+
+    public int intermissionTimer;
+
     [SyncVar]
     public bool intermission = false;
 

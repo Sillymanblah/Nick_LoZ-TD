@@ -44,19 +44,10 @@ public class ServerSlotsUI : MonoBehaviour
             {
                 onlineStatusText.text = "Offline";
                 connectButton.interactable = false;
-
+                
             }
-            
-        }
 
-        if (serverStats.InGame == 1)
-        {
-            ingameBooleanStatusText.text = "In game: Yes";
-            connectButton.interactable = false;
-        }
-        else
-        {
-            ingameBooleanStatusText.text = "In game: No"; 
+            return;
         }
 
         if (serverStats.Uptime > 0)
@@ -68,18 +59,24 @@ public class ServerSlotsUI : MonoBehaviour
         {
             onlineStatusText.text = "Offline";
             connectButton.interactable = false;
+            return;
+        }
+
+        if (serverStats.InGame == 1)
+        {
+            ingameBooleanStatusText.text = "In game: Yes";
+            connectButton.interactable = false;
+        }
+        else
+        {
+            ingameBooleanStatusText.text = "In game: No"; 
+            connectButton.interactable = true;
 
         }
 
         serverNameText.text = "Server " + serverStats.ServerID;
         playerCountText.text = serverStats.PlayersOnline + "/4";
         Port = (ushort)serverStats.Port;
-    }
-
-    void SetServerOffline()
-    {
-        connectButton.interactable = false;
-        onlineStatusText.text = "Offline";
     }
 
     public void Connect()

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Mirror;
 using TMPro;
 using UnityEngine;
@@ -84,6 +85,11 @@ public class ShopItem : MonoBehaviour
         descriptionText.text = item.description;
     }
 
+    [Server]
+    public void ServerInitializeItem(int waveNumber, IngameShopItemSO item)
+    {
+        cost = item.cost * (int)Mathf.Pow(10, waveNumber);
+    }
 
     // for clients
     [ClientCallback]

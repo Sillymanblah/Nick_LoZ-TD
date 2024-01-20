@@ -108,7 +108,7 @@ public class UIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             count.text = "0";
             image.enabled = true;
             image.sprite = player.unitsLoadout[i]?.icon;
-            cost.text = "$" + player.unitsLoadout[i]?.NextCost(1);
+            cost.text = player.unitsLoadout[i]?.NextCost(1).ToString();
         }
     }
     public void SlotUnitCount(int index)
