@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Bombchu Bowling Alley.unity
     guid: f882f9cdf859f104a8fcbe939b171a67
+  - enabled: 1
+    path: Assets/Scenes/Forest Temple Boss.unity
+    guid: 208348a03258d7849bc9f76c0860f70b
   m_configObjects: {}

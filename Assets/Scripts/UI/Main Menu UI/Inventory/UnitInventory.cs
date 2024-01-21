@@ -9,6 +9,7 @@ public class UnitInventory : MonoBehaviour
     [SerializeField] List<UnitSO> units = new List<UnitSO>();
     List<UnitInventorySlot> slots= new List<UnitInventorySlot>();
     [SerializeField] Transform slotsParent;
+    [SerializeField] UnitBookInventory unitBookInventory;
 
     [SerializeField] UnitHotBarInventory unitHotBarInventory;
 
@@ -33,8 +34,6 @@ public class UnitInventory : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        
-
         List<string> totalAchievedUnitsNames = new List<string>();
 
         foreach (UnitSO unit in totalAchievedUnits)
@@ -45,6 +44,8 @@ public class UnitInventory : MonoBehaviour
 
         SaveData.SaveInventory(totalAchievedUnitsNames);
 
+        Debug.Log(unitBookInventory);
+        unitBookInventory.UploadUnits(totalAchievedUnits);
 
         for (int i = 0; i < 3; i++)
         {

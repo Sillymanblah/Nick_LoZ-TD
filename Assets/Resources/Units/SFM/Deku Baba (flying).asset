@@ -15,10 +15,11 @@ MonoBehaviour:
   uniqueName: Deku Baba (flying)
   name: Deku Baba
   unitID: 4
-  icon: {fileID: 21300000, guid: 4940c6ddcd34c3542a304da405cfa4f1, type: 3}
+  icon: {fileID: 21300000, guid: 081cf03ab4daff3499b07c794349c1f1, type: 3}
   prefab: {fileID: 5777884355589571868, guid: 7ecaac6650afd2c40bf17ca19e5c6b3c, type: 3}
   chanceToMiss: 2
   gridType: 1
+  toObtainDesc: Complete the <color=yellow><b>tutorial</b></color>.
   cost1: 125
   attack1: 3
   cooldown1: 2

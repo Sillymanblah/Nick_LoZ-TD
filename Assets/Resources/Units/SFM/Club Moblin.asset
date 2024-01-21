@@ -15,10 +15,11 @@ MonoBehaviour:
   uniqueName: Club Moblin
   name: Club Moblin
   unitID: 9
-  icon: {fileID: 21300000, guid: e9619b195031baf42a7270d74395340b, type: 3}
+  icon: {fileID: 21300000, guid: 70a18ee9ad6ef204f9c0b7ed73fab1c5, type: 3}
   prefab: {fileID: 5814153406905477011, guid: 08272ecdd26848e4587245f95c927d11, type: 3}
   chanceToMiss: 15
   gridType: 0
+  toObtainDesc: Complete <color=green><b>Sacred Forest Meadows</b></color>.
   cost1: 2000
   attack1: 30
   cooldown1: 5

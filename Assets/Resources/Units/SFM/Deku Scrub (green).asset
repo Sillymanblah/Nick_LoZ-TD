@@ -19,6 +19,7 @@ MonoBehaviour:
   prefab: {fileID: 1187469130094244461, guid: 99a0b7818b2544f4ab0252927e9fa35f, type: 3}
   chanceToMiss: 2
   gridType: 0
+  toObtainDesc: Complete <color=green><b>Sacred Forest Meadows</b></color>.
   cost1: 75
   attack1: 3
   cooldown1: 3

@@ -12,6 +12,9 @@ public class UnitSO : UnitSOFinder<UnitSO>
     public int chanceToMiss;
     [SerializeField] public GridType gridType; 
 
+    [Space]
+    [TextArea] public string toObtainDesc;
+
     [Header("Level 1")]
     [SerializeField] int cost1;
     [SerializeField] float attack1;

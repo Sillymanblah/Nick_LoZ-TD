@@ -15,10 +15,12 @@ MonoBehaviour:
   uniqueName: Bombchu Girl
   name: Bombchu Girl
   unitID: 11
-  icon: {fileID: 21300000, guid: 3a359ff8cb4ee9c428666e916ae6a97b, type: 3}
+  icon: {fileID: 21300000, guid: 46ccd94d5c351e9459920161f0f30933, type: 3}
   prefab: {fileID: 3792259216536069562, guid: b4f97b05c5094254ebadae9e393b2bd4, type: 3}
   chanceToMiss: 0
   gridType: 0
+  toObtainDesc: Complete a high amount of waves in <color=#00ffffff><b>Bombchu Bowling
+    Alley</b></color>.
   cost1: 1000
   attack1: 30
   cooldown1: 20

@@ -19,6 +19,8 @@ MonoBehaviour:
   prefab: {fileID: 6058219008326219347, guid: 89a5621643ffe4544a15b265f7fcf051, type: 3}
   chanceToMiss: 20
   gridType: 0
+  toObtainDesc: Spend a lot of money in the Grotto over time or complete <color=green><b>Sacred
+    Forest Meadows</b></color>.
   cost1: 800
   attack1: 5
   cooldown1: 4

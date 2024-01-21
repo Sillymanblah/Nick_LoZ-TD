@@ -20,6 +20,7 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] GameObject multiplayerLobby;
     [SerializeField] GameObject settingsMenu;
     [SerializeField] GameObject inventoryMenu;
+    [SerializeField] GameObject unitBookMenu;
     [SerializeField] GameObject singlePlayerMenu;
     [SerializeField] GameObject creditsMenu;
     [SerializeField] GameObject serverListMenu;
@@ -135,10 +136,14 @@ public class MainMenuUIManager : MonoBehaviour
 
     public void FailedToJoinLobby(string reason)
     {
+        // Eventually, make it to where it just disconnects the player BUT if player is still in inv or unit book, dont let them exit it
+        // Instead, display a brief message on the screen and when they do exit out of those menus, itll take them to the server list
+        // Use C# events IAW this feature
         connectingMenu.SetActive(false);
         serverListMenu.SetActive(true);
         multiplayerLobby.SetActive(false);
         inventoryMenu.SetActive(false);
+        unitBookMenu.SetActive(false);
         currentMenu = serverListMenu;
         SetExceptionMessage(reason);
     }
