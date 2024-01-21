@@ -20,6 +20,8 @@ MonoBehaviour:
   chanceToMiss: 6
   gridType: 0
   toObtainDesc: Complete <color=green><b>Sacred Forest Meadows</b></color>.
+  unitDescription: A long range <color=#d66733><b>ground</color></b> unit designed
+    to take down bosses or hard hitting enemies.
   cost1: 250
   attack1: 6
   cooldown1: 2

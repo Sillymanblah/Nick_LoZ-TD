@@ -21,6 +21,8 @@ MonoBehaviour:
   gridType: 0
   toObtainDesc: Complete a high amount of waves in <color=#00ffffff><b>Bombchu Bowling
     Alley</b></color>.
+  unitDescription: A <color=#d66733><b>ground</color></b> unit that creates and places
+    <color=#913dff><b>Bombchus</b></color> next to the enemy path.
   cost1: 1000
   attack1: 30
   cooldown1: 20

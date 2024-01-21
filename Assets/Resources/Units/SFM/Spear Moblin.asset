@@ -20,6 +20,8 @@ MonoBehaviour:
   chanceToMiss: 10
   gridType: 0
   toObtainDesc: Complete <color=green><b>Sacred Forest Meadows</b></color>.
+  unitDescription: A <color=#d66733><b>ground</color></b> unit that uses its long
+    spear to eliminate any enemy that comes in its path.
   cost1: 1000
   attack1: 25
   cooldown1: 2

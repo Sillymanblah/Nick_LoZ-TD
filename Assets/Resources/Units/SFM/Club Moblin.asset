@@ -20,6 +20,8 @@ MonoBehaviour:
   chanceToMiss: 15
   gridType: 0
   toObtainDesc: Complete <color=green><b>Sacred Forest Meadows</b></color>.
+  unitDescription: A <color=#d66733><b>ground</color></b> unit that creates a <color=#00ded6><b>shockwave</b></color>
+    of damage between enemies in its range.
   cost1: 2000
   attack1: 30
   cooldown1: 5

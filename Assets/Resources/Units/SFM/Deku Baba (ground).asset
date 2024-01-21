@@ -20,6 +20,7 @@ MonoBehaviour:
   chanceToMiss: 5
   gridType: 0
   toObtainDesc: Complete the <color=yellow><b>tutorial</b></color>.
+  unitDescription: A beginning <color=#d66733><b>ground</color></b> unit.
   cost1: 200
   attack1: 5
   cooldown1: 2

@@ -21,6 +21,8 @@ MonoBehaviour:
   gridType: 0
   toObtainDesc: Spend a lot of money in the Grotto over time or complete <color=green><b>Sacred
     Forest Meadows</b></color>.
+  unitDescription: A <color=#d66733><b>ground</color></b> unit that multiplies the
+    <color=#00c900><b>rupees</b></color> gained from killing an enemy.
   cost1: 800
   attack1: 5
   cooldown1: 4

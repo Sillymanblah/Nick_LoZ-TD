@@ -15,6 +15,9 @@ public class UnitSO : UnitSOFinder<UnitSO>
     [Space]
     [TextArea] public string toObtainDesc;
 
+    [Space]
+    [TextArea] public string unitDescription;
+
     [Header("Level 1")]
     [SerializeField] int cost1;
     [SerializeField] float attack1;

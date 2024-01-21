@@ -20,6 +20,7 @@ MonoBehaviour:
   chanceToMiss: 2
   gridType: 1
   toObtainDesc: Complete the <color=yellow><b>tutorial</b></color>.
+  unitDescription: A beginning <color=#ff57dd><b>flying</b></color> unit.
   cost1: 125
   attack1: 3
   cooldown1: 2

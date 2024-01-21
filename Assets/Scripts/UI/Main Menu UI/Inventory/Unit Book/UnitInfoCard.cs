@@ -10,7 +10,7 @@ public class UnitInfoCard : MonoBehaviour
     UnitSO thisUnitData;
     [SerializeField] Image unitIcon;
     [SerializeField] TextMeshProUGUI unitName;
-    [SerializeField] TextMeshProUGUI unitObtainDesc;
+    [SerializeField] TextMeshProUGUI unitDescUI;
 
     [SerializeField] TextMeshProUGUI unitLevelText;
     int unitLevel = 1; // We are starting from 1 and NOT 0
@@ -41,7 +41,6 @@ public class UnitInfoCard : MonoBehaviour
         unitIcon.sprite = unit.icon;
         unitIcon.color = new Color(1,1,1);
 
-        unitLevelText.text = "Level " + 1;
         unitLevel = 1;
 
         unitName.text = unit.name;
@@ -50,6 +49,7 @@ public class UnitInfoCard : MonoBehaviour
             unitIcon.color = new Color(0,0,0);
             unitName.text = "???";
             unitLevelText.text = "???";
+            unitDescUI.text = unit.toObtainDesc;
 
             disableButtons.Invoke();
             SetLevelStats(0); // 0 means unachieved
@@ -57,11 +57,11 @@ public class UnitInfoCard : MonoBehaviour
         } 
         else 
         {
+            Debug.Log(unit.unitDescription.Length);
+            unitDescUI.text = thisUnitData.unitDescription;
             enableButtons.Invoke();
             SetLevelStats(unitLevel);
         }
-
-        unitObtainDesc.text = unit.toObtainDesc;
     }
 
     void SetLevelStats(int level)

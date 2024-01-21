@@ -20,6 +20,8 @@ MonoBehaviour:
   chanceToMiss: 10
   gridType: 0
   toObtainDesc: Complete <color=green><b>Sacred Forest Meadows</b></color>.
+  unitDescription: A <color=#d66733><b>ground</color></b> unit with sharp claws that
+    swipe away enemies that come close in its path.
   cost1: 500
   attack1: 30
   cooldown1: 3
