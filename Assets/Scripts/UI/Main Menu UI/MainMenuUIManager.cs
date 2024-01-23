@@ -31,12 +31,19 @@ public class MainMenuUIManager : MonoBehaviour
     GameObject currentMenu;
     public static MainMenuUIManager instance;
 
+    #region Server List things
+
     public List<ServerSlotsUI> serverSlotsList = new List<ServerSlotsUI>();
+
+    [SerializeField] GameObject serverElementObject;
     [SerializeField] Transform serverListParent;
+    [SerializeField] GameObject noServersTextExceptionObject;
 
     #region Network Buttons (necessary because the duplicate network manager is removed along with all its buttons OnClick events)
 
     [SerializeField] Button refreshServersButton;
+
+    #endregion
 
     #endregion
 
@@ -76,10 +83,10 @@ public class MainMenuUIManager : MonoBehaviour
 
         
 
-        foreach (Transform transform in serverListParent)
+        /*foreach (Transform transform in serverListParent)
         {
             serverSlotsList.Add(transform.GetComponent<ServerSlotsUI>());
-        }
+        }*/
 
         joinExceptionText.text = string.Empty;
 
@@ -145,6 +152,7 @@ public class MainMenuUIManager : MonoBehaviour
         inventoryMenu.SetActive(false);
         unitBookMenu.SetActive(false);
         currentMenu = serverListMenu;
+        RefreshServersUI();
         SetExceptionMessage(reason);
     }
 
@@ -176,6 +184,7 @@ public class MainMenuUIManager : MonoBehaviour
     {
         currentMenu = serverListMenu;
         NetworkManager.singleton.StopClient();
+        RefreshServersUI();
     }
 
     public void QuitGame()
@@ -208,5 +217,25 @@ public class MainMenuUIManager : MonoBehaviour
         audioSource.PlayOneShot(buttonClip, PlayerPrefs.GetFloat("SoundFXVol"));
     }
 
-    
+    public void CreateServerItem(NetworkDataBase.ServerStats serverStats)
+    {
+        if (serverStats.Version != CSNetworkManager.instance.gameVersion) return;
+
+        noServersTextExceptionObject.SetActive(false);
+
+        ServerSlotsUI serverSlot = Instantiate(serverElementObject, serverListParent).GetComponent<ServerSlotsUI>();
+        serverSlotsList.Add(serverSlot);
+        serverSlot.SetServerStats(serverStats);
+    }
+
+    public void RemoveEveryServer()
+    {
+        serverSlotsList.Clear();
+        noServersTextExceptionObject.SetActive(true);
+
+        foreach (Transform serverObject in serverListParent)
+        {
+            Destroy(serverObject.gameObject);
+        }
+    }
 }

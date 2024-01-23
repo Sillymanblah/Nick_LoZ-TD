@@ -19,8 +19,7 @@ public class ServerSlotsUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //SetServerOffline();
-        connectButton.interactable = false;
+
     }
 
     // Update is called once per frame
@@ -31,25 +30,6 @@ public class ServerSlotsUI : MonoBehaviour
 
     public void SetServerStats(NetworkDataBase.ServerStats serverStats)
     {
-        if (serverStats.Version != CSNetworkManager.instance.gameVersion)
-        {
-            connectButton.interactable = false;
-            ingameBooleanStatusText.text = "VersionFail";
-            if (serverStats.Uptime > 0)
-            {
-                onlineStatusText.text = "Online";
-                connectButton.interactable = true;
-            }
-            else
-            {
-                onlineStatusText.text = "Offline";
-                connectButton.interactable = false;
-                
-            }
-
-            return;
-        }
-
         if (serverStats.Uptime > 0)
         {
             onlineStatusText.text = "Online";
@@ -71,7 +51,6 @@ public class ServerSlotsUI : MonoBehaviour
         {
             ingameBooleanStatusText.text = "In game: No"; 
             connectButton.interactable = true;
-
         }
 
         serverNameText.text = "Server " + serverStats.ServerID;

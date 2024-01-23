@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 5, z: -0.5}
+  m_FollowOffset: {x: 0, y: 2.634286, z: -6.9708567}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -361,16 +361,16 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_YAxis:
-    Value: 1
-    m_SpeedMode: 0
+    Value: 0.6
+    m_SpeedMode: 1
     m_MaxSpeed: 2
-    m_AccelTime: 0.2
+    m_AccelTime: 0
     m_DecelTime: 0.1
     m_InputAxisName: Mouse Y
     m_InputAxisValue: 0
     m_InvertInput: 1
     m_MinValue: 0
-    m_MaxValue: 1
+    m_MaxValue: 0.9
     m_Wrap: 0
     m_Recentering:
       m_enabled: 0
@@ -386,9 +386,9 @@ MonoBehaviour:
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
     Value: 0
-    m_SpeedMode: 0
+    m_SpeedMode: 1
     m_MaxSpeed: 300
-    m_AccelTime: 0.1
+    m_AccelTime: 0
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Orbits:
   - m_Height: 5
     m_Radius: 0.5
-  - m_Height: 0
+  - m_Height: 1.25
     m_Radius: 7.5
   - m_Height: -5
     m_Radius: 0.5
@@ -453,7 +453,7 @@ MonoBehaviour:
   m_Strategy: 0
   m_MaximumEffort: 4
   m_SmoothingTime: 0
-  m_Damping: 1.5
+  m_Damping: 0.2
   m_DampingWhenOccluded: 0
   m_OptimalTargetDistance: 0
 --- !u!1 &8944510116751740878
@@ -515,7 +515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 5, z: -0.5}
+  m_FollowOffset: {x: 0, y: 2.634286, z: -6.9708567}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -721,7 +721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 5, z: -0.5}
+  m_FollowOffset: {x: 0, y: 2.634286, z: -6.9708567}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1

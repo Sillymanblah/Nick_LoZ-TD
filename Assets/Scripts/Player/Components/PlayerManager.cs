@@ -111,8 +111,6 @@ public class PlayerManager : NetworkBehaviour
             
             cameraControls.CCStart();
         }
-
-
     }
 
     private void Update()
@@ -132,6 +130,11 @@ public class PlayerManager : NetworkBehaviour
         base.OnStartClient();
 
         if (!isLocalPlayer) return;
+
+        if (SceneManager.GetActiveScene().path != mainMenuScene)
+        {
+            cameraControls.CCStart();
+        }
 
         HandleColorTunicChange(tunicColorIndex, tunicColorIndex);
     }

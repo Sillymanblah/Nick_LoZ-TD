@@ -41,6 +41,7 @@ public class PlayerWalkingState : PlayerBaseState
 
         else if (Input.GetKey(InputMan.jump))
         {
+            player.playerAnimations.PlayJumpSound();
             player.playerMovement.PlayerJumped();
             player.SwitchState(player.FallingState);
         }

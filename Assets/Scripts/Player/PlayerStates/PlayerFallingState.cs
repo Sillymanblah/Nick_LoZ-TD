@@ -8,13 +8,14 @@ public class PlayerFallingState : PlayerBaseState
         //player.playerMovement.PlayerJumped();
         Debug.Log($"Entered Falling State");
         player.playerManager.SwitchCamera();
-        player.playerAnimations.PlayJumpSound();
     }
 
     public override void UpdateState(PlayerStateManager player)
     {
         player.playerAnimations.MidAirJumpAnimation();
-        player.playerMovement.PlayerGravityMovement();
+
+        if (!player.playerMovement.isSliding)
+            player.playerMovement.PlayerGravityMovement();
 
         if (player.playerMovement.IsGrounded()) player.SwitchState(player.GroundedState);
     }

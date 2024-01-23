@@ -7,6 +7,7 @@ public class PlayerGroundedState : PlayerBaseState
     {
         Debug.Log($"Entered ground state");
         player.playerMovement.FreezePlayer(false);
+        //player.playerMovement.slideDirection = Vector3.zero;
     }
 
     public override void UpdateState(PlayerStateManager player)
@@ -52,6 +53,7 @@ public class PlayerGroundedState : PlayerBaseState
 
         if (Input.GetKey(InputMan.jump))
         {
+            player.playerAnimations.PlayJumpSound();
             player.playerMovement.PlayerJumped();
             player.SwitchState(player.FallingState);
         }

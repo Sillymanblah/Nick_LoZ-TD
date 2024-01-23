@@ -101,7 +101,7 @@ CharacterController:
   serializedVersion: 3
   m_Height: 1.26
   m_Radius: 0.28
-  m_SlopeLimit: 85
+  m_SlopeLimit: 40
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
@@ -230,6 +230,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 128
+  isSliding: 0
   turnSmoothTime: 0.05
 --- !u!114 &574616946098136766
 MonoBehaviour:

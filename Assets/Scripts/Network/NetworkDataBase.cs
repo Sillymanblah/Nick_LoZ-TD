@@ -53,7 +53,6 @@ public class NetworkDataBase : MonoBehaviour
     private void Start()
     {
         instance = this;
-        RefreshServers();
     }
 
     public void StartDatabase()
@@ -143,6 +142,7 @@ public class NetworkDataBase : MonoBehaviour
     IEnumerator GetServerData(int numberOfServers)
     {
         Debug.Log($"Refreshing server list");
+        MainMenuUIManager.instance.RemoveEveryServer();
 
         for (int i = 0; i < numberOfServers; i++)
         {
@@ -166,7 +166,8 @@ public class NetworkDataBase : MonoBehaviour
 
                 ServerStats newStats = JsonConvert.DeserializeObject<ServerStats>(req.downloadHandler.text);
 
-                MainMenuUIManager.instance.serverSlotsList[i].SetServerStats(newStats);
+                //MainMenuUIManager.instance.serverSlotsList[i].SetServerStats(newStats);
+                MainMenuUIManager.instance.CreateServerItem(newStats);
             }
         }
     }

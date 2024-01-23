@@ -48,6 +48,7 @@ public class PlayerShopState : PlayerBaseState
     {
         if (Input.GetKey(player.inputManager.jump))
         {
+            player.playerAnimations.PlayJumpSound();
             player.playerMovement.PlayerJumped();
 
             if (Grotto.instance != null)

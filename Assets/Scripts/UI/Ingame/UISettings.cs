@@ -55,6 +55,8 @@ public class UISettings : MonoBehaviour
 
         SetSoundFXSliderValue();
         SetMouseSensSliderValue();
+
+        // Call every player's camera controls here
     }
 
     // Update is called once per frame

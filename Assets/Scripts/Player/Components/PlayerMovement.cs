@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TheNicksin.Inputsystem;
+using Unity.VisualScripting;
+using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -21,6 +23,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform groundCheck = null;
     [SerializeField] public LayerMask groundMask;
     
+    #region Sliding
+
+    Vector3 slopeSlideVelocity;
+    public bool isSliding;
+
+    #endregion
+
     float turnSmoothVelocity;
     [SerializeField] float turnSmoothTime = 0.1f;
 
@@ -36,7 +45,20 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isGrounded = Physics.CheckBox(groundCheck.position, new Vector3(0.15f, 0f, 0.15f), Quaternion.identity, groundMask);   
+        isGrounded = Physics.CheckBox(groundCheck.position, new Vector3(0.15f, 0f, 0.15f), Quaternion.identity, groundMask);  
+        SetSlopeSlideVelocity();
+
+        if (slopeSlideVelocity == Vector3.zero)
+        {
+            isSliding = false;
+        } else if (slopeSlideVelocity != Vector3.zero)
+        {
+            isSliding = true;
+            Vector3 newVelocity = slopeSlideVelocity;
+            newVelocity.y = gravity * Time.deltaTime;
+
+            controller.Move(newVelocity * Time.deltaTime);
+        }
     }
     public void MovePlayer(PlayerBaseState player)
     {
@@ -84,6 +106,8 @@ public class PlayerMovement : MonoBehaviour
     }
     public void PlayerJumped()
     {
+        if (isSliding) return;
+
         if (velocity.y < 0)
         {
             velocity.y = -2f;
@@ -95,11 +119,26 @@ public class PlayerMovement : MonoBehaviour
     public void PlayerGravityMovement()
     {
         velocity.y += gravity * Time.deltaTime;
-
+    
         var newVelocity = new Vector3(moveVelocity.x, velocity.y, moveVelocity.z);
-        controller?.Move(newVelocity * Time.deltaTime);
+        controller?.Move((newVelocity) * Time.deltaTime);
+    }
 
-        //if (isGrounded) playerSM.SwitchState(playerSM.GroundedState);
+    void SetSlopeSlideVelocity()
+    {
+        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out RaycastHit hitInfo, 5, groundMask.value))
+        {
+            float angle = Vector3.Angle(hitInfo.normal, Vector3.up);
+            Debug.Log(angle);
+
+            if (angle >= controller.slopeLimit)
+            {
+                slopeSlideVelocity = Vector3.ProjectOnPlane(new Vector3(0, gravity, 0), hitInfo.normal);
+                return;
+            }
+        }
+
+        slopeSlideVelocity = Vector3.zero;
     }
 
     public void ResetGround()

@@ -57,7 +57,6 @@ public class UnitInfoCard : MonoBehaviour
         } 
         else 
         {
-            Debug.Log(unit.unitDescription.Length);
             unitDescUI.text = thisUnitData.unitDescription;
             enableButtons.Invoke();
             SetLevelStats(unitLevel);

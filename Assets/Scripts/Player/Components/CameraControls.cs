@@ -15,8 +15,6 @@ public class CameraControls : MonoBehaviour
 
     public void CCStart()
     {
-        Debug.Log($"aBHRUISHJFKDHJKHJKSADHJKAHSDJKASHJKDHSAKJ");
-
         UISettings.Singleton.onMouseSensValueChanged += ChangeMouseSensitivity;
         
         cineCam = FindObjectOfType<CinemachineFreeLook>();
@@ -28,9 +26,10 @@ public class CameraControls : MonoBehaviour
 
     public void SwitchCameraMovementControl()
     {
-        cineCam.m_Orbits[0].m_Height = Mathf.Clamp((cineCam.m_Orbits[0].m_Height - Input.mouseScrollDelta.y), 2, 20 * cameraZoomMultiplier);
-        cineCam.m_Orbits[1].m_Radius = Mathf.Clamp((cineCam.m_Orbits[1].m_Radius - Input.mouseScrollDelta.y), 2, 21 * cameraZoomMultiplier);
-        cineCam.m_Orbits[2].m_Height = Mathf.Clamp((cineCam.m_Orbits[2].m_Height + Input.mouseScrollDelta.y), -20 * cameraZoomMultiplier, -2);
+        // variable = Clamp (current height - mouse Y pos, min height, max height)
+        cineCam.m_Orbits[0].m_Height = Mathf.Clamp((cineCam.m_Orbits[0].m_Height - Input.mouseScrollDelta.y), 2.5f, 20 * cameraZoomMultiplier);
+        cineCam.m_Orbits[1].m_Radius = Mathf.Clamp((cineCam.m_Orbits[1].m_Radius - Input.mouseScrollDelta.y), 2, 21 * cameraZoomMultiplier); // Middle Orbit
+        cineCam.m_Orbits[2].m_Height = Mathf.Clamp((cineCam.m_Orbits[2].m_Height + Input.mouseScrollDelta.y), -20 * cameraZoomMultiplier, 0);
         //cam.m_Orbits[2].m_Radius -= Input.mouseScrollDelta.y / 2;
 
         if (Input.GetMouseButton(1))
@@ -58,13 +57,13 @@ public class CameraControls : MonoBehaviour
     {
         float value = PlayerPrefs.GetFloat("Mouse Sensitivity");
 
-        cineCam.m_YAxis.m_MaxSpeed = value * 10f;
-        cineCam.m_XAxis.m_MaxSpeed = value * 1500f;
+        cineCam.m_YAxis.m_MaxSpeed = value * 0.03f;
+        cineCam.m_XAxis.m_MaxSpeed = value * 5f;
     }
 
     void ChangeMouseSensitivity(object sender, MouseSenSettings e)
     {
-        cineCam.m_YAxis.m_MaxSpeed = e.sensValue * 10f;
-        cineCam.m_XAxis.m_MaxSpeed = e.sensValue * 1500f;
+        cineCam.m_YAxis.m_MaxSpeed = e.sensValue * 0.03f;
+        cineCam.m_XAxis.m_MaxSpeed = e.sensValue * 5f;
     }
 }
