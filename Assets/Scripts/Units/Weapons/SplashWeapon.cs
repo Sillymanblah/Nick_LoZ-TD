@@ -8,13 +8,13 @@ public class SplashWeapon : MonoBehaviour
     [SerializeField] SplashUnit thisUnit;
     [SerializeField] LayerMask collidersLayer;
 
-    public void SplashAttack(float splashDamage, Vector3 firstEnemyPos, EnemyUnit firstEnemy)
+    public void SplashAttack(float splashDamage, float splashRange, Vector3 firstEnemyPos, EnemyUnit firstEnemy)
     {
         this.transform.position = firstEnemyPos;
 
         List<EnemyUnit> enemyUnitsInRange = new List<EnemyUnit>();
 
-        foreach (Collider collider in Physics.OverlapSphere(this.transform.position, thisUnit.splashRange, collidersLayer))
+        foreach (Collider collider in Physics.OverlapSphere(this.transform.position, splashRange, collidersLayer))
         {
             enemyUnitsInRange.Add(collider.GetComponent<EnemyUnit>());
         }

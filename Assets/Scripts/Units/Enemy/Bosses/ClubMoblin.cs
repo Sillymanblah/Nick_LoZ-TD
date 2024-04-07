@@ -13,6 +13,9 @@ public class ClubMoblin : EnemyUnit
     bool beingAttacked;
     bool usedAbility;
     [SerializeField] LayerMask unitLayer;
+    [SerializeField] ParticleSystem shockwaveParticle;
+    [SerializeField] Transform clubPos;
+    [SerializeField] int shockwaveRange;
 
     protected override void Start()
     {
@@ -105,32 +108,27 @@ public class ClubMoblin : EnemyUnit
 
         yield return new WaitForSeconds(2.6f);
 
-        List<Unit> unitsInRange = new List<Unit>();
-
-        foreach (Collider collider in Physics.OverlapSphere(this.transform.position, 5, unitLayer))
+        foreach (Collider collider in Physics.OverlapSphere(clubPos.position, shockwaveRange, unitLayer))
         {
-            unitsInRange.Add(collider.GetComponent<Unit>());
+            Unit newUnit = collider.GetComponent<Unit>();
+            if (newUnit != null) StartCoroutine(newUnit.StunnedEffect(10));
         }
-
-        // STUN ABILITY
-        for (int i = 0; i < unitsInRange.Count; i++)
-        {
-            if (unitsInRange[i] == null)
-            {
-                unitsInRange.RemoveAt(i);
-                i--;
-                continue;
-            }
-
-            StartCoroutine(unitsInRange[i].StunnedEffect(10));
-        }
-        //
+        
+        RpcSmashAbility(shockwaveRange);
         StartCoroutine(CooldownAffect());
 
         yield return new WaitForSeconds(1);
 
         usedAbility = false;
         speed = originalSpeed;
+    }
+
+    [ClientRpc]
+    void RpcSmashAbility(int range)
+    {
+        shockwaveParticle.transform.position = clubPos.position;
+        shockwaveParticle.transform.localScale = Vector3.one * (0.34f * range);
+        shockwaveParticle.Play();
     }
 
     IEnumerator CooldownAffect()

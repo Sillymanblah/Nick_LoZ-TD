@@ -172,11 +172,11 @@ public class Grotto : NetworkBehaviour
 
 
     [ClientRpc]
-    public void RpcSetNewItems()
+    public void RpcSetNewItems(int waveNum)
     {
         for (int i = 0; i < itemsDisplays.Count; i++)
         {
-            itemsDisplays[i].InitializeItem(WaveManager.instance.currentWave, items[i]);
+            itemsDisplays[i].InitializeItem(waveNum, items[i]);
         }
     }
 

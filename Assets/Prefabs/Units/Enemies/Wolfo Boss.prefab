@@ -1612,6 +1612,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  enemyName: Wolfo
   isGrounded: 0
   maxHealthPoints: 150
   moneyMultiplier: 1

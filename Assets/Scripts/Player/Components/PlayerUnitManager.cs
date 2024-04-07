@@ -1,6 +1,7 @@
  using System.Collections;
 using System.Collections.Generic;
 using Mirror;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerUnitManager : NetworkBehaviour
@@ -48,15 +49,12 @@ public class PlayerUnitManager : NetworkBehaviour
         RaycastHpBar();
 
         SpawnUnit();
-
-        if (selectedUnit != null)
-        {
-            UnitSelectionOptions();
-        }
     }
 
-    void UnitSelectionOptions()
+    public void UnitSelectionOptions()
     {
+        if (selectedUnit == null) return;
+
         // Upgrading unit 
         if (Input.GetKeyDown(KeyCode.E))
         {

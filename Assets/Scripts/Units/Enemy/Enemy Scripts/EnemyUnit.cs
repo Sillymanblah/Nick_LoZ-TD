@@ -6,7 +6,14 @@ using UnityEngine.EventSystems;
 
 public class EnemyUnit : NetworkBehaviour
 {
+    public string enemyName;
+
+    [SyncVar]
+    public bool isBoss;
+    [Space]
     protected UnitAnimationManager animManager;
+
+    [Space]
 
     #region Moving
 
@@ -18,6 +25,7 @@ public class EnemyUnit : NetworkBehaviour
     #endregion
 
 
+    [Space]
     [SerializeField] protected int maxHealthPoints;
     public int GetMaxHealth() { return maxHealthPoints; }
 
@@ -163,40 +171,48 @@ public class EnemyUnit : NetworkBehaviour
                 player.GetComponent<PlayerUnitManager>().SetMoney(dropMoney);
             }
             
+            RpcIsDead();
             WaveManager.instance.EnemyKilled();
-            NetworkServer.Destroy(gameObject); 
+            NetworkServer.Destroy(gameObject);  
         }
+    }
+
+    [ClientRpc]
+    void RpcIsDead()
+    {
+        if (isBoss) UICentralBarSystem.instance.UpdateBossValue(enemyName, 0, maxHealthPoints);
     }
 
     void UpdateEnemyHealth(int oldValue, int newValue)
     {
-        healthPoints = newValue;
         thisHealthBar.UpdateBarValue(newValue);
+
+        if (isBoss) UICentralBarSystem.instance.UpdateBossValue(enemyName, newValue, maxHealthPoints);
     }
 
     [Server]
-    public void SetEnemyHPMultiplier(float health)
+    public void SetEnemyHPMultiplier(float health, bool isBoss)
     {
+        this.isBoss = isBoss;
         float maxHealthMultiplied = (float)maxHealthPoints * health;
 
         maxHealthPoints = Mathf.FloorToInt(maxHealthMultiplied);
         healthPoints = maxHealthPoints;
         
-        foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-        {
-            HPBarUIStartUp(player.connectionToClient, maxHealthPoints);
-        }
+        HPBarUIStartUp(maxHealthPoints);
+        
     }
 
     [Server]
     public void SetEnemyMoneyMultiplier(float moneyMultiplier)
     {
+        
         this.moneyMultiplier *= moneyMultiplier;
         dropMoney = Mathf.CeilToInt(this.moneyMultiplier * healthPoints);
     }
 
-    [TargetRpc]
-    void HPBarUIStartUp(NetworkConnectionToClient conn, int maxHealthPoints)
+    [ClientRpc]
+    void HPBarUIStartUp(int maxHealthPoints)
     {
         thisHealthBar.BarValueOnStart(maxHealthPoints);
     }
@@ -212,4 +228,6 @@ public class EnemyUnit : NetworkBehaviour
         missedAttackUIObject.SetActive(true);
         missedAttackUI.StartAnimation(number.ToString());
     } 
+
+    
 }

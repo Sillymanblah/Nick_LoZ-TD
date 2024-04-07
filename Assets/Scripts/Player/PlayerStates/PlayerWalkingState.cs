@@ -15,7 +15,7 @@ public class PlayerWalkingState : PlayerBaseState
 
         IdleDetection(player);
         InputsForState(player);
-
+        PlayerInputs(player);
         player.playerMovement.MovePlayer(this);
         
         player.playerMovement.JustPlayerGravity();
@@ -45,8 +45,19 @@ public class PlayerWalkingState : PlayerBaseState
             player.playerMovement.PlayerJumped();
             player.SwitchState(player.FallingState);
         }
+    }
 
-        //else if (Input.GetKey(InputMan.crouch))
-        //    player.SwitchState(player.CrouchState);
+    void PlayerInputs(PlayerStateManager player)
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (player.interactable != null)
+            {
+                player.interactable.DoInteractableThing(player.playerManager); 
+                return;
+            }
+        }
+
+        player.playerUnit.UnitSelectionOptions();
     }
 }

@@ -20,4 +20,11 @@ public class BBAGameManager : GameManager
             }
         }
     }
+
+    [Server]
+    public override void StartGame()
+    {
+        base.StartGame();
+        WaveManager.instance.StartGame(CSNetworkManager.instance.players.Count);
+    }
 }

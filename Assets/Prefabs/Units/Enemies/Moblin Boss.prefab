@@ -2208,6 +2208,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  enemyName: Spear Moblin
   isGrounded: 0
   maxHealthPoints: 500
   moneyMultiplier: 1

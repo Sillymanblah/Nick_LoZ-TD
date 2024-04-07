@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Mirror;
+using Mono.CSharp;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -51,8 +53,10 @@ public class WaveManager : NetworkBehaviour
     float playerMultiplier = 1;
     [SerializeField] int enemiesKilled;
 
-    [SyncVar]
+    [SyncVar(hook = nameof(HandleTotalEnemiesSpawned))]
     [SerializeField] public int totalEnemiesSpawned;
+
+    
 
     [SerializeField] int playerReadyCount;
     [SerializeField] List<NetworkIdentity> playersReadyToSkip = new List<NetworkIdentity>();
@@ -70,6 +74,10 @@ public class WaveManager : NetworkBehaviour
     void Start()
     {
         moneyMultiplier = 1;
+
+        if (!isServer) return;
+
+        GameManager.instance.OnGameStart += RpcStartGame;
     }
 
     // Update is called once per frame
@@ -112,7 +120,7 @@ public class WaveManager : NetworkBehaviour
             
             NetworkServer.Spawn(newEnemy.gameObject);
 
-            newEnemy.SetEnemyHPMultiplier(healthMultiplier);
+            newEnemy.SetEnemyHPMultiplier(healthMultiplier, false);
             newEnemy.SetEnemyMoneyMultiplier(moneyMultiplier);
 
             totalEnemiesSpawned++;
@@ -145,20 +153,27 @@ public class WaveManager : NetworkBehaviour
     {
         if (bosses.Count == 0) return;
 
-        EnemyUnit newBoss = null;
-
         /*if (currentWave == 1)
             newBoss = Instantiate(boss1, WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
         else if (currentWave == waveAmount)
             newBoss = Instantiate(boss2, WayPointsManager.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();*/
 
-        newBoss = Instantiate(bosses[currentWave - 1], WayPointsManager.instance.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
+        EnemyUnit newBoss = Instantiate(bosses[currentWave - 1], WayPointsManager.instance.points[0].position, Quaternion.identity).GetComponent<EnemyUnit>();
         
         totalEnemiesSpawned++;
+
+        RpcSpawnBoss(newBoss.enemyName, newBoss.GetMaxHealth());
         
         NetworkServer.Spawn(newBoss.gameObject);
-        newBoss.SetEnemyHPMultiplier(playerMultiplier);
+        newBoss.SetEnemyHPMultiplier(playerMultiplier, true);
         newBoss.SetEnemyMoneyMultiplier(2);
+
+    }
+
+    [ClientRpc]
+    void RpcSpawnBoss(string newName, int maxHealth)
+    {
+        UICentralBarSystem.instance.StartBossBar(newName, maxHealth, maxHealth);
     }
 
     [Server]
@@ -172,11 +187,12 @@ public class WaveManager : NetworkBehaviour
             goto End;
         }
 
-        Grotto.instance.RpcSetNewItems(); 
+        Grotto.instance.RpcSetNewItems(currentWave - 1); 
         Debug.Log($"Break time");
 
         yield return new WaitForSeconds(2.0f);
-        
+
+        RpcStartIntermission(GameManager.instance.intermissionTimer);
         TeleportAllPlayers(Grotto.instance.GetSpawnPosition());
 
         yield return new WaitForSeconds(GameManager.instance.intermissionTimer);
@@ -185,20 +201,46 @@ public class WaveManager : NetworkBehaviour
 
         TeleportAllPlayersUnderShop(NetworkManager.startPositions[0].position);
 
-        Grotto.instance.ResetShop();
-
     End:
         Debug.Log($"Break time over!");
-        GameManager.instance.intermission = false;
-        
+        EndIntermission();
+    }
+
+    [ClientRpc]
+    void RpcStartIntermission(int intermissionTime)
+    {
+        UICentralBarSystem.instance.StartIntermissionBar(intermissionTime);
+        StartCoroutine(IntermissionTimer(intermissionTime));
+    }
+
+    IEnumerator IntermissionTimer(int intermissionTimer)
+    {
+        while (intermissionTimer > 0)
+        {
+            if (!GameManager.instance.intermission) yield break;
+
+            UICentralBarSystem.instance.UpdateIntermissionValue(intermissionTimer--);
+            yield return new WaitForSeconds(1);
+        }
     }
 
     [Server]
     public void EndIntermission()
     {
         if (GameManager.instance.intermission == false) return;
+        if (Grotto.instance != null) 
+            Grotto.instance.ResetShop();
 
+        StopCoroutine(nameof(Intermission));
         GameManager.instance.intermission = false;
+        RpcEndIntermission();
+    }
+
+    [ClientRpc]
+    void RpcEndIntermission()
+    {
+        UICentralBarSystem.instance.StartWaveBar(currentWave, waveAmount, groupSize * waveSize, totalEnemiesSpawned);
+        StopCoroutine(IntermissionTimer(0));
     }
 
     [Server]
@@ -243,17 +285,14 @@ public class WaveManager : NetworkBehaviour
 
         float currentTime = 0;
 
-        while (currentTime < 5)
+        while (currentTime < 30)
         {
+            if (GameManager.instance.intermission) yield break;
+
             currentTime += Time.deltaTime;
 
             yield return null;
         }
-
-        /*foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-        {
-            RpcToggleSkipWaveButtonAppearance(player.connectionToClient, true);
-        }*/
 
         RpcToggleSkipWaveButtonAppearance(true);
 
@@ -264,7 +303,6 @@ public class WaveManager : NetworkBehaviour
     void RpcToggleSkipWaveButtonAppearance(bool result)
     {
         UIManager.instance.ToggleSkipButtonLocally(result);
-        
     }
 
     [ClientRpc]
@@ -297,7 +335,7 @@ public class WaveManager : NetworkBehaviour
 
         RpcUpdateSkipWaveCount(playerReadyCount, CSNetworkManager.instance.numPlayers);
 
-        if (playerReadyCount == CSNetworkManager.instance.numPlayers)
+        if (playerReadyCount == CSNetworkManager.instance.numPlayers )
         {
             playerReadyCount = 0;
             playersReadyToSkip.Clear();
@@ -337,22 +375,19 @@ public class WaveManager : NetworkBehaviour
             playersReadyToSkip.Clear();
             playerReadyCount = 0;
 
-            /*foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-            {
-                RpcToggleSkipWaveButtonAppearance(player.connectionToClient, false);
-            }*/
-
             RpcToggleSkipWaveButtonAppearance(false);
 
-
             StopCoroutine(nameof(ActivateSkipWave));
-            StartCoroutine(Intermission());
+            StartCoroutine(nameof(Intermission));
             currentGroup = 0;
         }
     }
 
+    [Server]
     void SkipWaveComplete()
     {
+        if (GameManager.instance.intermission) return;
+
         Debug.Log($"Wave complete!");
         currentWave++;
         healthMultiplier = playerMultiplier * (currentWave * setHealthMultiplier);
@@ -362,7 +397,7 @@ public class WaveManager : NetworkBehaviour
             moneyMultiplier = 0.1f;
 
         StopCoroutine(nameof(ActivateSkipWave));
-        StartCoroutine(Intermission());
+        StartCoroutine(nameof(Intermission));
         currentGroup = 0;
     }
 
@@ -408,5 +443,26 @@ public class WaveManager : NetworkBehaviour
         }
 
         CSNetworkManager.instance.SwitchScenes("MainMenu");
+    }
+
+    [Server]
+    public void StartGame(int playerCount)
+    {
+        spawnEnemies = true;
+        SetHealthWithPlayerCount(playerCount);
+    }
+
+    // USE C# EVENTS
+    [ClientRpc]
+    void RpcStartGame(object sender, EventArgs e)
+    {
+        UICentralBarSystem.instance.StartWaveBar(1, waveAmount, groupSize * waveSize, totalEnemiesSpawned);
+    }
+
+    private void HandleTotalEnemiesSpawned(int oldValue, int newValue)
+    {
+        if (isServerOnly) return;
+
+        UICentralBarSystem.instance.UpdateWaveValue(newValue, groupSize * waveSize);
     }
 }

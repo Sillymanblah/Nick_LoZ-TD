@@ -17,6 +17,7 @@ public class PlayerGroundedState : PlayerBaseState
         
         MovementDetection(player);
         InputsForState(player);
+        PlayerInputs(player);
         player.playerMovement.JustPlayerGravity();
 
         Emoting(player.playerAnimations);
@@ -41,10 +42,6 @@ public class PlayerGroundedState : PlayerBaseState
         {
             player.FlossingAnimation();
         }
-        else if (Input.GetKeyDown(KeyCode.R))
-        {
-            //player.HandWaveAnimation();
-        }
     }
 
     void InputsForState(PlayerStateManager player)
@@ -57,5 +54,19 @@ public class PlayerGroundedState : PlayerBaseState
             player.playerMovement.PlayerJumped();
             player.SwitchState(player.FallingState);
         }
+    }
+
+    void PlayerInputs(PlayerStateManager player)
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (player.interactable != null)
+            {
+                player.interactable.DoInteractableThing(player.playerManager); 
+                return;
+            }
+        }
+
+        player.playerUnit.UnitSelectionOptions();
     }
 }

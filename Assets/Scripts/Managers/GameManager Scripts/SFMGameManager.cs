@@ -46,4 +46,11 @@ public class SFMGameManager : GameManager
 
         return unitDrops[0].unit;
     }
+
+    [Server]
+    public override void StartGame()
+    {
+        base.StartGame();
+        WaveManager.instance.StartGame(CSNetworkManager.instance.players.Count);
+    }
 }

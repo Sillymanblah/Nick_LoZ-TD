@@ -18,8 +18,12 @@ public class PlayerStateManager : NetworkBehaviour
     public PlayerWalkingState WalkingState = new PlayerWalkingState();
     public PlayerRunningState RunningState = new PlayerRunningState();
     public PlayerShopState ShopState = new PlayerShopState();
+    public PlayerClimbingState ClimbingState = new PlayerClimbingState();
     public PlayerMovement playerMovement;
     public InputManager inputManager;
+
+
+    public Interactable interactable;
 
     // Start is called before the first frame update
     void Start()
@@ -56,5 +60,21 @@ public class PlayerStateManager : NetworkBehaviour
     {
         currentState = state;
         state.EnterState(this);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Interactable"))
+        {
+            interactable = other.GetComponent<Interactable>();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Interactable"))
+        {
+            interactable = null;
+        }
     }
 }

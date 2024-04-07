@@ -13,6 +13,8 @@ public class PlayerFallingState : PlayerBaseState
     public override void UpdateState(PlayerStateManager player)
     {
         player.playerAnimations.MidAirJumpAnimation();
+        player.playerUnit.UnitSelectionOptions();
+
 
         if (!player.playerMovement.isSliding)
             player.playerMovement.PlayerGravityMovement();

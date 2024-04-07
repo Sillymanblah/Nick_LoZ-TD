@@ -18,13 +18,13 @@ public class UIWaveBar : MonoBehaviour
         
 
         
-        waveSlider.value = 0;
+        //waveSlider.value = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (WaveManager.instance == null) return;
+        /*if (WaveManager.instance == null) return;
 
         var wavemanager = WaveManager.instance;
 
@@ -34,6 +34,6 @@ public class UIWaveBar : MonoBehaviour
         if (wavemanager.endless)
             waveCountText.text = "Wave " + (wavemanager.currentWave);
         else
-            waveCountText.text = "Wave " + (wavemanager.currentWave) + "/" + wavemanager.waveAmount;
+            waveCountText.text = "Wave " + (wavemanager.currentWave) + "/" + wavemanager.waveAmount;*/
     }
 }

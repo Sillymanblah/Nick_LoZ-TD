@@ -18,7 +18,7 @@ public class PlayerManager : NetworkBehaviour
     [SerializeField] GameObject playerNameTag;
     public PlayerMovement playerMovement;
     PlayerUnitManager playerUnitManager;
-    PlayerStateManager playerStateManager;
+    public PlayerStateManager playerStateManager;
     CameraControls cameraControls;
     public bool ingame = false;
     [Space]
@@ -125,16 +125,12 @@ public class PlayerManager : NetworkBehaviour
         Physics.IgnoreLayerCollision(8, 9, true);
     }
 
+    // Called before Start();
     public override void OnStartClient()
     {
         base.OnStartClient();
 
         if (!isLocalPlayer) return;
-
-        if (SceneManager.GetActiveScene().path != mainMenuScene)
-        {
-            cameraControls.CCStart();
-        }
 
         HandleColorTunicChange(tunicColorIndex, tunicColorIndex);
     }

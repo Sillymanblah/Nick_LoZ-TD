@@ -4,6 +4,7 @@ using UnityEngine;
 using TheNicksin.Inputsystem;
 using Unity.VisualScripting;
 using UnityEngine.EventSystems;
+using UnityEditor;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -45,7 +46,9 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isGrounded = Physics.CheckBox(groundCheck.position, new Vector3(0.15f, 0f, 0.15f), Quaternion.identity, groundMask);  
+        // isGrounded = Physics.CheckBox(groundCheck.position, new Vector3(0.15f, 0f, 0.15f), Quaternion.identity, groundMask);  
+        isGrounded = Physics.CheckSphere(new Vector3(this.transform.position.x, this.transform.position.y - 1.01f, this.transform.position.z), 0.25f, groundMask);
+
         SetSlopeSlideVelocity();
 
         if (slopeSlideVelocity == Vector3.zero)
@@ -129,7 +132,6 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out RaycastHit hitInfo, 5, groundMask.value))
         {
             float angle = Vector3.Angle(hitInfo.normal, Vector3.up);
-            Debug.Log(angle);
 
             if (angle >= controller.slopeLimit)
             {
@@ -158,5 +160,32 @@ public class PlayerMovement : MonoBehaviour
     public void FreezePlayer(bool freeze)
     {
         speed = freeze ? 0 : 2; 
+    }
+
+    /// <summary>
+    /// Callback to draw gizmos that are pickable and always drawn.
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(new Vector3(this.transform.position.x, this.transform.position.y - 1.01f, this.transform.position.z), 0.25f);
+    }
+
+    public void TeleportPlayer(Vector3 position)
+    {
+        controller.enabled = false;
+        transform.position = position;
+        controller.enabled = true;
+    }
+
+    public void Climbing()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            controller.Move(Vector3.up * Time.deltaTime * 5);
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            controller.Move(Vector3.down * Time.deltaTime * 5);
+        }
     }
 }

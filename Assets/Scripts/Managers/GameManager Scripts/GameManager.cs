@@ -17,7 +17,6 @@ public class GameManager : NetworkBehaviour
 
     List<GridCell> totalGridCells = new List<GridCell>();
     public static GameManager instance;
-    public event EventHandler OnGameStart;
 
 
     [SyncVar]
@@ -31,6 +30,13 @@ public class GameManager : NetworkBehaviour
     
     int playerReadyCount;
     List<NetworkIdentity> playersReadyToPlay = new List<NetworkIdentity>();
+
+    #region Events
+
+    public event EventHandler OnGameStart;
+
+
+    #endregion
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -157,17 +163,16 @@ public class GameManager : NetworkBehaviour
     }
 
     [Server]
-    public void StartGame()
+    public virtual void StartGame()
     {
         gameStarted = true;
-        WaveManager.instance.spawnEnemies = true;
-        WaveManager.instance.SetHealthWithPlayerCount(CSNetworkManager.instance.players.Count);
+        //WaveManager.instance.StartGame(CSNetworkManager.instance.players.Count, 3);
         BaseManager.instance.SetBaseHP(CSNetworkManager.instance.players.Count);
         playerReadyCount = 0;
         
         RpcAllReady();
 
-        if (!isServerOnly)
+        if (isServerOnly)
             OnGameStart?.Invoke(this, EventArgs.Empty);
     }
 
@@ -189,19 +194,6 @@ public class GameManager : NetworkBehaviour
     protected virtual UnitSO GiveUnitAward()
     {
         return null;
-        // BBA
-        /*var newUnitReward = gameLevelSO.GetRandomUnitReward(WaveManager.instance.currentWave, false);
-
-        if (newUnitReward != null)
-        {
-            foreach (NetworkIdentity player in CSNetworkManager.instance.players)
-            {
-                player.GetComponent<PlayerUnitManager>().SetUnitReward(newUnitReward.uniqueName);
-            }
-        }
-
-        // SFM
-         */
     }
 }
 
