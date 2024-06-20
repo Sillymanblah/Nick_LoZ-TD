@@ -21055,17 +21055,17 @@ PrefabInstance:
     - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
         type: 3}
       propertyPath: networkAddress
-      value: localhost
+      value: 143.198.22.120
       objectReference: {fileID: 0}
     - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
         type: 3}
       propertyPath: noRestrictions
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
         type: 3}
       propertyPath: DeployingAsServer
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9173269634202737193, guid: b2a0ad4f75f9115449816e14d5a6be18,
         type: 3}
