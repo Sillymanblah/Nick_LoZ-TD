@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9173269634202737193}
   - component: {fileID: 9173269634202737196}
   - component: {fileID: 1758361750419436153}
+  - component: {fileID: 2430632035118628226}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -52,13 +53,13 @@ MonoBehaviour:
   autoConnectClientBuild: 0
   sendRate: 30
   offlineScene: Assets/Scenes/Main Menu/MainMenu.unity
-  onlineScene: 
+  onlineScene: Assets/Scenes/Main Menu/MainMenu.unity
   transport: {fileID: 9173269634202737196}
   networkAddress: 143.198.22.120
   maxConnections: 4
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
-  authenticator: {fileID: 0}
+  authenticator: {fileID: 2430632035118628226}
   playerPrefab: {fileID: 794515074907002375, guid: 66aeec88f1ece2f4fbeb34bcccc82733,
     type: 3}
   autoCreatePlayer: 1
@@ -77,6 +78,10 @@ MonoBehaviour:
   - {fileID: 4589918344677092016, guid: 6a47dd3f0ee5dbd40a3624eb59a7f2c5, type: 3}
   - {fileID: 8062145506032376919, guid: 823be02c78c495f46bf4d7c8d2185acb, type: 3}
   - {fileID: 5814153406905477011, guid: 08272ecdd26848e4587245f95c927d11, type: 3}
+  - {fileID: 2383934787031908864, guid: 451f789dee8ceb04d8660769efaf3bc4, type: 3}
+  - {fileID: 3792259216536069562, guid: b4f97b05c5094254ebadae9e393b2bd4, type: 3}
+  - {fileID: 6058219008326219347, guid: 89a5621643ffe4544a15b265f7fcf051, type: 3}
+  - {fileID: 2463911035311198274, guid: 44df450f486e4f3438698bc51f9acac5, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     bufferLimit: 32
@@ -98,7 +103,8 @@ MonoBehaviour:
   sceneTesting: 0
   lobbyKickTimer: 300
   gameStartTimer: 120
-  gameVersion: 0.1.1
+  gameVersion: 0.4
+  mainMenuScene: Assets/Scenes/Main Menu/MainMenu.unity
 --- !u!114 &9173269634202737196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,3 +146,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24d49353292dbd14da22116bcbd0356c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2430632035118628226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9173269634202737192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aca5a3d0fa557a448701c4ee8275466, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnServerAuthenticated:
+    m_PersistentCalls:
+      m_Calls: []
+  OnClientAuthenticated:
+    m_PersistentCalls:
+      m_Calls: []
+  serverAccessToken: 312312
+  serverVersion: 0.4
+  clientAccessToken: 312312
+  clientVersion: 0.4
+  mainMenuScene: Assets/Scenes/Main Menu/MainMenu.unity
